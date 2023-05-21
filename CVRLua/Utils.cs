@@ -36,5 +36,16 @@ namespace CVRLua
         {
             p_target.ForEach(p => p_target.Add(p));
         }
+
+        public static bool IsSafeToDestroy(this UnityEngine.Object p_object)
+        {
+            if(p_object is UnityEngine.Component)
+                return ((p_object as UnityEngine.Component).gameObject.scene.name != "DontDestroyOnLoad");
+
+            if(p_object is UnityEngine.GameObject)
+                return ((p_object as UnityEngine.GameObject).scene.name != "DontDestroyOnLoad");
+
+            return true;
+        }
     }
 }

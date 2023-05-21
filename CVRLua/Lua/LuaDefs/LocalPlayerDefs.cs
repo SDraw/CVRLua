@@ -14,6 +14,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void Init()
         {
             ms_metaMethods.Add(("__tostring", ToString));
+            ms_metaMethods.Add(("__eq", Equal));
 
             ms_instanceProperties.Add("position", (GetPosition, null));
             ms_instanceProperties.Add("rotation", (GetRotation, null));
@@ -62,6 +63,17 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
+            return l_argReader.GetReturnValue();
+        }
+
+        static int Equal(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_playerA = null;
+            Wrappers.LocalPlayer l_playerB = null;
+            l_argReader.ReadObject(ref l_playerA);
+            l_argReader.ReadObject(ref l_playerB);
+            l_argReader.PushBoolean(!l_argReader.HasErrors());
             return l_argReader.GetReturnValue();
         }
 

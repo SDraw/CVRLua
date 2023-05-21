@@ -332,7 +332,6 @@ namespace CVRLua.Lua.LuaDefs
             else
                 l_argReader.PushBoolean(false);
 
-            l_argReader.LogError();
             return l_argReader.GetReturnValue();
         }
 

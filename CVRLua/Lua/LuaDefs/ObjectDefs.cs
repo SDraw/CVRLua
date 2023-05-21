@@ -67,8 +67,16 @@ namespace CVRLua.Lua.LuaDefs
             {
                 if(l_obj != null)
                 {
-                    UnityEngine.Object.Destroy(l_obj);
-                    l_argReader.PushBoolean(true);
+                    if(l_obj.IsSafeToDestroy())
+                    {
+                        UnityEngine.Object.Destroy(l_obj);
+                        l_argReader.PushBoolean(true);
+                    }
+                    else
+                    {
+                        l_argReader.SetError("Attempt to destroy non-safe Object");
+                        l_argReader.PushBoolean(false);
+                    }
                 }
                 else
                     l_argReader.PushBoolean(true);
@@ -149,7 +157,6 @@ namespace CVRLua.Lua.LuaDefs
             else
                 l_argReader.PushBoolean(false);
 
-            l_argReader.LogError();
             return l_argReader.GetReturnValue();
         }
 
