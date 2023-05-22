@@ -47,5 +47,10 @@ namespace CVRLua
 
             return true;
         }
+
+        public static bool IsInternal(UnityEngine.Component p_col)
+        {
+            return (p_col.gameObject.scene.name == "DontDestroyOnLoad");
+        }
     }
 }

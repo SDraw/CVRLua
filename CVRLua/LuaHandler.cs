@@ -12,6 +12,16 @@ namespace CVRLua
             Update,
             LateUpdate,
             FixedUpdate,
+            OnEnable,
+            OnDisable,
+            OnDestroy,
+            OnGUI,
+            OnCollisionEnter,
+            OnCollisionExit,
+            OnCollisionStay,
+            OnTriggerEnter,
+            OnTriggerExit,
+            OnTriggerStay,
             OnScriptMessage
         }
 
@@ -28,6 +38,9 @@ namespace CVRLua
             Lua.LuaDefs.TransformDefs.Init();
             Lua.LuaDefs.GameObjectDefs.Init();
 
+            Lua.LuaDefs.AudioSourceDefs.Init();
+            Lua.LuaDefs.ColliderDefs.Init();
+
             Lua.LuaDefs.QuaternionDefs.Init();
             Lua.LuaDefs.Vector2Defs.Init();
             Lua.LuaDefs.Vector3Defs.Init();
@@ -36,7 +49,7 @@ namespace CVRLua
             Lua.LuaDefs.LocalPlayerDefs.Init();
         }
 
-        internal LuaHandler(GameObject p_attachedTo, string p_name = "")
+        internal LuaHandler(string p_name = "")
         {
             m_eventFunctions = new Dictionary<ScriptEvent, int>();
 
@@ -50,6 +63,9 @@ namespace CVRLua
             Lua.LuaDefs.TransformDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.GameObjectDefs.RegisterInVM(m_vm);
 
+            Lua.LuaDefs.AudioSourceDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.ColliderDefs.RegisterInVM(m_vm);
+
             Lua.LuaDefs.QuaternionDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.Vector2Defs.RegisterInVM(m_vm);
             Lua.LuaDefs.Vector3Defs.RegisterInVM(m_vm);
@@ -57,10 +73,6 @@ namespace CVRLua
             //Lua.LuaDefs.LuaScriptDefs.Init(m_vm);
 
             Lua.LuaDefs.LocalPlayerDefs.RegisterInVM(m_vm);
-
-            // Fill default global variables
-            SetGlobalVariable("this", p_attachedTo);
-            SetGlobalVariable("localPlayer", new Wrappers.LocalPlayer());
         }
 
         public void Execute(string p_code)
@@ -68,16 +80,10 @@ namespace CVRLua
             m_vm.Execute(p_code);
         }
 
-        public void CallEvent(ScriptEvent p_event)
+        public void CallEvent(ScriptEvent p_event, params object[] p_args)
         {
             if(m_eventFunctions.ContainsKey(p_event))
-                m_vm.CallFunctionByReference(m_eventFunctions[p_event]);
-        }
-
-        public void CallEvent(ScriptEvent p_event, string p_str)
-        {
-            if(m_eventFunctions.ContainsKey(p_event))
-                m_vm.CallFunctionByReference(m_eventFunctions[p_event], p_str);
+                m_vm.CallFunctionByReference(m_eventFunctions[p_event], p_args);
         }
 
         public void SetGlobalVariable<T>(string p_name, T p_val) => m_vm.SetGlobalVariable(p_name, p_val);

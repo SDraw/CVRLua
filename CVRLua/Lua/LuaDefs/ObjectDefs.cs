@@ -26,6 +26,7 @@ namespace CVRLua.Lua.LuaDefs
 
             ms_instanceMethods.Add(nameof(GetInstanceID), GetInstanceID);
             ms_instanceMethods.Add(nameof(ToString), ToString);
+            ms_instanceMethods.Add("Equals", Equal);
         }
 
         internal static void Inherit(
@@ -153,7 +154,12 @@ namespace CVRLua.Lua.LuaDefs
             l_argReader.ReadObject(ref l_objA);
             l_argReader.ReadObject(ref l_objB);
             if(!l_argReader.HasErrors())
-                l_argReader.PushBoolean(l_objA == l_objB);
+            {
+                if((l_objA != null) && (l_objB != null))
+                    l_argReader.PushBoolean(l_objA.GetInstanceID() == l_objB.GetInstanceID());
+                else
+                    l_argReader.PushBoolean(false);
+            }
             else
                 l_argReader.PushBoolean(false);
 

@@ -12,10 +12,13 @@ namespace CVRLua
         public List<GameObject> VariableValues = new List<GameObject>();
 
         LuaHandler m_luaHandler = null;
+        Wrappers.LocalPlayer m_localPlayer = null;
 
         void Awake()
         {
-            m_luaHandler = new LuaHandler(this.gameObject, ((ScriptFile != null) ? ScriptFile.name : this.gameObject.name));
+            m_localPlayer = new Wrappers.LocalPlayer();
+
+            m_luaHandler = new LuaHandler((ScriptFile != null) ? ScriptFile.name : this.gameObject.name);
             Core.Instance?.RegisterScript(this);
 
             if((VariableNames.Count > 0) && (VariableValues.Count > 0))
@@ -23,6 +26,9 @@ namespace CVRLua
                 for(int i = 0, j = Mathf.Min(VariableNames.Count, VariableValues.Count); i < j; i++)
                     m_luaHandler.SetGlobalVariable(VariableNames[i], VariableValues[i]);
             }
+
+            m_luaHandler.SetGlobalVariable("this", this.gameObject);
+            m_luaHandler.SetGlobalVariable("localPlayer", m_localPlayer);
 
             if(ScriptFile != null)
                 m_luaHandler.Execute(ScriptFile.text);
@@ -35,6 +41,7 @@ namespace CVRLua
 
         void OnDestroy()
         {
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnDestroy);
             Core.Instance?.UnregisterScript(this);
         }
 
@@ -53,24 +60,52 @@ namespace CVRLua
             m_luaHandler.CallEvent(LuaHandler.ScriptEvent.FixedUpdate);
         }
 
-        void OnGUI()
+        void OnEnable()
         {
-            //m_luaHandler.CallEvent("OnGUI");
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnEnable);
         }
 
         void OnDisable()
         {
-            //m_luaHandler.CallEvent("OnDisable");
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnDisable);
         }
 
-        void OnEnable()
+        void OnGUI()
         {
-            //m_luaHandler.CallEvent("OnEnable");
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnGUI);
         }
 
-        public void SendScriptMessage(string p_msg)
+        void OnCollisionEnter(Collision p_col)
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnScriptMessage, p_msg);
+            // Add later
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnCollisionEnter);
+        }
+
+        void OnCollisionExit(Collision p_col)
+        {
+            // Add later
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnCollisionExit);
+        }
+
+        void OnCollisionStay(Collision p_col)
+        {
+            // Add later
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnCollisionStay);
+        }
+
+        void OnTriggerEnter(Collider p_col)
+        {
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnTriggerEnter, p_col.name, p_col.GetInstanceID(), Utils.IsInternal(p_col));
+        }
+
+        void OnTriggerExit(Collider p_col)
+        {
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnTriggerExit, p_col.name, p_col.GetInstanceID(), Utils.IsInternal(p_col));
+        }
+
+        void OnTriggerStay(Collider p_col)
+        {
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnTriggerStay, p_col.name, p_col.GetInstanceID(), Utils.IsInternal(p_col));
         }
 
         IEnumerator CheckEndOfFrame()
@@ -80,6 +115,11 @@ namespace CVRLua
                 yield return new WaitForEndOfFrame();
                 m_luaHandler.PerformGC();
             }
+        }
+
+        public void SendScriptMessage(params object[] p_args)
+        {
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnScriptMessage, p_args);
         }
     }
 }

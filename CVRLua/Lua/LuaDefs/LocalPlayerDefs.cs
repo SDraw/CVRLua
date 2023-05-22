@@ -39,6 +39,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceProperties.Add("leftHandGesture", (GetLeftHandGesture, null));
             ms_instanceProperties.Add("rightHandGesture", (GetRightHandGesture, null));
             ms_instanceProperties.Add("zoom", (GetZoom, null));
+            ms_instanceProperties.Add("movementVector", (GetMovementVector, null));
 
             ms_instanceMethods.Add(nameof(Teleport), Teleport);
             ms_instanceMethods.Add(nameof(SetImmobilized), SetImmobilized);
@@ -191,6 +192,12 @@ namespace CVRLua.Lua.LuaDefs
         static void GetZoom(object p_obj, LuaArgReader p_reader)
         {
             p_reader.PushBoolean((p_obj as Wrappers.LocalPlayer).IsZooming());
+        }
+
+        static void GetMovementVector(object p_obj, LuaArgReader p_reader)
+        {
+            UnityEngine.Vector3 l_vec = (p_obj as Wrappers.LocalPlayer).GetMovementVector();
+            p_reader.PushObject(new Wrappers.Vector2(l_vec.x,l_vec.z));
         }
 
         // Instance methods
