@@ -154,12 +154,7 @@ namespace CVRLua.Lua.LuaDefs
             l_argReader.ReadObject(ref l_objA);
             l_argReader.ReadObject(ref l_objB);
             if(!l_argReader.HasErrors())
-            {
-                if((l_objA != null) && (l_objB != null))
-                    l_argReader.PushBoolean(l_objA.GetInstanceID() == l_objB.GetInstanceID());
-                else
-                    l_argReader.PushBoolean(false);
-            }
+                l_argReader.PushBoolean(l_objA == l_objB);
             else
                 l_argReader.PushBoolean(false);
 

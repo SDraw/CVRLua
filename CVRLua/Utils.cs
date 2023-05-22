@@ -34,7 +34,7 @@ namespace CVRLua
 
         public static void MergeInto<T>(this List<T> p_source, List<T> p_target)
         {
-            p_target.ForEach(p => p_target.Add(p));
+            p_source.ForEach(p => p_target.Add(p));
         }
 
         public static bool IsSafeToDestroy(this UnityEngine.Object p_object)
