@@ -92,12 +92,7 @@ namespace CVRLua.Lua.LuaDefs
             Wrappers.Vector3 l_vec = null;
             p_reader.ReadObject(ref l_vec);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Transform).eulerAngles = l_vec.m_vec;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetForward(object p_obj, LuaArgReader p_reader)
@@ -115,12 +110,7 @@ namespace CVRLua.Lua.LuaDefs
             int l_capacity = 0;
             p_reader.ReadInteger(ref l_capacity);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Transform).hierarchyCapacity = l_capacity;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetHierarchyCount(object p_obj, LuaArgReader p_reader)
@@ -138,12 +128,7 @@ namespace CVRLua.Lua.LuaDefs
             Wrappers.Vector3 l_vec = null;
             p_reader.ReadObject(ref l_vec);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Transform).localEulerAngles = l_vec.m_vec;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetLocalPosition(object p_obj, LuaArgReader p_reader)
@@ -156,12 +141,7 @@ namespace CVRLua.Lua.LuaDefs
             Wrappers.Vector3 l_vec = null;
             p_reader.ReadObject(ref l_vec);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Transform).localPosition = l_vec.m_vec;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetLocalRotation(object p_obj, LuaArgReader p_reader)
@@ -174,12 +154,7 @@ namespace CVRLua.Lua.LuaDefs
             Wrappers.Quaternion l_quat = null;
             p_reader.ReadObject(ref l_quat);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Transform).localRotation = l_quat.m_quat;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetLocalScale(object p_obj, LuaArgReader p_reader)
@@ -192,12 +167,7 @@ namespace CVRLua.Lua.LuaDefs
             Wrappers.Vector3 l_vec = null;
             p_reader.ReadObject(ref l_vec);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Transform).localScale = l_vec.m_vec;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetLossyScale(object p_obj, LuaArgReader p_reader)
@@ -217,10 +187,7 @@ namespace CVRLua.Lua.LuaDefs
         static void SetParent(object p_obj, LuaArgReader p_reader)
         {
             if(p_reader.IsNextNil())
-            {
                 (p_obj as Transform).parent = null;
-                p_reader.PushBoolean(true);
-            }
             else
             {
                 Transform l_parent = null;
@@ -228,18 +195,10 @@ namespace CVRLua.Lua.LuaDefs
                 if(!p_reader.HasErrors())
                 {
                     if(l_parent != null)
-                    {
                         (p_obj as Transform).parent = l_parent;
-                        p_reader.PushBoolean(true);
-                    }
                     else
-                    {
                         p_reader.SetError(c_destroyed);
-                        p_reader.PushBoolean(false);
-                    }
                 }
-                else
-                    p_reader.PushBoolean(false);
             }
         }
 
@@ -253,12 +212,7 @@ namespace CVRLua.Lua.LuaDefs
             Wrappers.Vector3 l_vec = null;
             p_reader.ReadObject(ref l_vec);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Transform).position = l_vec.m_vec;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetRight(object p_obj, LuaArgReader p_reader)
@@ -282,12 +236,7 @@ namespace CVRLua.Lua.LuaDefs
             Wrappers.Quaternion l_quat = null;
             p_reader.ReadObject(ref l_quat);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Transform).rotation = l_quat.m_quat;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetUp(object p_obj, LuaArgReader p_reader)

@@ -528,12 +528,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Wrappers.Vector3).m_vec.x = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetY(object p_obj, LuaArgReader p_reader)
@@ -545,12 +540,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Wrappers.Vector3).m_vec.y = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetZ(object p_obj, LuaArgReader p_reader)
@@ -562,12 +552,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Wrappers.Vector3).m_vec.z = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void Magnitude(object p_obj, LuaArgReader p_reader)

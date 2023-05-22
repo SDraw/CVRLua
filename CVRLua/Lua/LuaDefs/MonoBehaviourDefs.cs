@@ -48,12 +48,7 @@ namespace CVRLua.Lua.LuaDefs
             bool l_state = false;
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as MonoBehaviour).useGUILayout = l_state;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         // Static getter

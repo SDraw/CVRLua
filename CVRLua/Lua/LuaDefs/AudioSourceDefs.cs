@@ -85,12 +85,7 @@ namespace CVRLua.Lua.LuaDefs
             bool l_state = false;
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).bypassEffects = l_state;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetBypassListenerEffects(object p_obj, LuaArgReader p_reader)
@@ -102,12 +97,7 @@ namespace CVRLua.Lua.LuaDefs
             bool l_state = false;
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).bypassListenerEffects = l_state;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetBypassReverbZones(object p_obj, LuaArgReader p_reader)
@@ -119,12 +109,7 @@ namespace CVRLua.Lua.LuaDefs
             bool l_state = false;
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).bypassReverbZones = l_state;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetDopplerLevel(object p_obj, LuaArgReader p_reader)
@@ -136,12 +121,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_value = 0f;
             p_reader.ReadNumber(ref l_value);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).dopplerLevel = l_value;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetIgnoreListenerPause(object p_obj, LuaArgReader p_reader)
@@ -153,12 +133,7 @@ namespace CVRLua.Lua.LuaDefs
             bool l_state = false;
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).ignoreListenerPause = l_state;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetIgnoreListenerVolume(object p_obj, LuaArgReader p_reader)
@@ -170,12 +145,7 @@ namespace CVRLua.Lua.LuaDefs
             bool l_state = false;
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).ignoreListenerVolume = l_state;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetPlaying(object p_obj, LuaArgReader p_reader)
@@ -197,12 +167,7 @@ namespace CVRLua.Lua.LuaDefs
             bool l_state = false;
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).loop = l_state;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetMaxDistance(object p_obj, LuaArgReader p_reader)
@@ -214,12 +179,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_dist = 0f;
             p_reader.ReadNumber(ref l_dist);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).maxDistance = l_dist;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetMinDistance(object p_obj, LuaArgReader p_reader)
@@ -231,12 +191,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_dist = 0f;
             p_reader.ReadNumber(ref l_dist);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).minDistance = l_dist;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetPanStereo(object p_obj, LuaArgReader p_reader)
@@ -248,12 +203,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).panStereo = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetPitch(object p_obj, LuaArgReader p_reader)
@@ -265,12 +215,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).pitch = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetPlayOnAwake(object p_obj, LuaArgReader p_reader)
@@ -282,12 +227,7 @@ namespace CVRLua.Lua.LuaDefs
             bool l_state = false;
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).playOnAwake = l_state;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetPriority(object p_obj, LuaArgReader p_reader)
@@ -299,12 +239,7 @@ namespace CVRLua.Lua.LuaDefs
             int l_val = 0;
             p_reader.ReadInteger(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).priority = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetReverbZoneMix(object p_obj, LuaArgReader p_reader)
@@ -316,12 +251,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).reverbZoneMix = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetRolloffMode(object p_obj, LuaArgReader p_reader)
@@ -333,12 +263,7 @@ namespace CVRLua.Lua.LuaDefs
             AudioRolloffMode l_mode = AudioRolloffMode.Logarithmic;
             p_reader.ReadEnum(ref l_mode);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).rolloffMode = l_mode;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetSpatialBlend(object p_obj, LuaArgReader p_reader)
@@ -350,12 +275,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).spatialBlend = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetSpatialize(object p_obj, LuaArgReader p_reader)
@@ -367,12 +287,7 @@ namespace CVRLua.Lua.LuaDefs
             bool l_state = false;
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).spatialize = l_state;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetSpatializePostEffects(object p_obj, LuaArgReader p_reader)
@@ -384,12 +299,7 @@ namespace CVRLua.Lua.LuaDefs
             bool l_state = false;
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).spatializePostEffects = l_state;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetSpread(object p_obj, LuaArgReader p_reader)
@@ -401,12 +311,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).spread = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetTime(object p_obj, LuaArgReader p_reader)
@@ -418,12 +323,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).time = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetTimeSamples(object p_obj, LuaArgReader p_reader)
@@ -434,13 +334,7 @@ namespace CVRLua.Lua.LuaDefs
         {
             int l_val = 0;
             p_reader.ReadInteger(ref l_val);
-            if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).timeSamples = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetVelocityUpdateMode(object p_obj, LuaArgReader p_reader)
@@ -452,12 +346,7 @@ namespace CVRLua.Lua.LuaDefs
             AudioVelocityUpdateMode l_mode = AudioVelocityUpdateMode.Auto;
             p_reader.ReadEnum(ref l_mode);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).velocityUpdateMode = l_mode;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetVolume(object p_obj, LuaArgReader p_reader)
@@ -469,12 +358,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as AudioSource).volume = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         // Instance methods

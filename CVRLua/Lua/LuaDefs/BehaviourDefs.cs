@@ -73,12 +73,7 @@ namespace CVRLua.Lua.LuaDefs
             bool l_state = false;
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Behaviour).enabled = l_state;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetIsActiveAndEnabled(object p_obj, LuaArgReader p_reader)

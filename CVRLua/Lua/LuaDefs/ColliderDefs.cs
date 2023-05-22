@@ -46,12 +46,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Collider).contactOffset = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetEnabled(object p_obj, LuaArgReader p_reader)
@@ -63,12 +58,7 @@ namespace CVRLua.Lua.LuaDefs
             bool l_state = false;
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Collider).enabled = l_state;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetTrigger(object p_obj, LuaArgReader p_reader)
@@ -80,12 +70,7 @@ namespace CVRLua.Lua.LuaDefs
             bool l_state = false;
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Collider).isTrigger = l_state;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         // Instance methods

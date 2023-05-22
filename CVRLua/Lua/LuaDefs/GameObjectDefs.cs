@@ -97,12 +97,7 @@ namespace CVRLua.Lua.LuaDefs
             bool l_state = false;
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as GameObject).isStatic = l_state;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetLayer(object p_obj, LuaArgReader p_reader)
@@ -115,12 +110,7 @@ namespace CVRLua.Lua.LuaDefs
             int l_layer = 0;
             p_reader.ReadInteger(ref l_layer);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as GameObject).layer = l_layer;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetTag(object p_obj, LuaArgReader p_reader)
@@ -133,12 +123,7 @@ namespace CVRLua.Lua.LuaDefs
             string l_tag = "";
             p_reader.ReadString(ref l_tag);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as GameObject).tag = l_tag;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetTransform(object p_obj, LuaArgReader p_reader)

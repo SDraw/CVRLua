@@ -172,12 +172,7 @@ namespace CVRLua.Lua.LuaDefs
             string l_name = "";
             p_reader.ReadString(ref l_name);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as UnityEngine.Object).name = l_name;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         // Instance methods

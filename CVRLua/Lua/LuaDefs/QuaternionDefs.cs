@@ -453,12 +453,7 @@ namespace CVRLua.Lua.LuaDefs
                 p_reader.ReadNumber(ref l_vec.m_vec.z);
             }
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Wrappers.Quaternion).m_quat.eulerAngles = l_vec.m_vec;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(true);
         }
 
         static void GetNormalized(object p_obj, LuaArgReader p_reader)
@@ -475,12 +470,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Wrappers.Quaternion).m_quat.x = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetY(object p_obj, LuaArgReader p_reader)
@@ -492,12 +482,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Wrappers.Quaternion).m_quat.y = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetZ(object p_obj, LuaArgReader p_reader)
@@ -509,12 +494,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Wrappers.Quaternion).m_quat.z = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         static void GetW(object p_obj, LuaArgReader p_reader)
@@ -526,12 +506,7 @@ namespace CVRLua.Lua.LuaDefs
             float l_val = 0f;
             p_reader.ReadNumber(ref l_val);
             if(!p_reader.HasErrors())
-            {
                 (p_obj as Wrappers.Quaternion).m_quat.w = l_val;
-                p_reader.PushBoolean(true);
-            }
-            else
-                p_reader.PushBoolean(false);
         }
 
         // Static getter
