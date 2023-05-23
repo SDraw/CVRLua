@@ -22,7 +22,14 @@ namespace CVRLua
             OnTriggerEnter,
             OnTriggerExit,
             OnTriggerStay,
-            OnScriptMessage
+            OnAnimatorIK,
+            OnMessage,
+            OnInteractableGrab,
+            OnInteractableDrop,
+            OnInteractableUp,
+            OnInteractableDown,
+            OnInteractableGazeEnter,
+            OnInteractableGazeExit,
         }
 
         readonly Lua.LuaVM m_vm = null;
@@ -38,8 +45,12 @@ namespace CVRLua
             Lua.LuaDefs.TransformDefs.Init();
             Lua.LuaDefs.GameObjectDefs.Init();
 
+            Lua.LuaDefs.AudioClipDefs.Init();
             Lua.LuaDefs.AudioSourceDefs.Init();
             Lua.LuaDefs.ColliderDefs.Init();
+            Lua.LuaDefs.AnimatorDefs.Init();
+
+            Lua.LuaDefs.LuaScriptDefs.Init();
 
             Lua.LuaDefs.QuaternionDefs.Init();
             Lua.LuaDefs.Vector2Defs.Init();
@@ -63,14 +74,17 @@ namespace CVRLua
             Lua.LuaDefs.TransformDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.GameObjectDefs.RegisterInVM(m_vm);
 
+            Lua.LuaDefs.AudioClipDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.AudioSourceDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.ColliderDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.AnimatorDefs.RegisterInVM(m_vm);
+
+            Lua.LuaDefs.LuaScriptDefs.RegisterInVM(m_vm);
 
             Lua.LuaDefs.QuaternionDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.Vector2Defs.RegisterInVM(m_vm);
             Lua.LuaDefs.Vector3Defs.RegisterInVM(m_vm);
             Lua.LuaDefs.Vector4Defs.RegisterInVM(m_vm);
-            //Lua.LuaDefs.LuaScriptDefs.Init(m_vm);
 
             Lua.LuaDefs.LocalPlayerDefs.RegisterInVM(m_vm);
         }

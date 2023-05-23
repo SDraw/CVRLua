@@ -25,10 +25,10 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceMethods.Add(nameof(CompareTag), CompareTag);
             ms_instanceMethods.Add(nameof(GetComponent), GetComponent);
 
-            ObjectDefs.Inherit(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
+            ObjectDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
-        internal static void Inherit(
+        internal static void InheritTo(
             List<(string, LuaInterop.lua_CFunction)> p_metaMethods,
             Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> p_staticProperties,
             Dictionary<string, LuaInterop.lua_CFunction> p_staticMethods,

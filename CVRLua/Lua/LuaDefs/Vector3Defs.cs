@@ -40,7 +40,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_staticMethods.Add(nameof(Slerp), Slerp);
             ms_staticMethods.Add(nameof(SlerpUnclamped), SlerpUnclamped);
             ms_staticMethods.Add(nameof(SmoothDamp), SmoothDamp);
-            ms_staticMethods.Add(nameof(IsValid), IsValid);
+            ms_staticMethods.Add(nameof(IsVector3), IsVector3);
 
             ms_metaMethods.Add(("__add", Add));
             ms_metaMethods.Add(("__sub", Subtract));
@@ -383,7 +383,7 @@ namespace CVRLua.Lua.LuaDefs
             return l_argReader.GetReturnValue();
         }
 
-        static int IsValid(IntPtr p_state)
+        static int IsVector3(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector3 l_obj = null;

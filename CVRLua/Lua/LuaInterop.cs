@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace CVRLua.Lua
 {
-    static class LuaInterop
+    public static class LuaInterop
     {
         const string ms_binaryName = "lua54.dll";
 

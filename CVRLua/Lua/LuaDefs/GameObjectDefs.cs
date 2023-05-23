@@ -30,7 +30,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceMethods.Add(nameof(GetComponent), GetComponent);
             ms_instanceMethods.Add(nameof(SetActive), SetActive);
 
-            ObjectDefs.Inherit(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
+            ObjectDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         public static void RegisterInVM(LuaVM p_vm)

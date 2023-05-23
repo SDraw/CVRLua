@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using ABI.CCK.Components;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace CVRLua
 {
     public class LuaScript : MonoBehaviour
     {
-        public TextAsset ScriptFile;
+        public List<TextAsset> Scripts = new List<TextAsset>();
 
         public List<string> VariableNames = new List<string>();
         public List<GameObject> VariableValues = new List<GameObject>();
@@ -14,11 +15,14 @@ namespace CVRLua
         LuaHandler m_luaHandler = null;
         Wrappers.LocalPlayer m_localPlayer = null;
 
+        CVRInteractable m_interactable = null;
+
         void Awake()
         {
             m_localPlayer = new Wrappers.LocalPlayer();
+            m_interactable = this.GetComponent<CVRInteractable>();
 
-            m_luaHandler = new LuaHandler((ScriptFile != null) ? ScriptFile.name : this.gameObject.name);
+            m_luaHandler = new LuaHandler(this.name);
             Core.Instance?.RegisterScript(this);
 
             if((VariableNames.Count > 0) && (VariableValues.Count > 0))
@@ -30,8 +34,8 @@ namespace CVRLua
             m_luaHandler.SetGlobalVariable("this", this.gameObject);
             m_luaHandler.SetGlobalVariable("localPlayer", m_localPlayer);
 
-            if(ScriptFile != null)
-                m_luaHandler.Execute(ScriptFile.text);
+            foreach(var l_script in Scripts)
+                m_luaHandler.Execute(l_script.text);
 
             m_luaHandler.ParseEvents();
             m_luaHandler.CallEvent(LuaHandler.ScriptEvent.Start);
@@ -108,6 +112,12 @@ namespace CVRLua
             m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnTriggerStay, p_col.name, p_col.GetInstanceID(), Utils.IsInternal(p_col));
         }
 
+        void OnAnimatorIK(int p_layer)
+        {
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnAnimatorIK, p_layer);
+        }
+
+        // GC
         IEnumerator CheckEndOfFrame()
         {
             while(true)
@@ -117,9 +127,47 @@ namespace CVRLua
             }
         }
 
-        public void SendScriptMessage(params object[] p_args)
+        // Custom events
+        public void SendScriptMessage(List<object> p_args)
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnScriptMessage, p_args);
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnMessage, p_args.ToArray());
+        }
+
+        // Game events
+        internal void OnInteractableGrab(CVRInteractable p_instance)
+        {
+            if(m_interactable == p_instance)
+                m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnInteractableGrab);
+        }
+
+        internal void OnInteractableDrop(CVRInteractable p_instance)
+        {
+            if(m_interactable == p_instance)
+                m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnInteractableDrop);
+        }
+
+        internal void OnInteractableUp(CVRInteractable p_instance)
+        {
+            if(m_interactable == p_instance)
+                m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnInteractableUp);
+        }
+
+        internal void OnInteractableDown(CVRInteractable p_instance)
+        {
+            if(m_interactable == p_instance)
+                m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnInteractableDown);
+        }
+
+        internal void OnInteractableGazeEnter(CVRInteractable p_instance)
+        {
+            if(m_interactable == p_instance)
+                m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnInteractableGazeEnter);
+        }
+
+        internal void OnInteractableGazeExit(CVRInteractable p_instance)
+        {
+            if(m_interactable == p_instance)
+                m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnInteractableGazeExit);
         }
     }
 }

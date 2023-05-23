@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CVRLua.Lua
 {
@@ -252,6 +253,54 @@ namespace CVRLua.Lua
         {
             if((m_vm != null) && !m_hasErrors && m_vm.IsString(m_currentArgument) && Enum.TryParse(m_vm.ToString(m_currentArgument), out p_enum))
                 m_currentArgument++;
+        }
+
+        public void ReadArguments(List<object> p_args)
+        {
+            if((m_vm != null) && !m_hasErrors)
+            {
+                while(m_currentArgument <= m_argumentsCount)
+                {
+                    if(m_vm.IsNil(m_currentArgument))
+                    {
+                        p_args.Add(null);
+                        m_currentArgument++;
+                        continue;
+                    }
+                    if(m_vm.IsBoolean(m_currentArgument))
+                    {
+                        p_args.Add(m_vm.ToBoolean(m_currentArgument));
+                        m_currentArgument++;
+                        continue;
+                    }
+                    if(m_vm.IsNumber(m_currentArgument))
+                    {
+                        p_args.Add(m_vm.ToNumber(m_currentArgument));
+                        m_currentArgument++;
+                        continue;
+                    }
+                    if(m_vm.IsInteger(m_currentArgument))
+                    {
+                        p_args.Add(m_vm.ToInteger(m_currentArgument));
+                        continue;
+                    }
+                    if(m_vm.IsString(m_currentArgument))
+                    {
+                        p_args.Add(m_vm.ToString(m_currentArgument));
+                        m_currentArgument++;
+                        continue;
+                    }
+                    if(m_vm.IsObject(m_currentArgument))
+                    {
+                        object p_obj = null;
+                        if(m_vm.GetObject(ref p_obj, m_currentArgument))
+                            p_args.Add(p_obj);
+                        else
+                            p_args.Add(null);
+                        m_currentArgument++;
+                    }
+                }
+            }
         }
 
         public void PushBoolean(bool p_val)

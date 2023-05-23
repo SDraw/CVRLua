@@ -79,12 +79,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LuaHandler.cs" />
+    <Compile Include="Lua\LuaDefs\AnimatorDefs.cs" />
+    <Compile Include="Lua\LuaDefs\AudioClipDefs.cs" />
     <Compile Include="Lua\LuaDefs\AudioSourceDefs.cs" />
     <Compile Include="Lua\LuaDefs\BehaviourDefs.cs" />
     <Compile Include="Lua\LuaDefs\ColliderDefs.cs" />
     <Compile Include="Lua\LuaDefs\ComponentDefs.cs" />
     <Compile Include="Lua\LuaDefs\Delegates.cs" />
-    <None Include="Lua\LuaDefs\LuaScriptDefs.cs" />
+    <Compile Include="Lua\LuaDefs\LuaScriptDefs.cs" />
     <Compile Include="Lua\LuaDefs\LocalPlayerDefs.cs" />
     <Compile Include="Lua\LuaDefs\MonoBehaviourDefs.cs" />
     <Compile Include="Lua\LuaDefs\ObjectDefs.cs" />

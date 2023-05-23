@@ -25,7 +25,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_staticMethods.Add(nameof(MoveTowards), MoveTowards);
             ms_staticMethods.Add(nameof(Project), Project);
             ms_staticMethods.Add(nameof(Scale), Scale);
-            ms_staticMethods.Add(nameof(IsValid), IsValid);
+            ms_staticMethods.Add(nameof(IsVector4), IsVector4);
 
             ms_metaMethods.Add(("__add", Add));
             ms_metaMethods.Add(("__sub", Subtract));
@@ -207,7 +207,7 @@ namespace CVRLua.Lua.LuaDefs
             return l_argReader.GetReturnValue();
         }
 
-        static int IsValid(IntPtr p_state)
+        static int IsVector4(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector4 l_obj = null;

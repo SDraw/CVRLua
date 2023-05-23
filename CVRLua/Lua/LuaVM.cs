@@ -12,6 +12,7 @@ namespace CVRLua.Lua
         readonly IntPtr m_state = IntPtr.Zero;
         readonly Dictionary<int, object> m_objectsMap = null;
 
+
         internal LuaVM(string p_name = "")
         {
             m_name = p_name;
@@ -154,7 +155,7 @@ namespace CVRLua.Lua
             LuaInterop.lua_gc(m_state, LuaInterop.LUA_GCSTEP, 0);
         }
 
-        static int LuaGC(IntPtr p_state)
+        static int ObjectsGC(IntPtr p_state)
         {
             // Erases only wrapped structures
             LuaVM l_vm = GetVM(p_state);
@@ -220,7 +221,7 @@ namespace CVRLua.Lua
 
             if(p_type.GetInterfaces().Contains(typeof(Wrappers.WrappedStructure)))
             {
-                LuaInterop.lua_pushcfunction(m_state, LuaGC);
+                LuaInterop.lua_pushcfunction(m_state, ObjectsGC);
                 LuaInterop.lua_setfield(m_state, -2, "__gc"); // Garbage collector for wrapped classes
             }
 

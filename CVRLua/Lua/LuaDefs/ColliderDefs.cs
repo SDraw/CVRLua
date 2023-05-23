@@ -16,6 +16,8 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
+            ms_staticMethods.Add(nameof(IsCollider), IsCollider);
+
             //ms_instanceProperties.Add("attachedRigidbody", (?, ?)); // Requires RigidBody defs
             //ms_instanceProperties.Add("bounds", (?, ?)); // Requires Bound defs
             ms_instanceProperties.Add("contactOffset", (GetContactOffset, SetContactOffset));
@@ -28,12 +30,22 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceMethods.Add(nameof(ClosestPointOnBounds), ClosestPointOnBounds);
             //ms_instanceMethods.Add(nameof(Raycast), Raycast); // Requires some defs
 
-            ComponentDefs.Inherit(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
+            ComponentDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Collider), null, ms_metaMethods, StaticGet, null, InstanceGet, InstanceSet);
+        }
+
+        // Static methods
+        static int IsCollider(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Collider l_col = null;
+            l_argReader.ReadNextObject(ref l_col);
+            l_argReader.PushBoolean(l_col != null);
+            return l_argReader.GetReturnValue();
         }
 
         // Instance properties

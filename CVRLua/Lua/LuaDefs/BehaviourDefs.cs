@@ -16,15 +16,15 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add("IsBehaviour", IsBehaviour);
+            ms_staticMethods.Add(nameof(IsBehaviour), IsBehaviour);
 
             ms_instanceProperties.Add("enabled", (GetEnabled, SetEnabled));
             ms_instanceProperties.Add("isActiveAndEnabled", (GetIsActiveAndEnabled, null));
 
-            ComponentDefs.Inherit(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
+            ComponentDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
-        internal static void Inherit(
+        internal static void InheritTo(
             List<(string, LuaInterop.lua_CFunction)> p_metaMethods,
             Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> p_staticProperties,
             Dictionary<string, LuaInterop.lua_CFunction> p_staticMethods,

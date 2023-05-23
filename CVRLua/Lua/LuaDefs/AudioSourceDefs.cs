@@ -7,6 +7,7 @@ namespace CVRLua.Lua.LuaDefs
     static class AudioSourceDefs
     {
         const string c_destroyed = "AudioSource is destroyed";
+        const string c_destroyedClip = "Destroyed AudioClip";
 
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_metaMethods = new List<(string, LuaInterop.lua_CFunction)>();
         static readonly Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> ms_staticProperties = new Dictionary<string, (StaticParseDelegate, StaticParseDelegate)>();
@@ -16,12 +17,13 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            //ms_staticMethods.Add(nameof(PlayClipAtPoint), PlayClipAtPoint); // Requires Clip defs
+            ms_staticMethods.Add(nameof(PlayClipAtPoint), PlayClipAtPoint);
+            ms_staticMethods.Add(nameof(IsAudioSource), IsAudioSource);
 
             ms_instanceProperties.Add("bypassEffects", (GetBypassEffects, SetBypassEffects));
             ms_instanceProperties.Add("bypassListenerEffects", (GetBypassListenerEffects, SetBypassListenerEffects));
             ms_instanceProperties.Add("bypassReverbZones", (GetBypassReverbZones, SetBypassReverbZones));
-            //ms_instanceProperties.Add("clip", (?, ?)); // Requires Clip defs
+            ms_instanceProperties.Add("clip", (GetClip, SetClip));
             ms_instanceProperties.Add("dopplerLevel", (GetDopplerLevel, SetDopplerLevel));
             ms_instanceProperties.Add("ignoreListenerPause", (GetIgnoreListenerPause, SetIgnoreListenerPause));
             ms_instanceProperties.Add("ignoreListenerVolume", (GetIgnoreListenerVolume, SetIgnoreListenerVolume));
@@ -55,7 +57,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceMethods.Add(nameof(Pause), Pause);
             ms_instanceMethods.Add(nameof(Play), Play);
             ms_instanceMethods.Add(nameof(PlayDelayed), PlayDelayed);
-            //ms_instanceMethods.Add(nameof(PlayOneShot), PlayOneShot); // Requires Clip defs
+            ms_instanceMethods.Add(nameof(PlayOneShot), PlayOneShot);
             ms_instanceMethods.Add(nameof(PlayScheduled), PlayScheduled);
             ms_instanceMethods.Add(nameof(SetAmbisonicDecoderFloat), SetAmbisonicDecoderFloat);
             //ms_instanceMethods.Add(nameof(SetCustomCurve), SetCustomCurve); // Requires Curve defs
@@ -65,7 +67,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceMethods.Add(nameof(Stop), Stop);
             ms_instanceMethods.Add(nameof(UnPause), UnPause);
 
-            BehaviourDefs.Inherit(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
+            BehaviourDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         internal static void RegisterInVM(LuaVM p_m)
@@ -74,6 +76,43 @@ namespace CVRLua.Lua.LuaDefs
         }
 
         // Static methods
+        static int PlayClipAtPoint(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            AudioClip l_clip = null;
+            Wrappers.Vector3 l_vec = null;
+            float l_volume = 1f;
+            l_argReader.ReadObject(ref l_clip);
+            l_argReader.ReadObject(ref l_vec);
+            l_argReader.ReadNextNumber(ref l_volume);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_clip != null)
+                {
+                    AudioSource.PlayClipAtPoint(l_clip, l_vec.m_vec, l_volume);
+                    l_argReader.PushBoolean(true);
+                }
+                else
+                {
+                    l_argReader.SetError(c_destroyedClip);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return l_argReader.GetReturnValue();
+        }
+
+        static int IsAudioSource(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadNextObject(ref l_source);
+            l_argReader.PushBoolean(l_source != null);
+            return l_argReader.GetReturnValue();
+        }
 
         // Instance properties
         static void GetBypassEffects(object p_obj, LuaArgReader p_reader)
@@ -110,6 +149,31 @@ namespace CVRLua.Lua.LuaDefs
             p_reader.ReadBoolean(ref l_state);
             if(!p_reader.HasErrors())
                 (p_obj as AudioSource).bypassReverbZones = l_state;
+        }
+
+        static void GetClip(object p_obj, LuaArgReader p_reader)
+        {
+            if((p_obj as AudioSource).clip != null)
+                p_reader.PushObject((p_obj as AudioSource).clip);
+            else
+                p_reader.PushBoolean(false);
+        }
+        static void SetClip(object p_obj, LuaArgReader p_reader)
+        {
+            if(p_reader.IsNextNil())
+                (p_obj as AudioSource).clip = null;
+            else
+            {
+                AudioClip l_clip = null;
+                p_reader.ReadObject(ref l_clip);
+                if(!p_reader.HasErrors())
+                {
+                    if(l_clip != null)
+                        (p_obj as AudioSource).clip = l_clip;
+                    else
+                        p_reader.SetError(c_destroyedClip);
+                }
+            }
         }
 
         static void GetDopplerLevel(object p_obj, LuaArgReader p_reader)
@@ -334,7 +398,7 @@ namespace CVRLua.Lua.LuaDefs
         {
             int l_val = 0;
             p_reader.ReadInteger(ref l_val);
-                (p_obj as AudioSource).timeSamples = l_val;
+            (p_obj as AudioSource).timeSamples = l_val;
         }
 
         static void GetVelocityUpdateMode(object p_obj, LuaArgReader p_reader)
@@ -483,6 +547,43 @@ namespace CVRLua.Lua.LuaDefs
                 {
                     l_source.PlayDelayed(l_delay);
                     l_argReader.PushBoolean(true);
+                }
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return l_argReader.GetReturnValue();
+        }
+
+        static int PlayOneShot(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            AudioClip l_clip = null;
+            float l_volume = 1f;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadObject(ref l_clip);
+            l_argReader.ReadNextNumber(ref l_volume);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                {
+                    if(l_clip != null)
+                    {
+                        l_source.PlayOneShot(l_clip, l_volume);
+                        l_argReader.PushBoolean(true);
+                    }
+                    else
+                    {
+                        l_argReader.SetError("Destroyed AudioClip");
+                        l_argReader.PushBoolean(false);
+                    }
                 }
                 else
                 {

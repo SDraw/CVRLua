@@ -1,4 +1,5 @@
-﻿using ABI_RC.Core.Player;
+﻿using ABI_RC.Core;
+using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Systems.IK;
 using ABI_RC.Systems.MovementSystem;
@@ -23,14 +24,18 @@ namespace CVRLua.Wrappers
 
         public bool IsInVR() => CheckVR.Instance.hasVrDeviceLoaded;
         public bool IsInFullbody() => CheckVR.Instance.hasFullbodyEnabled;
+        public bool HasAvatar() => (PlayerSetup.Instance._avatar != null);
         public bool IsAvatarLoading() => PlayerSetup.Instance.avatarIsLoading;
+        public bool IsAvatarHumanoid() => ((PlayerSetup.Instance._animator != null) && PlayerSetup.Instance._animator.isHuman);
 
         public bool IsFlying() => MovementSystem.Instance.flying;
         public bool IsCrouching() => MovementSystem.Instance.crouching;
         public bool IsProning() => MovementSystem.Instance.crouching;
         public bool IsSitting() => MovementSystem.Instance.sitting;
         public bool IsSprinting() => CVRInputManager.Instance.sprint;
+        public bool IsJumping() => CVRInputManager.Instance.jump;
         public bool IsZooming() => CVRInputManager.Instance.zoom;
+        public float GetZoomFactor() => CVR_DesktopCameraController.currentZoomProgress;
         public UnityEngine.Vector3 GetMovementVector() => MovementSystem.Instance.movementVector;
 
         public UnityEngine.Vector3 GetLeftHandPosition() => IKSystem.Instance.leftHandOffset.position;
@@ -43,6 +48,7 @@ namespace CVRLua.Wrappers
         public void Teleport(UnityEngine.Vector3 p_position) => MovementSystem.Instance.TeleportTo(p_position);
         public void Teleport(UnityEngine.Vector3 p_position, UnityEngine.Quaternion p_rotation) => MovementSystem.Instance.TeleportTo(p_position, p_rotation.eulerAngles);
         public void SetImmobilized(bool p_state) => MovementSystem.Instance.SetImmobilized(p_state);
+        public void Respawn() => RootLogic.Instance.Respawn();
 
         public UnityEngine.Vector3 GetBonePosition(UnityEngine.HumanBodyBones p_bone)
         {

@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace CVRLua.Lua.LuaDefs
 {
-    static class MonoBehaviourDefs
+    static class AudioClipDefs
     {
-        const string c_destroyed = "Behaviour is destroyed";
+        const string c_destroyed = "AudioClip is destroyed";
 
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_metaMethods = new List<(string, LuaInterop.lua_CFunction)>();
         static readonly Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> ms_staticProperties = new Dictionary<string, (StaticParseDelegate, StaticParseDelegate)>();
@@ -16,63 +16,81 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add("IsMonoBehaviour", IsMonoBehaviour);
+            //ms_staticMethods(nameof(Create), Create); // Probably will not be implemented
+            ms_staticMethods.Add(nameof(IsAudioClip), IsAudioClip);
 
-            ms_instanceProperties.Add("useGUILayout", (GetUseGUILayout, SetUseGUILayout));
+            ms_instanceProperties.Add("ambisonic", (GetAmbisonic, null));
+            ms_instanceProperties.Add("channels", (GetChannels, null));
+            ms_instanceProperties.Add("frequency", (GetFrequency, null));
+            ms_instanceProperties.Add("length", (GetLength, null));
+            ms_instanceProperties.Add("loadInBackground", (GetLoadInBackground, null));
+            ms_instanceProperties.Add("loadState", (GetLoadState, null));
+            ms_instanceProperties.Add("loadType", (GetLoadType, null));
+            ms_instanceProperties.Add("preloadAudioData", (GetPreloadAudioData, null));
+            ms_instanceProperties.Add("samples", (GetSamples, null));
 
-            BehaviourDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
+            ObjectDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         internal static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(MonoBehaviour), null, ms_metaMethods, StaticGet, null, InstanceGet, InstanceSet);
-        }
-
-        internal static void InheritTo(
-            List<(string, LuaInterop.lua_CFunction)> p_metaMethods,
-            Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> p_staticProperties,
-            Dictionary<string, LuaInterop.lua_CFunction> p_staticMethods,
-            Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)> p_instanceProperties,
-            Dictionary<string, LuaInterop.lua_CFunction> p_instanceMethods
-        )
-        {
-            if(p_metaMethods != null)
-                ms_metaMethods.MergeInto(p_metaMethods);
-
-            if(p_staticProperties != null)
-                ms_staticProperties.MergeInto(p_staticProperties);
-
-            if(p_staticMethods != null)
-                ms_staticMethods.MergeInto(p_staticMethods);
-
-            if(p_instanceProperties != null)
-                ms_instanceProperties.MergeInto(p_instanceProperties);
-
-            if(p_instanceMethods != null)
-                ms_instanceMethods.MergeInto(p_instanceMethods);
+            p_vm.RegisterClass(typeof(AudioClip), null, ms_metaMethods, StaticGet, null, InstanceGet, InstanceSet);
         }
 
         // Static methods
-        static int IsMonoBehaviour(IntPtr p_state)
+        static int IsAudioClip(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            MonoBehaviour l_behaviour = null;
-            l_argReader.ReadNextObject(ref l_behaviour);
-            l_argReader.PushBoolean(l_behaviour != null);
+            AudioClip l_clip = null;
+            l_argReader.ReadNextObject(ref l_clip);
+            l_argReader.PushBoolean(l_clip != null);
             return l_argReader.GetReturnValue();
         }
 
         // Instance properties
-        static void GetUseGUILayout(object p_obj, LuaArgReader p_reader)
+        static void GetAmbisonic(object p_obj, LuaArgReader p_reader)
         {
-            p_reader.PushBoolean((p_obj as MonoBehaviour).useGUILayout);
+            p_reader.PushBoolean((p_obj as AudioClip).ambisonic);
         }
-        static void SetUseGUILayout(object p_obj, LuaArgReader p_reader)
+
+        static void GetChannels(object p_obj, LuaArgReader p_reader)
         {
-            bool l_state = false;
-            p_reader.ReadBoolean(ref l_state);
-            if(!p_reader.HasErrors())
-                (p_obj as MonoBehaviour).useGUILayout = l_state;
+            p_reader.PushInteger((p_obj as AudioClip).channels);
+        }
+
+        static void GetFrequency(object p_obj, LuaArgReader p_reader)
+        {
+            p_reader.PushInteger((p_obj as AudioClip).frequency);
+        }
+
+        static void GetLength(object p_obj, LuaArgReader p_reader)
+        {
+            p_reader.PushNumber((p_obj as AudioClip).length);
+        }
+
+        static void GetLoadInBackground(object p_obj, LuaArgReader p_reader)
+        {
+            p_reader.PushBoolean((p_obj as AudioClip).loadInBackground);
+        }
+
+        static void GetLoadState(object p_obj, LuaArgReader p_reader)
+        {
+            p_reader.PushString((p_obj as AudioClip).loadState.ToString());
+        }
+
+        static void GetLoadType(object p_obj, LuaArgReader p_reader)
+        {
+            p_reader.PushString((p_obj as AudioClip).loadType.ToString());
+        }
+
+        static void GetPreloadAudioData(object p_obj, LuaArgReader p_reader)
+        {
+            p_reader.PushBoolean((p_obj as AudioClip).preloadAudioData);
+        }
+
+        static void GetSamples(object p_obj, LuaArgReader p_reader)
+        {
+            p_reader.PushInteger((p_obj as AudioClip).samples);
         }
 
         // Static getter
@@ -101,7 +119,7 @@ namespace CVRLua.Lua.LuaDefs
         static int InstanceGet(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Behaviour l_obj = null;
+            AudioClip l_obj = null;
             string l_key = "";
             l_argReader.ReadObject(ref l_obj);
             l_argReader.ReadString(ref l_key);
@@ -133,7 +151,7 @@ namespace CVRLua.Lua.LuaDefs
         {
             // Our value is on stack top
             var l_argReader = new LuaArgReader(p_state);
-            Behaviour l_obj = null;
+            AudioClip l_obj = null;
             string l_key = "";
             l_argReader.ReadObject(ref l_obj);
             l_argReader.ReadString(ref l_key);

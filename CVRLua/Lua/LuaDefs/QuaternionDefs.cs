@@ -27,7 +27,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_staticMethods.Add(nameof(RotateTowards), RotateTowards);
             ms_staticMethods.Add(nameof(Slerp), Slerp);
             ms_staticMethods.Add(nameof(SlerpUnclamped), SlerpUnclamped);
-            ms_staticMethods.Add(nameof(IsValid), IsValid);
+            ms_staticMethods.Add(nameof(IsQuaternion), IsQuaternion);
 
             ms_metaMethods.Add(("__mul", Multiply));
             ms_metaMethods.Add(("__eq", Equal));
@@ -294,7 +294,7 @@ namespace CVRLua.Lua.LuaDefs
             return l_argReader.GetReturnValue();
         }
 
-        static int IsValid(IntPtr p_state)
+        static int IsQuaternion(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
             Wrappers.Quaternion l_obj = null;

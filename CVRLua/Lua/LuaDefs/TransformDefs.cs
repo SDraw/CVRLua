@@ -58,7 +58,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceMethods.Add(nameof(TransformVector), TransformVector);
             ms_instanceMethods.Add(nameof(Translate), Translate);
 
-            ComponentDefs.Inherit(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
+            ComponentDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         public static void RegisterInVM(LuaVM p_vm)
