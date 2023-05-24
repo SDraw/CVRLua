@@ -1,6 +1,6 @@
 ﻿namespace CVRLua.Wrappers
 {
-    class Quaternion : WrappedStructure
+    class Quaternion
     {
         public UnityEngine.Quaternion m_quat;
 

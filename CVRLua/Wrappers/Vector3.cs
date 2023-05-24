@@ -1,6 +1,6 @@
 ﻿namespace CVRLua.Wrappers
 {
-    class Vector3 : WrappedStructure
+    class Vector3
     {
         public UnityEngine.Vector3 m_vec;
 

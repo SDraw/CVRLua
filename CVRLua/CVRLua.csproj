@@ -116,7 +116,6 @@
     <Compile Include="Wrappers\Vector2.cs" />
     <Compile Include="Wrappers\Vector4.cs" />
     <Compile Include="Wrappers\Vector3.cs" />
-    <Compile Include="Wrappers\WrappedStructure.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="vendor\lua\bin\lua54.dll">

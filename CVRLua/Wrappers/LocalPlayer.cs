@@ -6,7 +6,7 @@ using ABI_RC.Systems.MovementSystem;
 
 namespace CVRLua.Wrappers
 {
-    class LocalPlayer : WrappedStructure
+    class LocalPlayer
     {
         public string GetName() => MetaPort.Instance.username;
 

@@ -1,6 +1,6 @@
 ﻿namespace CVRLua.Wrappers
 {
-    class Vector4 : WrappedStructure
+    class Vector4
     {
         public UnityEngine.Vector4 m_vec;
 
