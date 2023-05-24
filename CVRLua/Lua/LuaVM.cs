@@ -79,7 +79,7 @@ namespace CVRLua.Lua
         // Objects push/get
         public void PushObject<T>(T p_obj) where T : class
         {
-            long l_hash = RuntimeHelpers.GetHashCode(p_obj);
+            long l_hash = Utils.CombineInts(RuntimeHelpers.GetHashCode(p_obj), p_obj.GetHashCode());
             if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
                 l_refObj.m_references++;
             else
@@ -91,7 +91,7 @@ namespace CVRLua.Lua
 
         public void PushObject<T>(T p_obj, string p_type) where T : class
         {
-            long l_hash = RuntimeHelpers.GetHashCode(p_obj);
+            long l_hash = Utils.CombineInts(RuntimeHelpers.GetHashCode(p_obj), p_obj.GetHashCode());
             if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
                 l_refObj.m_references++;
             else

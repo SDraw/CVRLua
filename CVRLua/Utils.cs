@@ -52,5 +52,13 @@ namespace CVRLua
         {
             return (p_col.gameObject.scene.name == "DontDestroyOnLoad");
         }
+
+        public static long CombineInts(int left, int right)
+        {
+            long l_result = left;
+            l_result = (l_result << 32);
+            l_result = l_result | (uint)right;
+            return l_result;
+        }
     }
 }
