@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace CVRLua.Lua
 {
@@ -21,7 +22,7 @@ namespace CVRLua.Lua
 
         readonly string m_name;
         readonly IntPtr m_state = IntPtr.Zero;
-        readonly Dictionary<int, ReferencedObject> m_objectsMap = null;
+        readonly Dictionary<long, ReferencedObject> m_objectsMap = null;
 
         internal LuaVM(string p_name = "")
         {
@@ -35,7 +36,7 @@ namespace CVRLua.Lua
             LuaInterop.luaL_requiref(m_state, "string", LuaInterop.luaopen_string, 1);
             LuaInterop.luaL_requiref(m_state, "math", LuaInterop.luaopen_math, 1);
 
-            m_objectsMap = new Dictionary<int, ReferencedObject>();
+            m_objectsMap = new Dictionary<long, ReferencedObject>();
 
             RegisterGlobalFunction(nameof(Log), Log);
         }
@@ -78,25 +79,25 @@ namespace CVRLua.Lua
         // Objects push/get
         public void PushObject<T>(T p_obj) where T : class
         {
-            int l_hash = p_obj.GetHashCode();
+            long l_hash = RuntimeHelpers.GetHashCode(p_obj);
             if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
                 l_refObj.m_references++;
             else
                 m_objectsMap.Add(l_hash, new ReferencedObject(p_obj));
 
-            LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash);
+            LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash); // This can lead to collision, still very rare
             LuaInterop.luaL_setmetatable(m_state, typeof(T).Name);
         }
 
         public void PushObject<T>(T p_obj, string p_type) where T : class
         {
-            int l_hash = p_obj.GetHashCode();
+            long l_hash = RuntimeHelpers.GetHashCode(p_obj);
             if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
                 l_refObj.m_references++;
             else
                 m_objectsMap.Add(l_hash, new ReferencedObject(p_obj));
 
-            LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash);
+            LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash); // This can lead to collision, still very rare
             LuaInterop.luaL_setmetatable(m_state, p_type);
         }
 
@@ -105,7 +106,7 @@ namespace CVRLua.Lua
             bool l_result = false;
             if(IsUserdata(p_index))
             {
-                int l_hash = ToUserdata(p_index).GetInt();
+                long l_hash = ToUserdata(p_index).GetInt();
                 if((l_hash != 0) && m_objectsMap.TryGetValue(l_hash, out var l_refObj) && (l_refObj.m_object is T))
                 {
                     p_obj = (T)l_refObj.m_object;
@@ -174,7 +175,7 @@ namespace CVRLua.Lua
             LuaVM l_vm = GetVM(p_state);
             if((l_vm != null) && l_vm.IsUserdata(1))
             {
-                int l_hash = l_vm.ToUserdata(1).GetInt();
+                long l_hash = l_vm.ToUserdata(1).GetInt();
                 if((l_hash != 0) && l_vm.m_objectsMap.TryGetValue(l_hash, out var l_orc))
                 {
                     l_orc.m_references--;

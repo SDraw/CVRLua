@@ -7,22 +7,22 @@ namespace CVRLua
 {
     static class Utils
     {
-        public static int GetInt(this IntPtr p_source)
+        public static long GetInt(this IntPtr p_source)
         {
-            int l_result = 0;
+            long l_result = 0;
             try
             {
-                l_result = Marshal.ReadInt32(p_source);
+                l_result = Marshal.ReadInt64(p_source);
             }
             catch(AccessViolationException) { }
             return l_result;
         }
 
-        public static void SetInt(this IntPtr p_source, int p_value)
+        public static void SetInt(this IntPtr p_source, long p_value)
         {
             try
             {
-                Marshal.WriteInt32(p_source, p_value);
+                Marshal.WriteInt64(p_source, p_value);
             }
             catch(AccessViolationException) { }
         }
