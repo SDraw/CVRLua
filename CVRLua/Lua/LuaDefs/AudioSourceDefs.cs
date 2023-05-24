@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace CVRLua.Lua.LuaDefs
@@ -473,7 +472,7 @@ namespace CVRLua.Lua.LuaDefs
                     {
                         float[] l_data = new float[l_samples];
                         l_source.GetOutputData(l_data, l_channel);
-                        l_argReader.PushTable(l_data.ToList());
+                        l_argReader.PushTable(l_data);
                     }
                     else
                         l_argReader.PushBoolean(false);
@@ -539,7 +538,7 @@ namespace CVRLua.Lua.LuaDefs
                     {
                         float[] l_data = new float[l_samples];
                         l_source.GetSpectrumData(l_data, l_channel, l_window);
-                        l_argReader.PushTable(l_data.ToList());
+                        l_argReader.PushTable(l_data);
                     }
                     else
                         l_argReader.PushBoolean(false);

@@ -277,6 +277,17 @@ namespace CVRLua.Lua
             }
         }
 
+        public void PushTable<T>(T[] p_array)
+        {
+            LuaInterop.lua_newtable(m_state);
+            for(int i = 0, j = p_array.Length; i < j; i++)
+            {
+                LuaInterop.lua_pushinteger(m_state, i + 1);
+                PushValue(p_array[i]);
+                LuaInterop.lua_settable(m_state, -3);
+            }
+        }
+
         public void PushTable<T>(List<T> p_list)
         {
             LuaInterop.lua_newtable(m_state);

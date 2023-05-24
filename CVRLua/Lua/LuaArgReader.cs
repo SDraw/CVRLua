@@ -375,6 +375,15 @@ namespace CVRLua.Lua
             }
         }
 
+        public void PushTable<T>(T[] p_array)
+        {
+            if(m_vm != null)
+            {
+                m_vm.PushTable(p_array);
+                m_returnCount++;
+            }
+        }
+
         public void PushTable<T>(List<T> p_list)
         {
             if(m_vm != null)
