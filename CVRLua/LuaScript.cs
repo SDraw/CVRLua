@@ -82,19 +82,19 @@ namespace CVRLua
         void OnCollisionEnter(Collision p_col)
         {
             // Add later
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnCollisionEnter);
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnCollisionEnter, p_col);
         }
 
         void OnCollisionExit(Collision p_col)
         {
             // Add later
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnCollisionExit);
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnCollisionExit, p_col);
         }
 
         void OnCollisionStay(Collision p_col)
         {
             // Add later
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnCollisionStay);
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnCollisionStay, p_col);
         }
 
         void OnTriggerEnter(Collider p_col)

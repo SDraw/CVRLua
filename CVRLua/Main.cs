@@ -22,6 +22,8 @@ namespace CVRLua
             if(Instance == null)
                 Instance = this;
 
+            LibrariesHandler.ExtractDependencies();
+
             // Patches
             // Interactable
             HarmonyInstance.Patch(typeof(CVRInteractable).GetMethod(nameof(CVRInteractable.Grab)),

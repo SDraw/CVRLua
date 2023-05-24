@@ -44,7 +44,7 @@ namespace CVRLua.Wrappers
         public UnityEngine.Quaternion GetRightHandRotation() => IKSystem.Instance.rightHandOffset.rotation;
         public float GetLeftHandGetsture() => CVRInputManager.Instance.gestureLeft;
         public float GetRightHandGetsture() => CVRInputManager.Instance.gestureRight;
-        
+
         public void Teleport(UnityEngine.Vector3 p_position) => MovementSystem.Instance.TeleportTo(p_position);
         public void Teleport(UnityEngine.Vector3 p_position, UnityEngine.Quaternion p_rotation) => MovementSystem.Instance.TeleportTo(p_position, p_rotation.eulerAngles);
         public void SetImmobilized(bool p_state) => MovementSystem.Instance.SetImmobilized(p_state);

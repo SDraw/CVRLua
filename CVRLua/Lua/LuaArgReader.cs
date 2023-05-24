@@ -375,6 +375,24 @@ namespace CVRLua.Lua
             }
         }
 
+        public void PushTable<T>(List<T> p_list)
+        {
+            if(m_vm != null)
+            {
+                m_vm.PushTable(p_list);
+                m_returnCount++;
+            }
+        }
+
+        public void PushTable(Dictionary<string, object> p_dict)
+        {
+            if(m_vm != null)
+            {
+                m_vm.PushTable(p_dict);
+                m_returnCount++;
+            }
+        }
+
         public bool IsNextBoolean() => ((m_vm != null) && (m_currentArgument <= m_argumentsCount) && m_vm.IsBoolean(m_currentArgument));
         public bool IsNextNumber() => ((m_vm != null) && (m_currentArgument <= m_argumentsCount) && m_vm.IsNumber(m_currentArgument));
         public bool IsNextInteger() => ((m_vm != null) && (m_currentArgument <= m_argumentsCount) && m_vm.IsInteger(m_currentArgument));

@@ -6,7 +6,7 @@ namespace CVRLua.Lua.LuaDefs
 {
     static class MonoBehaviourDefs
     {
-        const string c_destroyed = "Behaviour is destroyed";
+        const string c_destroyed = "MonoBehaviour is destroyed";
 
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_metaMethods = new List<(string, LuaInterop.lua_CFunction)>();
         static readonly Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> ms_staticProperties = new Dictionary<string, (StaticParseDelegate, StaticParseDelegate)>();

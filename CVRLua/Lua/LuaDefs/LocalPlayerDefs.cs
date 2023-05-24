@@ -249,7 +249,7 @@ namespace CVRLua.Lua.LuaDefs
         static void GetMovementVector(object p_obj, LuaArgReader p_reader)
         {
             UnityEngine.Vector3 l_vec = (p_obj as Wrappers.LocalPlayer).GetMovementVector();
-            p_reader.PushObject(new Wrappers.Vector2(l_vec.x,l_vec.z));
+            p_reader.PushObject(new Wrappers.Vector2(l_vec.x, l_vec.z));
         }
 
         // Instance methods

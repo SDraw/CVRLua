@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace CVRLua
 {
@@ -50,12 +49,19 @@ namespace CVRLua
             Lua.LuaDefs.ColliderDefs.Init();
             Lua.LuaDefs.AnimatorDefs.Init();
 
+            Lua.LuaDefs.ContactPointDefs.Init();
+            Lua.LuaDefs.CollisionDefs.Init();
+
             Lua.LuaDefs.LuaScriptDefs.Init();
 
             Lua.LuaDefs.QuaternionDefs.Init();
             Lua.LuaDefs.Vector2Defs.Init();
             Lua.LuaDefs.Vector3Defs.Init();
             Lua.LuaDefs.Vector4Defs.Init();
+
+            Lua.LuaDefs.TimeDefs.Init();
+            Lua.LuaDefs.DateTimeDefs.Init();
+            Lua.LuaDefs.MathfDefs.Init();
 
             Lua.LuaDefs.LocalPlayerDefs.Init();
         }
@@ -79,12 +85,19 @@ namespace CVRLua
             Lua.LuaDefs.ColliderDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.AnimatorDefs.RegisterInVM(m_vm);
 
+            Lua.LuaDefs.ContactPointDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.CollisionDefs.RegisterInVM(m_vm);
+
             Lua.LuaDefs.LuaScriptDefs.RegisterInVM(m_vm);
 
             Lua.LuaDefs.QuaternionDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.Vector2Defs.RegisterInVM(m_vm);
             Lua.LuaDefs.Vector3Defs.RegisterInVM(m_vm);
             Lua.LuaDefs.Vector4Defs.RegisterInVM(m_vm);
+
+            Lua.LuaDefs.TimeDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.DateTimeDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.MathfDefs.RegisterInVM(m_vm);
 
             Lua.LuaDefs.LocalPlayerDefs.RegisterInVM(m_vm);
         }

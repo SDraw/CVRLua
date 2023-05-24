@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CVRLua.Lua.LuaDefs
@@ -51,9 +52,9 @@ namespace CVRLua.Lua.LuaDefs
 
             ms_instanceMethods.Add(nameof(GetAmbisonicDecoderFloat), GetAmbisonicDecoderFloat);
             //ms_instanceMethods.Add(nameof(GetCustomCurve), GetCustomCurve); // Requires Curve defs
-            //ms_instanceMethods.Add(nameof(GetOutputData), GetOutputData); // Requires reader table push
+            ms_instanceMethods.Add(nameof(GetOutputData), GetOutputData);
             ms_instanceMethods.Add(nameof(GetSpatializerFloat), GetSpatializerFloat);
-            //ms_instanceMethods.Add(nameof(GetSpectrumData), GetSpectrumData); // Requires reader table push
+            ms_instanceMethods.Add(nameof(GetSpectrumData), GetSpectrumData);
             ms_instanceMethods.Add(nameof(Pause), Pause);
             ms_instanceMethods.Add(nameof(Play), Play);
             ms_instanceMethods.Add(nameof(PlayDelayed), PlayDelayed);
@@ -455,6 +456,41 @@ namespace CVRLua.Lua.LuaDefs
             return l_argReader.GetReturnValue();
         }
 
+        static int GetOutputData(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            int l_samples = 0;
+            int l_channel = 0;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadInteger(ref l_samples);
+            l_argReader.ReadInteger(ref l_channel);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                {
+                    if(Mathf.IsPowerOfTwo(l_samples))
+                    {
+                        float[] l_data = new float[l_samples];
+                        l_source.GetOutputData(l_data, l_channel);
+                        l_argReader.PushTable(l_data.ToList());
+                    }
+                    else
+                        l_argReader.PushBoolean(false);
+                }
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return l_argReader.GetReturnValue();
+        }
+
         static int GetSpatializerFloat(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
@@ -468,6 +504,43 @@ namespace CVRLua.Lua.LuaDefs
                 {
                     if(l_source.GetSpatializerFloat(l_index, out float l_result))
                         l_argReader.PushNumber(l_result);
+                    else
+                        l_argReader.PushBoolean(false);
+                }
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return l_argReader.GetReturnValue();
+        }
+
+        static int GetSpectrumData(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            int l_samples = 0;
+            int l_channel = 0;
+            FFTWindow l_window = FFTWindow.Rectangular;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadInteger(ref l_samples);
+            l_argReader.ReadInteger(ref l_channel);
+            l_argReader.ReadEnum(ref l_window);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                {
+                    if(Mathf.IsPowerOfTwo(l_samples))
+                    {
+                        float[] l_data = new float[l_samples];
+                        l_source.GetSpectrumData(l_data, l_channel, l_window);
+                        l_argReader.PushTable(l_data.ToList());
+                    }
                     else
                         l_argReader.PushBoolean(false);
                 }

@@ -1,17 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CVRLua.Lua
 {
     class LuaVM
     {
+        class ReferencedObject
+        {
+            public object m_object = null;
+            public int m_references = 0;
+
+            public ReferencedObject(object p_obj)
+            {
+                m_object = p_obj;
+                m_references = 1;
+            }
+        }
+
         static readonly Dictionary<IntPtr, LuaVM> ms_VMs = new Dictionary<IntPtr, LuaVM>();
 
         readonly string m_name;
         readonly IntPtr m_state = IntPtr.Zero;
-        readonly Dictionary<int, object> m_objectsMap = null;
-
+        readonly Dictionary<int, ReferencedObject> m_objectsMap = null;
 
         internal LuaVM(string p_name = "")
         {
@@ -25,9 +35,9 @@ namespace CVRLua.Lua
             LuaInterop.luaL_requiref(m_state, "string", LuaInterop.luaopen_string, 1);
             LuaInterop.luaL_requiref(m_state, "math", LuaInterop.luaopen_math, 1);
 
-            m_objectsMap = new Dictionary<int, object>();
+            m_objectsMap = new Dictionary<int, ReferencedObject>();
 
-            RegisterGlobalFunction("print", Log);
+            RegisterGlobalFunction(nameof(Log), Log);
         }
         ~LuaVM()
         {
@@ -69,8 +79,10 @@ namespace CVRLua.Lua
         public void PushObject<T>(T p_obj) where T : class
         {
             int l_hash = p_obj.GetHashCode();
-            if(!m_objectsMap.ContainsKey(l_hash))
-                m_objectsMap.Add(l_hash, p_obj);
+            if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
+                l_refObj.m_references++;
+            else
+                m_objectsMap.Add(l_hash, new ReferencedObject(p_obj));
 
             LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash);
             LuaInterop.luaL_setmetatable(m_state, typeof(T).Name);
@@ -79,8 +91,10 @@ namespace CVRLua.Lua
         public void PushObject<T>(T p_obj, string p_type) where T : class
         {
             int l_hash = p_obj.GetHashCode();
-            if(!m_objectsMap.ContainsKey(l_hash))
-                m_objectsMap.Add(l_hash, p_obj);
+            if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
+                l_refObj.m_references++;
+            else
+                m_objectsMap.Add(l_hash, new ReferencedObject(p_obj));
 
             LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash);
             LuaInterop.luaL_setmetatable(m_state, p_type);
@@ -92,9 +106,9 @@ namespace CVRLua.Lua
             if(IsUserdata(p_index))
             {
                 int l_hash = ToUserdata(p_index).GetInt();
-                if((l_hash != 0) && m_objectsMap.ContainsKey(l_hash) && (m_objectsMap[l_hash] is T))
+                if((l_hash != 0) && m_objectsMap.TryGetValue(l_hash, out var l_refObj) && (l_refObj.m_object is T))
                 {
-                    p_obj = (T)m_objectsMap[l_hash];
+                    p_obj = (T)l_refObj.m_object;
                     l_result = true;
                 }
             }
@@ -157,13 +171,16 @@ namespace CVRLua.Lua
 
         static int ObjectsGC(IntPtr p_state)
         {
-            // Erases only wrapped structures
             LuaVM l_vm = GetVM(p_state);
             if((l_vm != null) && l_vm.IsUserdata(1))
             {
                 int l_hash = l_vm.ToUserdata(1).GetInt();
-                if((l_hash != 0) && l_vm.m_objectsMap.TryGetValue(l_hash, out object l_obj))
-                    l_vm.m_objectsMap.Remove(l_hash);
+                if((l_hash != 0) && l_vm.m_objectsMap.TryGetValue(l_hash, out var l_orc))
+                {
+                    l_orc.m_references--;
+                    if(l_orc.m_references == 0)
+                        l_vm.m_objectsMap.Remove(l_hash);
+                }
             }
             return 0;
         }
@@ -179,11 +196,8 @@ namespace CVRLua.Lua
             LuaInterop.lua_CFunction p_instanceSetter = null
         )
         {
-            if(!p_type.IsClass)
-                return;
-
             LuaInterop.lua_newtable(m_state); // First table, dummy
-            LuaInterop.lua_newtable(m_state); // Second table, holds constructor, instance getter and setter
+            LuaInterop.lua_newtable(m_state); // Second table, holds constructor, static getter and setter
             if(p_ctor != null)
             {
                 LuaInterop.lua_pushcfunction(m_state, p_ctor);
@@ -219,11 +233,8 @@ namespace CVRLua.Lua
                 }
             }
 
-            if(p_type.GetInterfaces().Contains(typeof(Wrappers.WrappedStructure)))
-            {
-                LuaInterop.lua_pushcfunction(m_state, ObjectsGC);
-                LuaInterop.lua_setfield(m_state, -2, "__gc"); // Garbage collector for wrapped classes
-            }
+            LuaInterop.lua_pushcfunction(m_state, ObjectsGC);
+            LuaInterop.lua_setfield(m_state, -2, "__gc"); // Garbage collector for referenced objects as userdata
 
             LuaInterop.lua_pop(m_state, 1); // Pop it from top
         }
@@ -263,6 +274,29 @@ namespace CVRLua.Lua
                 default:
                     PushNil();
                     break;
+            }
+        }
+
+        public void PushTable<T>(List<T> p_list)
+        {
+            LuaInterop.lua_newtable(m_state);
+            long l_index = 1;
+            foreach(object l_obj in p_list)
+            {
+                LuaInterop.lua_pushinteger(m_state, l_index);
+                PushValue(l_obj);
+                LuaInterop.lua_settable(m_state, -3);
+                l_index++;
+            }
+        }
+
+        public void PushTable(Dictionary<string, object> p_list)
+        {
+            LuaInterop.lua_newtable(m_state);
+            foreach(var l_pair in p_list)
+            {
+                PushValue(l_pair.Value);
+                LuaInterop.lua_setfield(m_state, -2, l_pair.Key);
             }
         }
 

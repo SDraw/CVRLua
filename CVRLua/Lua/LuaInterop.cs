@@ -5,7 +5,7 @@ namespace CVRLua.Lua
 {
     public static class LuaInterop
     {
-        const string ms_binaryName = "lua54.dll";
+        const string ms_binaryName = "UserLibs/lua54.dll";
 
         public const int LUAI_MAXSTACK = 1000000; // for x64
         public const int LUA_REGISTRYINDEX = (-LUAI_MAXSTACK - 1000);
@@ -229,5 +229,8 @@ namespace CVRLua.Lua
         public static extern int lua_getinfo(IntPtr L, string what, ref lua_Debug ar);
 
         public static bool lua_isnil(IntPtr L, int idx) => (lua_type(L, idx) == LUA_TNIL);
+
+        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void lua_settable(IntPtr L, int idx);
     }
 }
