@@ -67,7 +67,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int CeilToInt(IntPtr p_state)
@@ -81,7 +81,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int Clamp(IntPtr p_state)
@@ -99,7 +99,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int Clamp01(IntPtr p_state)
@@ -113,7 +113,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int ClosestPowerOfTwo(IntPtr p_state)
@@ -127,7 +127,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int DeltaAngle(IntPtr p_state)
@@ -143,7 +143,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int FloorToInt(IntPtr p_state)
@@ -157,7 +157,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int GammaToLinearSpace(IntPtr p_state)
@@ -171,7 +171,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int InverseLerp(IntPtr p_state)
@@ -189,7 +189,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int IsPowerOfTwo(IntPtr p_state)
@@ -203,7 +203,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int Lerp(IntPtr p_state)
@@ -221,7 +221,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int LerpAngle(IntPtr p_state)
@@ -239,7 +239,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int LerpUnclamped(IntPtr p_state)
@@ -257,7 +257,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int LinearToGammaSpace(IntPtr p_state)
@@ -271,7 +271,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int MoveTowards(IntPtr p_state)
@@ -289,7 +289,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int MoveTowardsAngle(IntPtr p_state)
@@ -307,7 +307,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int NextPowerOfTwo(IntPtr p_state)
@@ -321,7 +321,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int PerlinNoise(IntPtr p_state)
@@ -337,7 +337,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int PingPong(IntPtr p_state)
@@ -353,7 +353,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int Repeat(IntPtr p_state)
@@ -369,7 +369,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int RoundToInt(IntPtr p_state)
@@ -383,7 +383,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int Sign(IntPtr p_state)
@@ -397,7 +397,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int SmoothDamp(IntPtr p_state)
@@ -424,7 +424,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int SmoothDampAngle(IntPtr p_state)
@@ -451,7 +451,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         static int SmoothStep(IntPtr p_state)
@@ -469,7 +469,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetArgumentsCount();
+            return l_argReader.GetReturnValue();
         }
 
         // Static getter

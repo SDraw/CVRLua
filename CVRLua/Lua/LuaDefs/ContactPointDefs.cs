@@ -18,12 +18,10 @@ namespace CVRLua.Lua.LuaDefs
             ms_metaMethods.Add(("__tostring", ToString));
 
             ms_instanceProperties.Add("normal", (GetNormal, null));
-            ms_instanceProperties.Add("otherColliderName", (GetOtherColliderName, null));
-            ms_instanceProperties.Add("otherColliderID", (GetOtherColliderID, null));
+            ms_instanceProperties.Add("otherCollider", (GetOtherCollider, null));
             ms_instanceProperties.Add("point", (GetPoint, null));
             ms_instanceProperties.Add("separation", (GetSeparation, null));
-            ms_instanceProperties.Add("thisColliderName", (GetThisColliderName, null));
-            ms_instanceProperties.Add("thisColliderID", (GetThisColliderID, null));
+            ms_instanceProperties.Add("thisCollider", (GetThisCollider, null));
         }
 
         internal static void RegisterInVM(LuaVM p_vm)
@@ -61,20 +59,11 @@ namespace CVRLua.Lua.LuaDefs
             p_reader.PushObject(new Wrappers.Vector3((p_obj as Wrappers.ContactPoint).m_point.normal));
         }
 
-        static void GetOtherColliderName(object p_obj, LuaArgReader p_reader)
+        static void GetOtherCollider(object p_obj, LuaArgReader p_reader)
         {
             UnityEngine.Collider l_col = (p_obj as Wrappers.ContactPoint).m_point.otherCollider;
             if(l_col != null)
-                p_reader.PushString(l_col.name);
-            else
-                p_reader.PushBoolean(false);
-        }
-
-        static void GetOtherColliderID(object p_obj, LuaArgReader p_reader)
-        {
-            UnityEngine.Collider l_col = (p_obj as Wrappers.ContactPoint).m_point.otherCollider;
-            if(l_col != null)
-                p_reader.PushInteger(l_col.GetInstanceID());
+                p_reader.PushObject(l_col);
             else
                 p_reader.PushBoolean(false);
         }
@@ -89,20 +78,11 @@ namespace CVRLua.Lua.LuaDefs
             p_reader.PushNumber((p_obj as Wrappers.ContactPoint).m_point.separation);
         }
 
-        static void GetThisColliderName(object p_obj, LuaArgReader p_reader)
+        static void GetThisCollider(object p_obj, LuaArgReader p_reader)
         {
             UnityEngine.Collider l_col = (p_obj as Wrappers.ContactPoint).m_point.thisCollider;
             if(l_col != null)
-                p_reader.PushString(l_col.name);
-            else
-                p_reader.PushBoolean(false);
-        }
-
-        static void GetThisColliderID(object p_obj, LuaArgReader p_reader)
-        {
-            UnityEngine.Collider l_col = (p_obj as Wrappers.ContactPoint).m_point.thisCollider;
-            if(l_col != null)
-                p_reader.PushInteger(l_col.GetInstanceID());
+                p_reader.PushObject(l_col);
             else
                 p_reader.PushBoolean(false);
         }

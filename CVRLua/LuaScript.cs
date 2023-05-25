@@ -99,17 +99,17 @@ namespace CVRLua
 
         void OnTriggerEnter(Collider p_col)
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnTriggerEnter, p_col.name, p_col.GetInstanceID(), Utils.IsInternal(p_col));
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnTriggerEnter, p_col, Utils.IsInternal(p_col));
         }
 
         void OnTriggerExit(Collider p_col)
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnTriggerExit, p_col.name, p_col.GetInstanceID(), Utils.IsInternal(p_col));
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnTriggerExit, p_col, Utils.IsInternal(p_col));
         }
 
         void OnTriggerStay(Collider p_col)
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnTriggerStay, p_col.name, p_col.GetInstanceID(), Utils.IsInternal(p_col));
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnTriggerStay, p_col, Utils.IsInternal(p_col));
         }
 
         void OnAnimatorIK(int p_layer)

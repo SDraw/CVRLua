@@ -19,8 +19,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_metaMethods.Add(("__eq", Equal));
             ms_metaMethods.Add(("__tostring", ToString));
 
-            ms_instanceProperties.Add("colliderName", (GetColliderName, null));
-            ms_instanceProperties.Add("colliderID", (GetColliderID, null));
+            ms_instanceProperties.Add("collider", (GetCollider, null));
             ms_instanceProperties.Add("contactCount", (GetContactCount, null));
             ms_instanceProperties.Add("impulse", (GetImpulse, null));
             ms_instanceProperties.Add("relativeVelocity", (GetRelativeVelocity, null));
@@ -74,20 +73,11 @@ namespace CVRLua.Lua.LuaDefs
         }
 
         // Instance properties
-        static void GetColliderName(object p_obj, LuaArgReader p_reader)
+        static void GetCollider(object p_obj, LuaArgReader p_reader)
         {
             Collider l_col = (p_obj as Collision).collider;
             if(l_col != null)
-                p_reader.PushString(l_col.name);
-            else
-                p_reader.PushBoolean(false);
-        }
-
-        static void GetColliderID(object p_obj, LuaArgReader p_reader)
-        {
-            Collider l_col = (p_obj as Collision).collider;
-            if(l_col != null)
-                p_reader.PushInteger(l_col.GetInstanceID());
+                p_reader.PushObject(l_col);
             else
                 p_reader.PushBoolean(false);
         }
