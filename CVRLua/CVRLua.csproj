@@ -76,6 +76,14 @@
       <HintPath>D:\games\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.TerrainPhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Games\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.TerrainPhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VehiclesModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Games\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.VehiclesModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LibrariesHandler.cs" />
@@ -84,6 +92,13 @@
     <Compile Include="Lua\LuaDefs\AudioClipDefs.cs" />
     <Compile Include="Lua\LuaDefs\AudioSourceDefs.cs" />
     <Compile Include="Lua\LuaDefs\BehaviourDefs.cs" />
+    <Compile Include="Lua\LuaDefs\TerrainColliderDefs.cs" />
+    <Compile Include="Lua\LuaDefs\WheelColliderDefs.cs" />
+    <Compile Include="Lua\LuaDefs\SphereColliderDefs.cs" />
+    <Compile Include="Lua\LuaDefs\BoxColliderDefs.cs" />
+    <Compile Include="Lua\LuaDefs\CapsuleColliderDefs.cs" />
+    <Compile Include="Lua\LuaDefs\MeshColliderDefs.cs" />
+    <Compile Include="Lua\LuaDefs\CharacterControllerDefs.cs" />
     <Compile Include="Lua\LuaDefs\ColliderDefs.cs" />
     <Compile Include="Lua\LuaDefs\CollisionDefs.cs" />
     <Compile Include="Lua\LuaDefs\ComponentDefs.cs" />

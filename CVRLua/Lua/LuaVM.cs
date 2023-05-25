@@ -216,7 +216,7 @@ namespace CVRLua.Lua
 
             LuaInterop.luaL_newmetatable(m_state, p_type.Name); // Registry metatable, holds instance getter and setter
 
-            LuaInterop.lua_pushcfunction(m_state, p_instanceGetter ?? p_instanceGetter);
+            LuaInterop.lua_pushcfunction(m_state, p_instanceGetter ?? NilResultFunction);
             LuaInterop.lua_setfield(m_state, -2, "__index"); // Getter if any
 
             LuaInterop.lua_pushcfunction(m_state, p_instanceSetter ?? NoActionFunction);

@@ -46,7 +46,16 @@ namespace CVRLua
 
             Lua.LuaDefs.AudioClipDefs.Init();
             Lua.LuaDefs.AudioSourceDefs.Init();
+
             Lua.LuaDefs.ColliderDefs.Init();
+            Lua.LuaDefs.CharacterControllerDefs.Init();
+            Lua.LuaDefs.MeshColliderDefs.Init();
+            Lua.LuaDefs.CapsuleColliderDefs.Init();
+            Lua.LuaDefs.BoxColliderDefs.Init();
+            Lua.LuaDefs.SphereColliderDefs.Init();
+            Lua.LuaDefs.WheelColliderDefs.Init();
+            Lua.LuaDefs.TerrainColliderDefs.Init();
+
             Lua.LuaDefs.AnimatorDefs.Init();
 
             Lua.LuaDefs.ContactPointDefs.Init();
@@ -84,7 +93,16 @@ namespace CVRLua
 
             Lua.LuaDefs.AudioClipDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.AudioSourceDefs.RegisterInVM(m_vm);
+
             Lua.LuaDefs.ColliderDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.CharacterControllerDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.MeshColliderDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.CapsuleColliderDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.BoxColliderDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.SphereColliderDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.WheelColliderDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.TerrainColliderDefs.RegisterInVM(m_vm);
+
             Lua.LuaDefs.AnimatorDefs.RegisterInVM(m_vm);
 
             Lua.LuaDefs.ContactPointDefs.RegisterInVM(m_vm);

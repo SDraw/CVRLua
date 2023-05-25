@@ -38,6 +38,30 @@ namespace CVRLua.Lua.LuaDefs
             p_vm.RegisterClass(typeof(Collider), null, ms_metaMethods, StaticGet, null, InstanceGet, InstanceSet);
         }
 
+        internal static void InheritTo(
+            List<(string, LuaInterop.lua_CFunction)> p_metaMethods,
+            Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> p_staticProperties,
+            Dictionary<string, LuaInterop.lua_CFunction> p_staticMethods,
+            Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)> p_instanceProperties,
+            Dictionary<string, LuaInterop.lua_CFunction> p_instanceMethods
+        )
+        {
+            if(p_metaMethods != null)
+                ms_metaMethods.MergeInto(p_metaMethods);
+
+            if(p_staticProperties != null)
+                ms_staticProperties.MergeInto(p_staticProperties);
+
+            if(p_staticMethods != null)
+                ms_staticMethods.MergeInto(p_staticMethods);
+
+            if(p_instanceProperties != null)
+                ms_instanceProperties.MergeInto(p_instanceProperties);
+
+            if(p_instanceMethods != null)
+                ms_instanceMethods.MergeInto(p_instanceMethods);
+        }
+
         // Static methods
         static int IsCollider(IntPtr p_state)
         {

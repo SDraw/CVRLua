@@ -300,9 +300,7 @@ namespace CVRLua.Lua.LuaDefs
         {
             var l_argReader = new LuaArgReader(p_state);
             Wrappers.LocalPlayer l_player = null;
-            bool l_state = false;
             l_argReader.ReadObject(ref l_player);
-            l_argReader.ReadBoolean(ref l_state);
             if(!l_argReader.HasErrors())
             {
                 l_player.Respawn();
