@@ -79,25 +79,25 @@ namespace CVRLua.Lua
         // Objects push/get
         public void PushObject<T>(T p_obj) where T : class
         {
-            long l_hash = Utils.CombineInts(RuntimeHelpers.GetHashCode(p_obj), p_obj.GetHashCode());
+            long l_hash = Utils.CombineInts(RuntimeHelpers.GetHashCode(p_obj), typeof(T).GetHashCode()); // Help ...
             if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
                 l_refObj.m_references++;
             else
                 m_objectsMap.Add(l_hash, new ReferencedObject(p_obj));
 
-            LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash); // This can lead to collision, still very rare
+            LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash);
             LuaInterop.luaL_setmetatable(m_state, typeof(T).Name);
         }
 
         public void PushObject<T>(T p_obj, string p_type) where T : class
         {
-            long l_hash = Utils.CombineInts(RuntimeHelpers.GetHashCode(p_obj), p_obj.GetHashCode());
+            long l_hash = Utils.CombineInts(RuntimeHelpers.GetHashCode(p_obj), typeof(T).GetHashCode()); // Help ...
             if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
                 l_refObj.m_references++;
             else
                 m_objectsMap.Add(l_hash, new ReferencedObject(p_obj));
 
-            LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash); // This can lead to collision, still very rare
+            LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash);
             LuaInterop.luaL_setmetatable(m_state, p_type);
         }
 

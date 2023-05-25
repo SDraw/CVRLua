@@ -63,6 +63,8 @@ namespace CVRLua
             Lua.LuaDefs.DateTimeDefs.Init();
             Lua.LuaDefs.MathfDefs.Init();
 
+            Lua.LuaDefs.CVRPointerDefs.Init();
+
             Lua.LuaDefs.LocalPlayerDefs.Init();
         }
 
@@ -98,6 +100,8 @@ namespace CVRLua
             Lua.LuaDefs.TimeDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.DateTimeDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.MathfDefs.RegisterInVM(m_vm);
+
+            Lua.LuaDefs.CVRPointerDefs.RegisterInVM(m_vm);
 
             Lua.LuaDefs.LocalPlayerDefs.RegisterInVM(m_vm);
         }
