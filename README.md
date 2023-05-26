@@ -14,8 +14,8 @@ Scripting approach is kept very close to Unity's CSharp scripting. That means me
   * Download `CVRLua.dll` from latest release
   * Copy it into `ChilloutVR/Mods` folder
 * For world creators:
-   * Download `CVRLua_Editor.unitypackage` (from repository root or latest release)
-   * Import into your world project
+   * Download `CVRLua_Editor.unitypackage` from latest release
+   * Import it into your world project
    * Add `LuaScript` component to your GameObject(s)
 # Scripting documentation
 Visit [wiki pages](../../wiki) for in-depth information about scripting state and usage.
