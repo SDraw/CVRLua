@@ -8,9 +8,10 @@ namespace CVRLua
     public class LuaScript : MonoBehaviour
     {
         public List<TextAsset> Scripts = new List<TextAsset>();
-
         public List<string> VariableNames = new List<string>();
-        public List<GameObject> VariableValues = new List<GameObject>();
+        public List<string> VariableValues = new List<string>();
+        public List<string> VariableObjectNames = new List<string>();
+        public List<Object> VariableObjectValues = new List<Object>();
 
         LuaHandler m_luaHandler = null;
         Wrappers.LocalPlayer m_localPlayer = null;
@@ -25,14 +26,20 @@ namespace CVRLua
             m_luaHandler = new LuaHandler(this.name);
             Core.Instance?.RegisterScript(this);
 
+            m_luaHandler.SetGlobalVariable("this", this.gameObject);
+            m_luaHandler.SetGlobalVariable("localPlayer", m_localPlayer);
+
             if((VariableNames.Count > 0) && (VariableValues.Count > 0))
             {
                 for(int i = 0, j = Mathf.Min(VariableNames.Count, VariableValues.Count); i < j; i++)
-                    m_luaHandler.SetGlobalVariable(VariableNames[i], VariableValues[i]);
+                    m_luaHandler.Execute(string.Format("{0} = {1}", VariableNames[i], VariableValues[i]));
             }
 
-            m_luaHandler.SetGlobalVariable("this", this.gameObject);
-            m_luaHandler.SetGlobalVariable("localPlayer", m_localPlayer);
+            if((VariableObjectNames.Count > 0) && (VariableObjectValues.Count > 0))
+            {
+                for(int i = 0, j = Mathf.Min(VariableObjectNames.Count, VariableObjectValues.Count); i < j; i++)
+                    m_luaHandler.SetGlobalVariable(VariableObjectNames[i], (object)VariableObjectValues[i]);
+            }
 
             foreach(var l_script in Scripts)
                 m_luaHandler.Execute(l_script.text);
