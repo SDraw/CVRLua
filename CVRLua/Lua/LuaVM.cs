@@ -18,6 +18,10 @@ namespace CVRLua.Lua
             }
         }
 
+        const string c_propGet = "__propGet";
+        const string c_propSet = "__propSet";
+        const string c_methods = "__methods";
+
         static readonly Dictionary<IntPtr, LuaVM> ms_VMs = new Dictionary<IntPtr, LuaVM>();
 
         readonly string m_name;
@@ -186,60 +190,7 @@ namespace CVRLua.Lua
             return 0;
         }
 
-        // Classes
-        public void RegisterClass(
-            Type p_type,
-            LuaInterop.lua_CFunction p_ctor = null,
-            List<(string, LuaInterop.lua_CFunction)> p_meta = null,
-            LuaInterop.lua_CFunction p_staticGetter = null,
-            LuaInterop.lua_CFunction p_staticSetter = null,
-            LuaInterop.lua_CFunction p_instanceGetter = null,
-            LuaInterop.lua_CFunction p_instanceSetter = null
-        )
-        {
-            LuaInterop.lua_newtable(m_state); // First table, dummy
-            LuaInterop.lua_newtable(m_state); // Second table, holds constructor, static getter and setter
-            if(p_ctor != null)
-            {
-                LuaInterop.lua_pushcfunction(m_state, p_ctor);
-                LuaInterop.lua_setfield(m_state, -2, "__call");
-            }
-
-            LuaInterop.lua_pushcfunction(m_state, p_staticGetter ?? NilResultFunction);
-            LuaInterop.lua_setfield(m_state, -2, "__index");
-
-            LuaInterop.lua_pushcfunction(m_state, p_staticSetter ?? NoActionFunction);
-            LuaInterop.lua_setfield(m_state, -2, "__newindex");
-
-            LuaInterop.lua_setmetatable(m_state, -2); // Combines two previous tables
-            LuaInterop.lua_setglobal(m_state, p_type.Name); // Sets as global
-
-            LuaInterop.luaL_newmetatable(m_state, p_type.Name); // Registry metatable, holds instance getter and setter
-
-            LuaInterop.lua_pushcfunction(m_state, p_instanceGetter ?? NilResultFunction);
-            LuaInterop.lua_setfield(m_state, -2, "__index"); // Getter if any
-
-            LuaInterop.lua_pushcfunction(m_state, p_instanceSetter ?? NoActionFunction);
-            LuaInterop.lua_setfield(m_state, -2, "__newindex"); // Setter if any
-
-            LuaInterop.lua_pushcfunction(m_state, NilResultFunction);
-            LuaInterop.lua_setfield(m_state, -2, "__metatable"); // No metatable access from script
-
-            if(p_meta != null)
-            {
-                foreach(var l_pair in p_meta)
-                {
-                    LuaInterop.lua_pushcfunction(m_state, l_pair.Item2);
-                    LuaInterop.lua_setfield(m_state, -2, l_pair.Item1); // Push additional metatable methods if any
-                }
-            }
-
-            LuaInterop.lua_pushcfunction(m_state, ObjectsGC);
-            LuaInterop.lua_setfield(m_state, -2, "__gc"); // Garbage collector for referenced objects as userdata
-
-            LuaInterop.lua_pop(m_state, 1); // Pop it from top
-        }
-
+        // Extended pushes
         public void PushValue(object p_value)
         {
             // Always pushes something
@@ -323,17 +274,6 @@ namespace CVRLua.Lua
         }
 
         // Utility
-        static int NilResultFunction(IntPtr p_state)
-        {
-            LuaInterop.lua_pushnil(p_state);
-            return 1;
-        }
-
-        static int NoActionFunction(IntPtr p_state)
-        {
-            return 0;
-        }
-
         static int Log(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
@@ -346,6 +286,274 @@ namespace CVRLua.Lua
 
             l_argReader.LogError();
             return l_argReader.GetReturnValue();
+        }
+
+        // Classes
+        internal void RegisterClass(Type p_type,
+            LuaInterop.lua_CFunction p_ctor,
+            List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> p_staticProperties,
+            List<(string, LuaInterop.lua_CFunction)> p_staticMethods,
+            List<(string, LuaInterop.lua_CFunction)> p_metaMethods,
+            List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> p_instanceProperties,
+            List<(string, LuaInterop.lua_CFunction)> p_instanceMethods
+       )
+        {
+            // Static definition
+            LuaInterop.lua_newtable(m_state); // {}
+            LuaInterop.lua_newtable(m_state); // {}
+
+            if(p_ctor != null)
+            {
+                LuaInterop.lua_pushcfunction(m_state, p_ctor);
+                LuaInterop.lua_setfield(m_state, -2, "__call");
+            }
+
+            LuaInterop.lua_pushcfunction(m_state, NilResultFunction);
+            LuaInterop.lua_setfield(m_state, -2, "__metatable");
+
+            LuaInterop.lua_pushcfunction(m_state, ClassStaticGet);
+            LuaInterop.lua_setfield(m_state, -2, "__index");
+
+            LuaInterop.lua_pushcfunction(m_state, ClassStaticSet);
+            LuaInterop.lua_setfield(m_state, -2, "__newindex");
+
+            LuaInterop.lua_newtable(m_state);
+            if(p_staticProperties != null)
+            {
+                foreach(var l_prop in p_staticProperties)
+                {
+                    if(l_prop.Item2.Item1 != null) // property get
+                    {
+                        LuaInterop.lua_pushcfunction(m_state, l_prop.Item2.Item1);
+                        LuaInterop.lua_setfield(m_state, -2, l_prop.Item1);
+                    }
+                }
+            }
+            LuaInterop.lua_setfield(m_state, -2, c_propGet);
+
+            LuaInterop.lua_newtable(m_state); // {}
+            if(p_staticProperties != null)
+            {
+                foreach(var l_pair in p_staticProperties)
+                {
+                    if(l_pair.Item2.Item2 != null) // Property set
+                    {
+                        LuaInterop.lua_pushcfunction(m_state, l_pair.Item2.Item2);
+                        LuaInterop.lua_setfield(m_state, -2, l_pair.Item1);
+                    }
+                }
+            }
+            LuaInterop.lua_setfield(m_state, -2, c_propSet);
+
+            LuaInterop.lua_newtable(m_state);
+            if(p_staticMethods != null)
+            {
+                foreach(var l_pair in p_staticMethods)
+                {
+                    LuaInterop.lua_pushcfunction(m_state, l_pair.Item2);
+                    LuaInterop.lua_setfield(m_state, -2, l_pair.Item1);
+                }
+            }
+            LuaInterop.lua_setfield(m_state, -2, c_methods);
+
+            LuaInterop.lua_setmetatable(m_state, -2); // Combines two previous tables
+            LuaInterop.lua_setglobal(m_state, p_type.Name); // Sets as global
+
+            // Instance definition
+            LuaInterop.luaL_newmetatable(m_state, p_type.Name); // Registry metatable
+
+            LuaInterop.lua_pushcfunction(m_state, NilResultFunction);
+            LuaInterop.lua_setfield(m_state, -2, "__metatable");
+
+            LuaInterop.lua_pushcfunction(m_state, ClassInstanceGet);
+            LuaInterop.lua_setfield(m_state, -2, "__index");
+
+            LuaInterop.lua_pushcfunction(m_state, ClassInstanceSet);
+            LuaInterop.lua_setfield(m_state, -2, "__newindex");
+
+            LuaInterop.lua_pushcfunction(m_state, ObjectsGC);
+            LuaInterop.lua_setfield(m_state, -2, "__gc"); // Garbage collector for referenced objects as userdata
+
+            if(p_metaMethods != null)
+            {
+                foreach(var l_pair in p_metaMethods)
+                {
+                    LuaInterop.lua_pushcfunction(m_state, l_pair.Item2);
+                    LuaInterop.lua_setfield(m_state, -2, l_pair.Item1); // Push additional metatable methods if any
+                }
+            }
+
+            LuaInterop.lua_newtable(m_state);
+            if(p_instanceProperties != null)
+            {
+                foreach(var l_prop in p_instanceProperties)
+                {
+                    if(l_prop.Item2.Item1 != null)
+                    {
+                        LuaInterop.lua_pushcfunction(m_state, l_prop.Item2.Item1);
+                        LuaInterop.lua_setfield(m_state, -2, l_prop.Item1);
+                    }
+                }
+            }
+            LuaInterop.lua_setfield(m_state, -2, c_propGet);
+
+            LuaInterop.lua_newtable(m_state);
+            if(p_instanceProperties != null)
+            {
+                foreach(var l_prop in p_instanceProperties)
+                {
+                    if(l_prop.Item2.Item2 != null) // Property set
+                    {
+                        LuaInterop.lua_pushcfunction(m_state, l_prop.Item2.Item2);
+                        LuaInterop.lua_setfield(m_state, -2, l_prop.Item1);
+                    }
+                }
+            }
+            LuaInterop.lua_setfield(m_state, -2, c_propSet);
+
+            LuaInterop.lua_newtable(m_state);
+            if(p_instanceMethods != null)
+            {
+                foreach(var l_pair in p_instanceMethods)
+                {
+                    LuaInterop.lua_pushcfunction(m_state, l_pair.Item2);
+                    LuaInterop.lua_setfield(m_state, -2, l_pair.Item1);
+                }
+            }
+            LuaInterop.lua_setfield(m_state, -2, c_methods);
+
+            LuaInterop.lua_pop(m_state, 1); // Pop metatable
+        }
+
+        static int ClassStaticGet(IntPtr p_state)
+        {
+            // Current stack - 1-table, 2-key
+            int l_top = LuaInterop.lua_gettop(p_state);
+            if(!LuaInterop.lua_isstring(p_state, 2)) // Not a string as key
+            {
+                LuaInterop.lua_pushnil(p_state);
+                return 1;
+            }
+            string l_key = LuaInterop.lua_tostring(p_state, 2);
+
+            LuaInterop.luaL_getmetafield(p_state, 1, c_methods); // table is on top+1
+            if(LuaInterop.lua_getfield(p_state, l_top + 1, l_key) == LuaInterop.LUA_TFUNCTION)
+            {
+                // function is on top+2
+                LuaInterop.lua_remove(p_state, l_top + 1); // remove table and shift stack down
+                return 1;
+            }
+
+            // Not a method, maybe a prop?
+            LuaInterop.lua_pop(p_state, 2); // remove undesired value and table from stack
+            LuaInterop.luaL_getmetafield(p_state, 1, c_propGet); // table is on top+1
+            if(LuaInterop.lua_getfield(p_state, l_top + 1, l_key) == LuaInterop.LUA_TFUNCTION)
+            {
+                // now actual top is top+2, function is on top
+                LuaInterop.lua_call(p_state, 0, 1);
+                LuaInterop.lua_remove(p_state, l_top + 1); // remove table and shift stack down
+                return 1;
+            }
+
+            // Nothing found, push nil
+            LuaInterop.lua_pop(p_state, 2); // remove undesired value and table from stack
+            LuaInterop.lua_pushnil(p_state);
+            return 1;
+        }
+
+        static int ClassStaticSet(IntPtr p_state)
+        {
+            // Current stack - 1-table, 2-key, 3-value
+            int l_top = LuaInterop.lua_gettop(p_state);
+
+            if(!LuaInterop.lua_isstring(p_state, 2)) // Not a string as key
+                return 0;
+            string l_key = LuaInterop.lua_tostring(p_state, 2);
+
+            LuaInterop.luaL_getmetafield(p_state, 1, c_propSet); // table on top+1
+            if(LuaInterop.lua_getfield(p_state, l_top + 1, l_key) == LuaInterop.LUA_TFUNCTION)
+            {
+                // now actual top is top+2, function is on top
+                LuaInterop.lua_settop(p_state, l_top + 3);
+                LuaInterop.lua_copy(p_state, 3, l_top + 3);
+                LuaInterop.lua_call(p_state, 1, 0);
+                LuaInterop.lua_pop(p_state, 1); // remove table from stack
+                return 0;
+            }
+
+            // Nothing found
+            LuaInterop.lua_pop(p_state, 2); // remove table and value from stack
+            return 0;
+        }
+
+        static int ClassInstanceGet(IntPtr p_state)
+        {
+            // Current stack - 1-userdata, 2-key
+            int l_top = LuaInterop.lua_gettop(p_state);
+            if(!LuaInterop.lua_isstring(p_state, 2)) // Not a string as key
+            {
+                LuaInterop.lua_pushnil(p_state);
+                return 1;
+            }
+            string l_key = LuaInterop.lua_tostring(p_state, 2);
+
+            LuaInterop.luaL_getmetafield(p_state, 1, c_methods); // table is on top+1
+            if(LuaInterop.lua_getfield(p_state, l_top + 1, l_key) == LuaInterop.LUA_TFUNCTION)
+            {
+                // function is on top+2
+                LuaInterop.lua_remove(p_state, l_top + 1); // remove table and shift stack down
+                return 1;
+            }
+
+            // Not a method, maybe a prop?
+            LuaInterop.lua_pop(p_state, 2); // remove undesired value and table from stack
+            LuaInterop.luaL_getmetafield(p_state, 1, c_propGet); // table is on top+1
+            if(LuaInterop.lua_getfield(p_state, l_top + 1, l_key) == LuaInterop.LUA_TFUNCTION)
+            {
+                // now actual top is top+2, function is on top
+                LuaInterop.lua_settop(p_state, l_top + 3);
+                LuaInterop.lua_copy(p_state, 1, l_top + 3);
+                LuaInterop.lua_call(p_state, 1, 1);
+                LuaInterop.lua_remove(p_state, l_top + 1); // remove table and shift stack down
+                return 1;
+            }
+
+            // Nothing found, push nil
+            LuaInterop.lua_pop(p_state, 2); // remove undesired value and table from stack
+            LuaInterop.lua_pushnil(p_state);
+            return 1;
+        }
+
+        static int ClassInstanceSet(IntPtr p_state)
+        {
+            // Current stack - 1-userdata, 2-key, 3-value
+            int l_top = LuaInterop.lua_gettop(p_state);
+
+            if(!LuaInterop.lua_isstring(p_state, 2)) // Not a string as key
+                return 0;
+            string l_key = LuaInterop.lua_tostring(p_state, 2);
+
+            LuaInterop.luaL_getmetafield(p_state, 1, c_propSet); // table on top+1
+            if(LuaInterop.lua_getfield(p_state, l_top + 1, l_key) == LuaInterop.LUA_TFUNCTION)
+            {
+                // now actual top is top+2, function is on top
+                LuaInterop.lua_settop(p_state, l_top + 4);
+                LuaInterop.lua_copy(p_state, 1, l_top + 3);
+                LuaInterop.lua_copy(p_state, 3, l_top + 4);
+                LuaInterop.lua_call(p_state, 2, 0);
+                LuaInterop.lua_pop(p_state, 1); // remove table from stack
+                return 0;
+            }
+
+            // Nothing found
+            LuaInterop.lua_pop(p_state, 2); // remove table and value from stack
+            return 0;
+        }
+
+        static int NilResultFunction(IntPtr p_state)
+        {
+            LuaInterop.lua_pushnil(p_state);
+            return 1;
         }
     }
 }

@@ -9,61 +9,61 @@ namespace CVRLua.Lua.LuaDefs
         const string c_destroyed = "Transform is destroyed";
 
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_metaMethods = new List<(string, LuaInterop.lua_CFunction)>();
-        static readonly Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> ms_staticProperties = new Dictionary<string, (StaticParseDelegate, StaticParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_staticMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
-        static readonly Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)> ms_instanceProperties = new Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_instanceMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_staticProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_staticMethods = new List<(string, LuaInterop.lua_CFunction)>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_instanceProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_instanceMethods = new List<(string, LuaInterop.lua_CFunction)>();
 
         internal static void Init()
         {
-            ms_staticMethods.Add(nameof(IsTransform), IsTransform);
+            ms_staticMethods.Add((nameof(IsTransform), IsTransform));
 
-            ms_instanceProperties.Add("childCount", (GetChildCount, null));
-            ms_instanceProperties.Add("eulerAngles", (GetEulerAngles, SetEulerAngles));
-            ms_instanceProperties.Add("forward", (GetForward, null));
-            ms_instanceProperties.Add("hierarchyCapacity", (GetHierarchyCapacity, SetHierarchyCapacity));
-            ms_instanceProperties.Add("hierarchyCount", (GetHierarchyCount, null));
-            ms_instanceProperties.Add("localEulerAngles", (GetLocalEulerAngles, SetLocalEulerAngles));
-            ms_instanceProperties.Add("localPosition", (GetLocalPosition, SetLocalPosition));
-            ms_instanceProperties.Add("localRotation", (GetLocalRotation, SetLocalRotation));
-            ms_instanceProperties.Add("localScale", (GetLocalScale, SetLocalScale));
-            //ms_instanceProperties.Add("localToWorldMatrix", (?, ?));
-            ms_instanceProperties.Add("lossyScale", (GetLossyScale, null));
-            ms_instanceProperties.Add("parent", (GetParent, SetParent));
-            ms_instanceProperties.Add("position", (GetPosition, SetPosition));
-            ms_instanceProperties.Add("right", (GetRight, null));
-            ms_instanceProperties.Add("root", (GetRoot, null));
-            ms_instanceProperties.Add("rotation", (GetRotation, SetRotation));
-            ms_instanceProperties.Add("up", (GetUp, null));
-            //ms_instanceProperties.Add("worldToLocalMatrix", (?, ?));
+            ms_instanceProperties.Add(("childCount", (GetChildCount, null)));
+            ms_instanceProperties.Add(("eulerAngles", (GetEulerAngles, SetEulerAngles)));
+            ms_instanceProperties.Add(("forward", (GetForward, null)));
+            ms_instanceProperties.Add(("hierarchyCapacity", (GetHierarchyCapacity, SetHierarchyCapacity)));
+            ms_instanceProperties.Add(("hierarchyCount", (GetHierarchyCount, null)));
+            ms_instanceProperties.Add(("localEulerAngles", (GetLocalEulerAngles, SetLocalEulerAngles)));
+            ms_instanceProperties.Add(("localPosition", (GetLocalPosition, SetLocalPosition)));
+            ms_instanceProperties.Add(("localRotation", (GetLocalRotation, SetLocalRotation)));
+            ms_instanceProperties.Add(("localScale", (GetLocalScale, SetLocalScale)));
+            //ms_instanceProperties.Add(("localToWorldMatrix", (?, ?)));
+            ms_instanceProperties.Add(("lossyScale", (GetLossyScale, null)));
+            ms_instanceProperties.Add(("parent", (GetParent, SetParentProp)));
+            ms_instanceProperties.Add(("position", (GetPosition, SetPosition)));
+            ms_instanceProperties.Add(("right", (GetRight, null)));
+            ms_instanceProperties.Add(("root", (GetRoot, null)));
+            ms_instanceProperties.Add(("rotation", (GetRotation, SetRotation)));
+            ms_instanceProperties.Add(("up", (GetUp, null)));
+            //ms_instanceProperties.Add(("worldToLocalMatrix", (?, ?)));
 
-            ms_instanceMethods.Add(nameof(DetachChildren), DetachChildren);
-            ms_instanceMethods.Add(nameof(Find), Find);
-            ms_instanceMethods.Add(nameof(GetChild), GetChild);
-            ms_instanceMethods.Add(nameof(GetSiblingIndex), GetSiblingIndex);
-            ms_instanceMethods.Add(nameof(InverseTransformDirection), InverseTransformDirection);
-            ms_instanceMethods.Add(nameof(InverseTransformPoint), InverseTransformPoint);
-            ms_instanceMethods.Add(nameof(InverseTransformVector), InverseTransformVector);
-            ms_instanceMethods.Add(nameof(IsChildOf), IsChildOf);
-            ms_instanceMethods.Add(nameof(LookAt), LookAt);
-            ms_instanceMethods.Add(nameof(Rotate), Rotate);
-            ms_instanceMethods.Add(nameof(RotateAround), RotateAround);
-            ms_instanceMethods.Add(nameof(SetAsFirstSibling), SetAsFirstSibling);
-            ms_instanceMethods.Add(nameof(SetAsLastSibling), SetAsLastSibling);
-            ms_instanceMethods.Add(nameof(SetParent), SetParent);
-            ms_instanceMethods.Add(nameof(SetPositionAndRotation), SetPositionAndRotation);
-            ms_instanceMethods.Add(nameof(SetSiblingIndex), SetSiblingIndex);
-            ms_instanceMethods.Add(nameof(TransformDirection), TransformDirection);
-            ms_instanceMethods.Add(nameof(TransformPoint), TransformPoint);
-            ms_instanceMethods.Add(nameof(TransformVector), TransformVector);
-            ms_instanceMethods.Add(nameof(Translate), Translate);
+            ms_instanceMethods.Add((nameof(DetachChildren), DetachChildren));
+            ms_instanceMethods.Add((nameof(Find), Find));
+            ms_instanceMethods.Add((nameof(GetChild), GetChild));
+            ms_instanceMethods.Add((nameof(GetSiblingIndex), GetSiblingIndex));
+            ms_instanceMethods.Add((nameof(InverseTransformDirection), InverseTransformDirection));
+            ms_instanceMethods.Add((nameof(InverseTransformPoint), InverseTransformPoint));
+            ms_instanceMethods.Add((nameof(InverseTransformVector), InverseTransformVector));
+            ms_instanceMethods.Add((nameof(IsChildOf), IsChildOf));
+            ms_instanceMethods.Add((nameof(LookAt), LookAt));
+            ms_instanceMethods.Add((nameof(Rotate), Rotate));
+            ms_instanceMethods.Add((nameof(RotateAround), RotateAround));
+            ms_instanceMethods.Add((nameof(SetAsFirstSibling), SetAsFirstSibling));
+            ms_instanceMethods.Add((nameof(SetAsLastSibling), SetAsLastSibling));
+            ms_instanceMethods.Add((nameof(SetParent), SetParent));
+            ms_instanceMethods.Add((nameof(SetPositionAndRotation), SetPositionAndRotation));
+            ms_instanceMethods.Add((nameof(SetSiblingIndex), SetSiblingIndex));
+            ms_instanceMethods.Add((nameof(TransformDirection), TransformDirection));
+            ms_instanceMethods.Add((nameof(TransformPoint), TransformPoint));
+            ms_instanceMethods.Add((nameof(TransformVector), TransformVector));
+            ms_instanceMethods.Add((nameof(Translate), Translate));
 
             ComponentDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         public static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(Transform), null, ms_metaMethods, StaticGet, null, InstanceGet, InstanceSet);
+            p_vm.RegisterClass(typeof(Transform), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         // Static methods
@@ -77,172 +77,496 @@ namespace CVRLua.Lua.LuaDefs
         }
 
         // Instance properties
-        static void GetChildCount(object p_obj, LuaArgReader p_reader)
+        static int GetChildCount(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Transform).childCount);
-        }
-
-        static void GetEulerAngles(object p_obj, LuaArgReader p_reader)
-        {
-            Wrappers.Vector3 l_vec = new Wrappers.Vector3((p_obj as Transform).eulerAngles);
-            p_reader.PushObject(l_vec);
-        }
-        static void SetEulerAngles(object p_obj, LuaArgReader p_reader)
-        {
-            Wrappers.Vector3 l_vec = null;
-            p_reader.ReadObject(ref l_vec);
-            if(!p_reader.HasErrors())
-                (p_obj as Transform).eulerAngles = l_vec.m_vec;
-        }
-
-        static void GetForward(object p_obj, LuaArgReader p_reader)
-        {
-            Wrappers.Vector3 l_vec = new Wrappers.Vector3((p_obj as Transform).forward);
-            p_reader.PushObject(l_vec);
-        }
-
-        static void GetHierarchyCapacity(object p_obj, LuaArgReader p_reader)
-        {
-            p_reader.PushInteger((p_obj as Transform).hierarchyCapacity);
-        }
-        static void SetHierarchyCapacity(object p_obj, LuaArgReader p_reader)
-        {
-            int l_capacity = 0;
-            p_reader.ReadInteger(ref l_capacity);
-            if(!p_reader.HasErrors())
-                (p_obj as Transform).hierarchyCapacity = l_capacity;
-        }
-
-        static void GetHierarchyCount(object p_obj, LuaArgReader p_reader)
-        {
-            p_reader.PushInteger((p_obj as Transform).hierarchyCount);
-        }
-
-        static void GetLocalEulerAngles(object p_obj, LuaArgReader p_reader)
-        {
-            Wrappers.Vector3 l_vec = new Wrappers.Vector3((p_obj as Transform).localEulerAngles);
-            p_reader.PushObject(l_vec);
-        }
-        static void SetLocalEulerAngles(object p_obj, LuaArgReader p_reader)
-        {
-            Wrappers.Vector3 l_vec = null;
-            p_reader.ReadObject(ref l_vec);
-            if(!p_reader.HasErrors())
-                (p_obj as Transform).localEulerAngles = l_vec.m_vec;
-        }
-
-        static void GetLocalPosition(object p_obj, LuaArgReader p_reader)
-        {
-            Wrappers.Vector3 l_vec = new Wrappers.Vector3((p_obj as Transform).localPosition);
-            p_reader.PushObject(l_vec);
-        }
-        static void SetLocalPosition(object p_obj, LuaArgReader p_reader)
-        {
-            Wrappers.Vector3 l_vec = null;
-            p_reader.ReadObject(ref l_vec);
-            if(!p_reader.HasErrors())
-                (p_obj as Transform).localPosition = l_vec.m_vec;
-        }
-
-        static void GetLocalRotation(object p_obj, LuaArgReader p_reader)
-        {
-            Wrappers.Quaternion l_quat = new Wrappers.Quaternion((p_obj as Transform).localRotation);
-            p_reader.PushObject(l_quat);
-        }
-        static void SetLocalRotation(object p_obj, LuaArgReader p_reader)
-        {
-            Wrappers.Quaternion l_quat = null;
-            p_reader.ReadObject(ref l_quat);
-            if(!p_reader.HasErrors())
-                (p_obj as Transform).localRotation = l_quat.m_quat;
-        }
-
-        static void GetLocalScale(object p_obj, LuaArgReader p_reader)
-        {
-            Wrappers.Vector3 l_vec = new Wrappers.Vector3((p_obj as Transform).localScale);
-            p_reader.PushObject(l_vec);
-        }
-        static void SetLocalScale(object p_obj, LuaArgReader p_reader)
-        {
-            Wrappers.Vector3 l_vec = null;
-            p_reader.ReadObject(ref l_vec);
-            if(!p_reader.HasErrors())
-                (p_obj as Transform).localScale = l_vec.m_vec;
-        }
-
-        static void GetLossyScale(object p_obj, LuaArgReader p_reader)
-        {
-            Wrappers.Vector3 l_vec = new Wrappers.Vector3((p_obj as Transform).lossyScale);
-            p_reader.PushObject(l_vec);
-        }
-
-        static void GetParent(object p_obj, LuaArgReader p_reader)
-        {
-            if((p_obj as Transform).parent != null)
-                p_reader.PushObject((p_obj as Transform).parent);
-            else
-                p_reader.PushBoolean(false);
-        }
-
-        static void SetParent(object p_obj, LuaArgReader p_reader)
-        {
-            if(p_reader.IsNextNil())
-                (p_obj as Transform).parent = null;
-            else
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
             {
-                Transform l_parent = null;
-                p_reader.ReadObject(ref l_parent);
-                if(!p_reader.HasErrors())
+                if(l_transform != null)
+                    l_argReader.PushInteger(l_transform.childCount);
+                else
                 {
-                    if(l_parent != null)
-                        (p_obj as Transform).parent = l_parent;
-                    else
-                        p_reader.SetError(c_destroyed);
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
                 }
             }
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetPosition(object p_obj, LuaArgReader p_reader)
+        static int GetEulerAngles(IntPtr p_state)
         {
-            Wrappers.Vector3 l_vec = new Wrappers.Vector3((p_obj as Transform).position);
-            p_reader.PushObject(l_vec);
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushObject(new Wrappers.Vector3(l_transform.eulerAngles));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetPosition(object p_obj, LuaArgReader p_reader)
+        static int SetEulerAngles(IntPtr p_state)
         {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
             Wrappers.Vector3 l_vec = null;
-            p_reader.ReadObject(ref l_vec);
-            if(!p_reader.HasErrors())
-                (p_obj as Transform).position = l_vec.m_vec;
+            l_argReader.ReadObject(ref l_transform);
+            l_argReader.ReadObject(ref l_vec);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_transform.eulerAngles = l_vec.m_vec;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetRight(object p_obj, LuaArgReader p_reader)
+        static int GetForward(IntPtr p_state)
         {
-            Wrappers.Vector3 l_vec = new Wrappers.Vector3((p_obj as Transform).right);
-            p_reader.PushObject(l_vec);
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushObject(new Wrappers.Vector3(l_transform.forward));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetRoot(object p_obj, LuaArgReader p_reader)
+        static int GetHierarchyCapacity(IntPtr p_state)
         {
-            p_reader.PushObject((p_obj as Transform).root);
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushInteger(l_transform.hierarchyCapacity);
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetHierarchyCapacity(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            int l_value = 0;
+            l_argReader.ReadObject(ref l_transform);
+            l_argReader.ReadInteger(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_transform.hierarchyCapacity = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetRotation(object p_obj, LuaArgReader p_reader)
+        static int GetHierarchyCount(IntPtr p_state)
         {
-            Wrappers.Quaternion l_quat = new Wrappers.Quaternion((p_obj as Transform).rotation);
-            p_reader.PushObject(l_quat);
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushInteger(l_transform.hierarchyCount);
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetRotation(object p_obj, LuaArgReader p_reader)
+
+        static int GetLocalEulerAngles(IntPtr p_state)
         {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushObject(new Wrappers.Vector3(l_transform.localEulerAngles));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetLocalEulerAngles(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            Wrappers.Vector3 l_vec = null;
+            l_argReader.ReadObject(ref l_transform);
+            l_argReader.ReadObject(ref l_vec);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_transform.localEulerAngles = l_vec.m_vec;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
+        }
+
+        static int GetLocalPosition(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushObject(new Wrappers.Vector3(l_transform.localPosition));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetLocalPosition(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            Wrappers.Vector3 l_vec = null;
+            l_argReader.ReadObject(ref l_transform);
+            l_argReader.ReadObject(ref l_vec);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_transform.localPosition = l_vec.m_vec;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
+        }
+
+        static int GetLocalRotation(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushObject(new Wrappers.Quaternion(l_transform.localRotation));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetLocalRotation(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
             Wrappers.Quaternion l_quat = null;
-            p_reader.ReadObject(ref l_quat);
-            if(!p_reader.HasErrors())
-                (p_obj as Transform).rotation = l_quat.m_quat;
+            l_argReader.ReadObject(ref l_transform);
+            l_argReader.ReadObject(ref l_quat);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_transform.localRotation = l_quat.m_quat;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetUp(object p_obj, LuaArgReader p_reader)
+        static int GetLocalScale(IntPtr p_state)
         {
-            Wrappers.Vector3 l_vec = new Wrappers.Vector3((p_obj as Transform).up);
-            p_reader.PushObject(l_vec);
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushObject(new Wrappers.Vector3(l_transform.localScale));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetLocalScale(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            Wrappers.Vector3 l_vec = null;
+            l_argReader.ReadObject(ref l_transform);
+            l_argReader.ReadObject(ref l_vec);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_transform.localScale = l_vec.m_vec;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
+        }
+
+        static int GetLossyScale(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushObject(new Wrappers.Vector3(l_transform.lossyScale));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
+        }
+
+        static int GetParent(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                {
+                    if(l_transform.parent != null)
+                        l_argReader.PushObject(l_transform.parent);
+                    else
+                        l_argReader.PushBoolean(false);
+                }
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetParentProp(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            Transform l_parent = null;
+            l_argReader.ReadObject(ref l_transform);
+            l_argReader.ReadNextObject(ref l_parent);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                {
+                    if(l_parent != null)
+                        l_transform.parent = l_parent;
+                    else
+                        l_transform.parent = null;
+                }
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
+        }
+
+        static int GetPosition(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushObject(new Wrappers.Vector3(l_transform.position));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetPosition(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            Wrappers.Vector3 l_vec = null;
+            l_argReader.ReadObject(ref l_transform);
+            l_argReader.ReadObject(ref l_vec);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_transform.position = l_vec.m_vec;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
+        }
+
+        static int GetRight(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushObject(new Wrappers.Vector3(l_transform.right));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
+        }
+
+        static int GetRoot(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushObject(l_transform.root);
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
+        }
+
+        static int GetRotation(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushObject(new Wrappers.Quaternion(l_transform.rotation));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetRotation(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            Wrappers.Quaternion l_quat = null;
+            l_argReader.ReadObject(ref l_transform);
+            l_argReader.ReadObject(ref l_quat);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_transform.rotation = l_quat.m_quat;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
+        }
+
+        static int GetUp(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushObject(new Wrappers.Vector3(l_transform.up));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
         }
 
         // Instance methods
@@ -754,83 +1078,6 @@ namespace CVRLua.Lua.LuaDefs
                     l_argReader.SetError(c_destroyed);
                     l_argReader.PushBoolean(false);
                 }
-            }
-
-            l_argReader.LogError();
-            return l_argReader.GetReturnValue();
-        }
-
-        // Static getter
-        static int StaticGet(IntPtr p_state)
-        {
-            var l_argReader = new LuaArgReader(p_state);
-            string l_key = "";
-            l_argReader.Skip(); // Metatable
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(ms_staticMethods.TryGetValue(l_key, out var l_func))
-                    l_argReader.PushFunction(l_func);
-                else if(ms_staticProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                    l_pair.Item1.Invoke(l_argReader);
-                else
-                    l_argReader.PushNil();
-            }
-            else
-                l_argReader.PushNil();
-
-            return l_argReader.GetReturnValue();
-        }
-
-        // Instance getter
-        static int InstanceGet(IntPtr p_state)
-        {
-            var l_argReader = new LuaArgReader(p_state);
-            Transform l_obj = null;
-            string l_key = "";
-            l_argReader.ReadObject(ref l_obj);
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(l_obj != null)
-                {
-                    if(ms_instanceMethods.TryGetValue(l_key, out var l_func))
-                        l_argReader.PushFunction(l_func); // Lua handles it by itself
-                    else if(ms_instanceProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                        l_pair.Item1.Invoke(l_obj, l_argReader);
-                    else
-                        l_argReader.PushNil();
-                }
-                else
-                {
-                    l_argReader.SetError(c_destroyed);
-                    l_argReader.PushNil();
-                }
-            }
-            else
-                l_argReader.PushNil();
-
-            return l_argReader.GetReturnValue();
-        }
-
-        // Instance setter
-        static int InstanceSet(IntPtr p_state)
-        {
-            // Our value is on stack top
-            var l_argReader = new LuaArgReader(p_state);
-            Transform l_obj = null;
-            string l_key = "";
-            l_argReader.ReadObject(ref l_obj);
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(l_obj != null)
-                {
-                    if(ms_instanceProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item2 != null))
-                        l_pair.Item2.Invoke(l_obj, l_argReader);
-                }
-                else
-                    l_argReader.SetError(c_destroyed);
             }
 
             l_argReader.LogError();

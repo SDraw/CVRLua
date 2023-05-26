@@ -79,10 +79,12 @@
     <Reference Include="UnityEngine.TerrainPhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Games\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.TerrainPhysicsModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.VehiclesModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Games\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.VehiclesModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -105,7 +107,6 @@
     <Compile Include="Lua\LuaDefs\ContactPointDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRPointerDefs.cs" />
     <Compile Include="Lua\LuaDefs\DateTimeDefs.cs" />
-    <Compile Include="Lua\LuaDefs\Delegates.cs" />
     <Compile Include="Lua\LuaDefs\LuaScriptDefs.cs" />
     <Compile Include="Lua\LuaDefs\LocalPlayerDefs.cs" />
     <Compile Include="Lua\LuaDefs\MathfDefs.cs" />

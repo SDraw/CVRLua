@@ -6,58 +6,58 @@ namespace CVRLua.Lua.LuaDefs
     static class LocalPlayerDefs
     {
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_metaMethods = new List<(string, LuaInterop.lua_CFunction)>();
-        static readonly Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> ms_staticProperties = new Dictionary<string, (StaticParseDelegate, StaticParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_staticMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
-        static readonly Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)> ms_instanceProperties = new Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_instanceMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_staticProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_staticMethods = new List<(string, LuaInterop.lua_CFunction)>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_instanceProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_instanceMethods = new List<(string, LuaInterop.lua_CFunction)>();
 
         internal static void Init()
         {
-            ms_staticMethods.Add(nameof(IsLocalPlayer), IsLocalPlayer);
+            ms_staticMethods.Add((nameof(IsLocalPlayer), IsLocalPlayer));
 
             ms_metaMethods.Add(("__tostring", ToString));
             ms_metaMethods.Add(("__eq", Equal));
 
-            ms_instanceProperties.Add("name", (GetName, null));
-            ms_instanceProperties.Add("position", (GetPosition, null));
-            ms_instanceProperties.Add("rotation", (GetRotation, null));
-            ms_instanceProperties.Add("avatarHeight", (GetAvatarHeight, null));
-            ms_instanceProperties.Add("avatarScale", (GetAvatarScale, null));
-            ms_instanceProperties.Add("playerHeight", (GetPlayerHeight, null));
-            ms_instanceProperties.Add("playerScale", (GetPlayerScale, null));
-            ms_instanceProperties.Add("cameraPosition", (GetCameraPosition, null));
-            ms_instanceProperties.Add("cameraRotation", (GetCameraRotation, null));
-            ms_instanceProperties.Add("inVR", (GetInVR, null));
-            ms_instanceProperties.Add("inFBT", (GetFBT, null));
-            ms_instanceProperties.Add("hasAvatar", (GetAvatar, null));
-            ms_instanceProperties.Add("isAvatarLoading", (GetAvatarLoading, null));
-            ms_instanceProperties.Add("isAvatarHumanoid", (GetAvatarHumanoid, null));
-            ms_instanceProperties.Add("isFlying", (GetFlying, null));
-            ms_instanceProperties.Add("isCrouching", (GetCrouching, null));
-            ms_instanceProperties.Add("isProning", (GetProning, null));
-            ms_instanceProperties.Add("isSitting", (GetSitting, null));
-            ms_instanceProperties.Add("isSprinting", (GetSprinting, null));
-            ms_instanceProperties.Add("isJumping", (GetJumping, null));
-            ms_instanceProperties.Add("leftHandPosition", (GetLeftHandPosition, null));
-            ms_instanceProperties.Add("leftHandRotation", (GetLeftHandRotation, null));
-            ms_instanceProperties.Add("rightHandPosition", (GetRightHandPosition, null));
-            ms_instanceProperties.Add("rightHandRotation", (GetRightHandRotation, null));
-            ms_instanceProperties.Add("leftHandGesture", (GetLeftHandGesture, null));
-            ms_instanceProperties.Add("rightHandGesture", (GetRightHandGesture, null));
-            ms_instanceProperties.Add("zoom", (GetZoom, null));
-            ms_instanceProperties.Add("zoomFactor", (GetZoomFactor, null));
-            ms_instanceProperties.Add("movementVector", (GetMovementVector, null));
+            ms_instanceProperties.Add(("name", (GetName, null)));
+            ms_instanceProperties.Add(("position", (GetPosition, null)));
+            ms_instanceProperties.Add(("rotation", (GetRotation, null)));
+            ms_instanceProperties.Add(("avatarHeight", (GetAvatarHeight, null)));
+            ms_instanceProperties.Add(("avatarScale", (GetAvatarScale, null)));
+            ms_instanceProperties.Add(("playerHeight", (GetPlayerHeight, null)));
+            ms_instanceProperties.Add(("playerScale", (GetPlayerScale, null)));
+            ms_instanceProperties.Add(("cameraPosition", (GetCameraPosition, null)));
+            ms_instanceProperties.Add(("cameraRotation", (GetCameraRotation, null)));
+            ms_instanceProperties.Add(("inVR", (GetInVR, null)));
+            ms_instanceProperties.Add(("inFBT", (GetFBT, null)));
+            ms_instanceProperties.Add(("hasAvatar", (GetAvatar, null)));
+            ms_instanceProperties.Add(("isAvatarLoading", (GetAvatarLoading, null)));
+            ms_instanceProperties.Add(("isAvatarHumanoid", (GetAvatarHumanoid, null)));
+            ms_instanceProperties.Add(("isFlying", (GetFlying, null)));
+            ms_instanceProperties.Add(("isCrouching", (GetCrouching, null)));
+            ms_instanceProperties.Add(("isProning", (GetProning, null)));
+            ms_instanceProperties.Add(("isSitting", (GetSitting, null)));
+            ms_instanceProperties.Add(("isSprinting", (GetSprinting, null)));
+            ms_instanceProperties.Add(("isJumping", (GetJumping, null)));
+            ms_instanceProperties.Add(("leftHandPosition", (GetLeftHandPosition, null)));
+            ms_instanceProperties.Add(("leftHandRotation", (GetLeftHandRotation, null)));
+            ms_instanceProperties.Add(("rightHandPosition", (GetRightHandPosition, null)));
+            ms_instanceProperties.Add(("rightHandRotation", (GetRightHandRotation, null)));
+            ms_instanceProperties.Add(("leftHandGesture", (GetLeftHandGesture, null)));
+            ms_instanceProperties.Add(("rightHandGesture", (GetRightHandGesture, null)));
+            ms_instanceProperties.Add(("zoom", (GetZoom, null)));
+            ms_instanceProperties.Add(("zoomFactor", (GetZoomFactor, null)));
+            ms_instanceProperties.Add(("movementVector", (GetMovementVector, null)));
 
-            ms_instanceMethods.Add(nameof(Teleport), Teleport);
-            ms_instanceMethods.Add(nameof(SetImmobilized), SetImmobilized);
-            ms_instanceMethods.Add(nameof(Respawn), Respawn);
-            ms_instanceMethods.Add(nameof(GetBonePosition), GetBonePosition);
-            ms_instanceMethods.Add(nameof(GetBoneRotation), GetBoneRotation);
+            ms_instanceMethods.Add((nameof(Teleport), Teleport));
+            ms_instanceMethods.Add((nameof(SetImmobilized), SetImmobilized));
+            ms_instanceMethods.Add((nameof(Respawn), Respawn));
+            ms_instanceMethods.Add((nameof(GetBonePosition), GetBonePosition));
+            ms_instanceMethods.Add((nameof(GetBoneRotation), GetBoneRotation));
         }
 
         public static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(Wrappers.LocalPlayer), Constructor, ms_metaMethods, StaticGet, null, InstanceGet, InstanceSet);
+            p_vm.RegisterClass(typeof(Wrappers.LocalPlayer), Constructor, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         // Constructor
@@ -106,150 +106,410 @@ namespace CVRLua.Lua.LuaDefs
         }
 
         // Instance properties
-        static void GetName(object p_obj, LuaArgReader p_reader)
+        static int GetName(IntPtr p_state)
         {
-            p_reader.PushString((p_obj as Wrappers.LocalPlayer).GetName());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushString(l_player.GetName());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetPosition(object p_obj, LuaArgReader p_reader)
+        static int GetPosition(IntPtr p_state)
         {
-            p_reader.PushObject(new Wrappers.Vector3((p_obj as Wrappers.LocalPlayer).GetPosition()));
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushObject(new Wrappers.Vector3(l_player.GetPosition()));
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetRotation(object p_obj, LuaArgReader p_reader)
+        static int GetRotation(IntPtr p_state)
         {
-            p_reader.PushObject(new Wrappers.Quaternion((p_obj as Wrappers.LocalPlayer).GetRotation()));
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushObject(new Wrappers.Quaternion(l_player.GetRotation()));
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetAvatarHeight(object p_obj, LuaArgReader p_reader)
+        static int GetAvatarHeight(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.LocalPlayer).GetAvatarHeight());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushNumber(l_player.GetAvatarHeight());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetAvatarScale(object p_obj, LuaArgReader p_reader)
+        static int GetAvatarScale(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.LocalPlayer).GetAvatarScale());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushNumber(l_player.GetAvatarScale());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetPlayerHeight(object p_obj, LuaArgReader p_reader)
+        static int GetPlayerHeight(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.LocalPlayer).GetPlayerHeight());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushNumber(l_player.GetPlayerHeight());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetPlayerScale(object p_obj, LuaArgReader p_reader)
+        static int GetPlayerScale(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.LocalPlayer).GetPlayerScale());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushNumber(l_player.GetPlayerScale());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetCameraPosition(object p_obj, LuaArgReader p_reader)
+        static int GetCameraPosition(IntPtr p_state)
         {
-            p_reader.PushObject(new Wrappers.Vector3((p_obj as Wrappers.LocalPlayer).GetCameraPosition()));
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushObject(new Wrappers.Vector3(l_player.GetCameraPosition()));
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetCameraRotation(object p_obj, LuaArgReader p_reader)
+        static int GetCameraRotation(IntPtr p_state)
         {
-            p_reader.PushObject(new Wrappers.Quaternion((p_obj as Wrappers.LocalPlayer).GetCameraRotation()));
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushObject(new Wrappers.Quaternion(l_player.GetCameraRotation()));
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetInVR(object p_obj, LuaArgReader p_reader)
+        static int GetInVR(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as Wrappers.LocalPlayer).IsInVR());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushBoolean(l_player.IsInVR());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetFBT(object p_obj, LuaArgReader p_reader)
+        static int GetFBT(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as Wrappers.LocalPlayer).IsInFullbody());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushBoolean(l_player.IsInFullbody());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetAvatar(object p_obj, LuaArgReader p_reader)
+        static int GetAvatar(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as Wrappers.LocalPlayer).HasAvatar());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushBoolean(l_player.HasAvatar());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetAvatarLoading(object p_obj, LuaArgReader p_reader)
+        static int GetAvatarLoading(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as Wrappers.LocalPlayer).IsAvatarLoading());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushBoolean(l_player.IsAvatarLoading());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetAvatarHumanoid(object p_obj, LuaArgReader p_reader)
+        static int GetAvatarHumanoid(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as Wrappers.LocalPlayer).IsAvatarHumanoid());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushBoolean(l_player.IsAvatarHumanoid());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetFlying(object p_obj, LuaArgReader p_reader)
+        static int GetFlying(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as Wrappers.LocalPlayer).IsFlying());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushBoolean(l_player.IsFlying());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetCrouching(object p_obj, LuaArgReader p_reader)
+        static int GetCrouching(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as Wrappers.LocalPlayer).IsCrouching());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushBoolean(l_player.IsCrouching());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetProning(object p_obj, LuaArgReader p_reader)
+        static int GetProning(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as Wrappers.LocalPlayer).IsProning());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushBoolean(l_player.IsProning());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetSitting(object p_obj, LuaArgReader p_reader)
+        static int GetSitting(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as Wrappers.LocalPlayer).IsSitting());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushBoolean(l_player.IsSitting());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetSprinting(object p_obj, LuaArgReader p_reader)
+        static int GetSprinting(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as Wrappers.LocalPlayer).IsSprinting());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushBoolean(l_player.IsSprinting());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetJumping(object p_obj, LuaArgReader p_reader)
+        static int GetJumping(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as Wrappers.LocalPlayer).IsJumping());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushBoolean(l_player.IsJumping());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetLeftHandPosition(object p_obj, LuaArgReader p_reader)
+        static int GetLeftHandPosition(IntPtr p_state)
         {
-            p_reader.PushObject(new Wrappers.Vector3((p_obj as Wrappers.LocalPlayer).GetLeftHandPosition()));
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushObject(new Wrappers.Vector3(l_player.GetLeftHandPosition()));
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetLeftHandRotation(object p_obj, LuaArgReader p_reader)
+        static int GetLeftHandRotation(IntPtr p_state)
         {
-            p_reader.PushObject(new Wrappers.Quaternion((p_obj as Wrappers.LocalPlayer).GetLeftHandRotation()));
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushObject(new Wrappers.Quaternion(l_player.GetLeftHandRotation()));
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetRightHandPosition(object p_obj, LuaArgReader p_reader)
+        static int GetRightHandPosition(IntPtr p_state)
         {
-            p_reader.PushObject(new Wrappers.Vector3((p_obj as Wrappers.LocalPlayer).GetRightHandPosition()));
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushObject(new Wrappers.Vector3(l_player.GetRightHandPosition()));
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetRightHandRotation(object p_obj, LuaArgReader p_reader)
+        static int GetRightHandRotation(IntPtr p_state)
         {
-            p_reader.PushObject(new Wrappers.Quaternion((p_obj as Wrappers.LocalPlayer).GetRightHandRotation()));
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushObject(new Wrappers.Quaternion(l_player.GetRightHandRotation()));
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetLeftHandGesture(object p_obj, LuaArgReader p_reader)
+        static int GetLeftHandGesture(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.LocalPlayer).GetLeftHandGetsture());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushNumber(l_player.GetLeftHandGetsture());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetRightHandGesture(object p_obj, LuaArgReader p_reader)
+        static int GetRightHandGesture(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.LocalPlayer).GetRightHandGetsture());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushNumber(l_player.GetRightHandGetsture());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetZoom(object p_obj, LuaArgReader p_reader)
+        static int GetZoom(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as Wrappers.LocalPlayer).IsZooming());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushBoolean(l_player.IsZooming());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetZoomFactor(object p_obj, LuaArgReader p_reader)
+        static int GetZoomFactor(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.LocalPlayer).GetZoomFactor());
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushNumber(l_player.GetZoomFactor());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetMovementVector(object p_obj, LuaArgReader p_reader)
+        static int GetMovementVector(IntPtr p_state)
         {
-            UnityEngine.Vector3 l_vec = (p_obj as Wrappers.LocalPlayer).GetMovementVector();
-            p_reader.PushObject(new Wrappers.Vector2(l_vec.x, l_vec.z));
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.LocalPlayer l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushObject(new Wrappers.Vector2(l_player.GetMovementVector()));
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
         // Instance methods
@@ -340,70 +600,6 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushObject(new Wrappers.Quaternion(l_player.GetBoneRotation(l_bone)));
             else
                 l_argReader.PushBoolean(false);
-
-            l_argReader.LogError();
-            return l_argReader.GetReturnValue();
-        }
-
-        // Static getter
-        static int StaticGet(IntPtr p_state)
-        {
-            var l_argReader = new LuaArgReader(p_state);
-            string l_key = "";
-            l_argReader.Skip(); // Metatable
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(ms_staticMethods.TryGetValue(l_key, out var l_func))
-                    l_argReader.PushFunction(l_func);
-                else if(ms_staticProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                    l_pair.Item1.Invoke(l_argReader);
-                else
-                    l_argReader.PushNil();
-            }
-            else
-                l_argReader.PushNil();
-
-            return l_argReader.GetReturnValue();
-        }
-
-        // Instance getter
-        static int InstanceGet(IntPtr p_state)
-        {
-            var l_argReader = new LuaArgReader(p_state);
-            Wrappers.LocalPlayer l_obj = null;
-            string l_key = "";
-            l_argReader.ReadObject(ref l_obj);
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(ms_instanceMethods.TryGetValue(l_key, out var l_func))
-                    l_argReader.PushFunction(l_func); // Lua handles it by itself
-                else if(ms_instanceProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                    l_pair.Item1.Invoke(l_obj, l_argReader);
-                else
-                    l_argReader.PushNil();
-            }
-            else
-                l_argReader.PushNil();
-
-            return l_argReader.GetReturnValue();
-        }
-
-        // Instance setter
-        static int InstanceSet(IntPtr p_state)
-        {
-            // Our value is on stack top
-            var l_argReader = new LuaArgReader(p_state);
-            Wrappers.LocalPlayer l_obj = null;
-            string l_key = "";
-            l_argReader.ReadObject(ref l_obj);
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(ms_instanceProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item2 != null))
-                    l_pair.Item2.Invoke(l_obj, l_argReader);
-            }
 
             l_argReader.LogError();
             return l_argReader.GetReturnValue();

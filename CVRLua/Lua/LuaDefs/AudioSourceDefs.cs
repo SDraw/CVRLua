@@ -7,72 +7,71 @@ namespace CVRLua.Lua.LuaDefs
     static class AudioSourceDefs
     {
         const string c_destroyed = "AudioSource is destroyed";
-        const string c_destroyedClip = "Destroyed AudioClip";
+        const string c_destroyedClip = "AudioClip is destroyed";
 
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_metaMethods = new List<(string, LuaInterop.lua_CFunction)>();
-        static readonly Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> ms_staticProperties = new Dictionary<string, (StaticParseDelegate, StaticParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_staticMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
-        static readonly Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)> ms_instanceProperties = new Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_instanceMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_staticProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_staticMethods = new List<(string, LuaInterop.lua_CFunction)>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_instanceProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_instanceMethods = new List<(string, LuaInterop.lua_CFunction)>();
 
         internal static void Init()
         {
-            ms_staticMethods.Add(nameof(PlayClipAtPoint), PlayClipAtPoint);
-            ms_staticMethods.Add(nameof(IsAudioSource), IsAudioSource);
+            ms_staticMethods.Add((nameof(PlayClipAtPoint), PlayClipAtPoint));
+            ms_staticMethods.Add((nameof(IsAudioSource), IsAudioSource));
 
-            ms_instanceProperties.Add("bypassEffects", (GetBypassEffects, SetBypassEffects));
-            ms_instanceProperties.Add("bypassListenerEffects", (GetBypassListenerEffects, SetBypassListenerEffects));
-            ms_instanceProperties.Add("bypassReverbZones", (GetBypassReverbZones, SetBypassReverbZones));
-            ms_instanceProperties.Add("clip", (GetClip, SetClip));
-            ms_instanceProperties.Add("dopplerLevel", (GetDopplerLevel, SetDopplerLevel));
-            ms_instanceProperties.Add("ignoreListenerPause", (GetIgnoreListenerPause, SetIgnoreListenerPause));
-            ms_instanceProperties.Add("ignoreListenerVolume", (GetIgnoreListenerVolume, SetIgnoreListenerVolume));
-            ms_instanceProperties.Add("isPlaying", (GetPlaying, null));
-            ms_instanceProperties.Add("isVirtual", (GetVirtual, null));
-            ms_instanceProperties.Add("loop", (GetLoop, SetLoop));
-            ms_instanceProperties.Add("maxDistance", (GetMaxDistance, SetMaxDistance));
-            ms_instanceProperties.Add("minDistance", (GetMinDistance, SetMinDistance));
-            //ms_instanceProperties.Add("outputAudioMixerGroup", (?, ?)); // Requires AudioMixerGroup defs
-            ms_instanceProperties.Add("panStereo", (GetPanStereo, SetPanStereo));
-            ms_instanceProperties.Add("pitch", (GetPitch, SetPitch));
-            ms_instanceProperties.Add("playOnAwake", (GetPlayOnAwake, SetPlayOnAwake));
-            ms_instanceProperties.Add("priority", (GetPriority, SetPriority));
-            ms_instanceProperties.Add("reverbZoneMix", (GetReverbZoneMix, SetReverbZoneMix));
-            ;
-            ms_instanceProperties.Add("rolloffMode", (GetRolloffMode, SetRolloffMode));
-            ms_instanceProperties.Add("spatialBlend", (GetSpatialBlend, SetSpatialBlend));
-            ms_instanceProperties.Add("spatialize", (GetSpatialize, SetSpatialize));
-            ms_instanceProperties.Add("spatializePostEffects", (GetSpatializePostEffects, SetSpatializePostEffects));
-            ms_instanceProperties.Add("spread", (GetSpread, SetSpread));
-            ms_instanceProperties.Add("time", (GetTime, SetTime));
-            ms_instanceProperties.Add("timeSamples", (GetTimeSamples, SetTimeSamples));
-            ms_instanceProperties.Add("velocityUpdateMode", (GetVelocityUpdateMode, SetVelocityUpdateMode));
-            ms_instanceProperties.Add("volume", (GetVolume, SetVolume));
+            ms_instanceProperties.Add(("bypassEffects", (GetBypassEffects, SetBypassEffects)));
+            ms_instanceProperties.Add(("bypassListenerEffects", (GetBypassListenerEffects, SetBypassListenerEffects)));
+            ms_instanceProperties.Add(("bypassReverbZones", (GetBypassReverbZones, SetBypassReverbZones)));
+            ms_instanceProperties.Add(("clip", (GetClip, SetClip)));
+            ms_instanceProperties.Add(("dopplerLevel", (GetDopplerLevel, SetDopplerLevel)));
+            ms_instanceProperties.Add(("ignoreListenerPause", (GetIgnoreListenerPause, SetIgnoreListenerPause)));
+            ms_instanceProperties.Add(("ignoreListenerVolume", (GetIgnoreListenerVolume, SetIgnoreListenerVolume)));
+            ms_instanceProperties.Add(("isPlaying", (GetPlaying, null)));
+            ms_instanceProperties.Add(("isVirtual", (GetVirtual, null)));
+            ms_instanceProperties.Add(("loop", (GetLoop, SetLoop)));
+            ms_instanceProperties.Add(("maxDistance", (GetMaxDistance, SetMaxDistance)));
+            ms_instanceProperties.Add(("minDistance", (GetMinDistance, SetMinDistance)));
+            //ms_instanceProperties.Add(("outputAudioMixerGroup", (?, ?))); // Requires AudioMixerGroup defs
+            ms_instanceProperties.Add(("panStereo", (GetPanStereo, SetPanStereo)));
+            ms_instanceProperties.Add(("pitch", (GetPitch, SetPitch)));
+            ms_instanceProperties.Add(("playOnAwake", (GetPlayOnAwake, SetPlayOnAwake)));
+            ms_instanceProperties.Add(("priority", (GetPriority, SetPriority)));
+            ms_instanceProperties.Add(("reverbZoneMix", (GetReverbZoneMix, SetReverbZoneMix)));
+            ms_instanceProperties.Add(("rolloffMode", (GetRolloffMode, SetRolloffMode)));
+            ms_instanceProperties.Add(("spatialBlend", (GetSpatialBlend, SetSpatialBlend)));
+            ms_instanceProperties.Add(("spatialize", (GetSpatialize, SetSpatialize)));
+            ms_instanceProperties.Add(("spatializePostEffects", (GetSpatializePostEffects, SetSpatializePostEffects)));
+            ms_instanceProperties.Add(("spread", (GetSpread, SetSpread)));
+            ms_instanceProperties.Add(("time", (GetTime, SetTime)));
+            ms_instanceProperties.Add(("timeSamples", (GetTimeSamples, SetTimeSamples)));
+            ms_instanceProperties.Add(("velocityUpdateMode", (GetVelocityUpdateMode, SetVelocityUpdateMode)));
+            ms_instanceProperties.Add(("volume", (GetVolume, SetVolume)));
 
-            ms_instanceMethods.Add(nameof(GetAmbisonicDecoderFloat), GetAmbisonicDecoderFloat);
-            //ms_instanceMethods.Add(nameof(GetCustomCurve), GetCustomCurve); // Requires Curve defs
-            ms_instanceMethods.Add(nameof(GetOutputData), GetOutputData);
-            ms_instanceMethods.Add(nameof(GetSpatializerFloat), GetSpatializerFloat);
-            ms_instanceMethods.Add(nameof(GetSpectrumData), GetSpectrumData);
-            ms_instanceMethods.Add(nameof(Pause), Pause);
-            ms_instanceMethods.Add(nameof(Play), Play);
-            ms_instanceMethods.Add(nameof(PlayDelayed), PlayDelayed);
-            ms_instanceMethods.Add(nameof(PlayOneShot), PlayOneShot);
-            ms_instanceMethods.Add(nameof(PlayScheduled), PlayScheduled);
-            ms_instanceMethods.Add(nameof(SetAmbisonicDecoderFloat), SetAmbisonicDecoderFloat);
-            //ms_instanceMethods.Add(nameof(SetCustomCurve), SetCustomCurve); // Requires Curve defs
-            ms_instanceMethods.Add(nameof(SetScheduledEndTime), SetScheduledEndTime);
-            ms_instanceMethods.Add(nameof(SetScheduledStartTime), SetScheduledStartTime);
-            ms_instanceMethods.Add(nameof(SetSpatializerFloat), SetSpatializerFloat);
-            ms_instanceMethods.Add(nameof(Stop), Stop);
-            ms_instanceMethods.Add(nameof(UnPause), UnPause);
+            ms_instanceMethods.Add((nameof(GetAmbisonicDecoderFloat), GetAmbisonicDecoderFloat));
+            //ms_instanceMethods.Add((nameof(GetCustomCurve), GetCustomCurve)); // Requires Curve defs
+            ms_instanceMethods.Add((nameof(GetOutputData), GetOutputData));
+            ms_instanceMethods.Add((nameof(GetSpatializerFloat), GetSpatializerFloat));
+            ms_instanceMethods.Add((nameof(GetSpectrumData), GetSpectrumData));
+            ms_instanceMethods.Add((nameof(Pause), Pause));
+            ms_instanceMethods.Add((nameof(Play), Play));
+            ms_instanceMethods.Add((nameof(PlayDelayed), PlayDelayed));
+            ms_instanceMethods.Add((nameof(PlayOneShot), PlayOneShot));
+            ms_instanceMethods.Add((nameof(PlayScheduled), PlayScheduled));
+            ms_instanceMethods.Add((nameof(SetAmbisonicDecoderFloat), SetAmbisonicDecoderFloat));
+            //ms_instanceMethods.Add((nameof(SetCustomCurve), SetCustomCurve)); // Requires Curve defs
+            ms_instanceMethods.Add((nameof(SetScheduledEndTime), SetScheduledEndTime));
+            ms_instanceMethods.Add((nameof(SetScheduledStartTime), SetScheduledStartTime));
+            ms_instanceMethods.Add((nameof(SetSpatializerFloat), SetSpatializerFloat));
+            ms_instanceMethods.Add((nameof(Stop), Stop));
+            ms_instanceMethods.Add((nameof(UnPause), UnPause));
 
             BehaviourDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         internal static void RegisterInVM(LuaVM p_m)
         {
-            p_m.RegisterClass(typeof(AudioSource), null, ms_metaMethods, StaticGet, null, InstanceGet, InstanceSet);
+            p_m.RegisterClass(typeof(AudioSource), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         // Static methods
@@ -115,314 +114,1018 @@ namespace CVRLua.Lua.LuaDefs
         }
 
         // Instance properties
-        static void GetBypassEffects(object p_obj, LuaArgReader p_reader)
+        static int GetBypassEffects(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as AudioSource).bypassEffects);
-        }
-        static void SetBypassEffects(object p_obj, LuaArgReader p_reader)
-        {
-            bool l_state = false;
-            p_reader.ReadBoolean(ref l_state);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).bypassEffects = l_state;
-        }
-
-        static void GetBypassListenerEffects(object p_obj, LuaArgReader p_reader)
-        {
-            p_reader.PushBoolean((p_obj as AudioSource).bypassListenerEffects);
-        }
-        static void SetBypassListenerEffects(object p_obj, LuaArgReader p_reader)
-        {
-            bool l_state = false;
-            p_reader.ReadBoolean(ref l_state);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).bypassListenerEffects = l_state;
-        }
-
-        static void GetBypassReverbZones(object p_obj, LuaArgReader p_reader)
-        {
-            p_reader.PushBoolean((p_obj as AudioSource).bypassReverbZones);
-        }
-        static void SetBypassReverbZones(object p_obj, LuaArgReader p_reader)
-        {
-            bool l_state = false;
-            p_reader.ReadBoolean(ref l_state);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).bypassReverbZones = l_state;
-        }
-
-        static void GetClip(object p_obj, LuaArgReader p_reader)
-        {
-            if((p_obj as AudioSource).clip != null)
-                p_reader.PushObject((p_obj as AudioSource).clip);
-            else
-                p_reader.PushBoolean(false);
-        }
-        static void SetClip(object p_obj, LuaArgReader p_reader)
-        {
-            if(p_reader.IsNextNil())
-                (p_obj as AudioSource).clip = null;
-            else
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
             {
-                AudioClip l_clip = null;
-                p_reader.ReadObject(ref l_clip);
-                if(!p_reader.HasErrors())
+                if(l_source != null)
+                    l_argReader.PushBoolean(l_source.bypassEffects);
+                else
                 {
-                    if(l_clip != null)
-                        (p_obj as AudioSource).clip = l_clip;
-                    else
-                        p_reader.SetError(c_destroyedClip);
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
                 }
             }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetBypassEffects(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            bool l_state = false;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadBoolean(ref l_state);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.bypassEffects = l_state;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetDopplerLevel(object p_obj, LuaArgReader p_reader)
+        static int GetBypassListenerEffects(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as AudioSource).dopplerLevel);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushBoolean(l_source.bypassListenerEffects);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetDopplerLevel(object p_obj, LuaArgReader p_reader)
+        static int SetBypassListenerEffects(IntPtr p_state)
         {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            bool l_state = false;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadBoolean(ref l_state);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.bypassListenerEffects = l_state;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
+        }
+
+        static int GetBypassReverbZones(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushBoolean(l_source.bypassReverbZones);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetBypassReverbZones(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            bool l_state = false;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadBoolean(ref l_state);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.bypassReverbZones = l_state;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
+        }
+
+        static int GetClip(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                {
+                    if(l_source.clip != null)
+                        l_argReader.PushObject(l_source.clip);
+                    else
+                        l_argReader.PushBoolean(false);
+                }
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetClip(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            AudioClip l_clip = null;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadNextObject(ref l_clip);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                {
+                    if(l_clip != null)
+                        l_source.clip = l_clip;
+                    else
+                        l_source.clip = null;
+                }
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
+        }
+
+        static int GetDopplerLevel(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushNumber(l_source.dopplerLevel);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetDopplerLevel(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
             float l_value = 0f;
-            p_reader.ReadNumber(ref l_value);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).dopplerLevel = l_value;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.dopplerLevel = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetIgnoreListenerPause(object p_obj, LuaArgReader p_reader)
+        static int GetIgnoreListenerPause(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as AudioSource).ignoreListenerPause);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushBoolean(l_source.ignoreListenerPause);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetIgnoreListenerPause(object p_obj, LuaArgReader p_reader)
+        static int SetIgnoreListenerPause(IntPtr p_state)
         {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
             bool l_state = false;
-            p_reader.ReadBoolean(ref l_state);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).ignoreListenerPause = l_state;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadBoolean(ref l_state);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.ignoreListenerPause = l_state;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetIgnoreListenerVolume(object p_obj, LuaArgReader p_reader)
+        static int GetIgnoreListenerVolume(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as AudioSource).ignoreListenerVolume);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushBoolean(l_source.ignoreListenerVolume);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetIgnoreListenerVolume(object p_obj, LuaArgReader p_reader)
+        static int SetIgnoreListenerVolume(IntPtr p_state)
         {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
             bool l_state = false;
-            p_reader.ReadBoolean(ref l_state);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).ignoreListenerVolume = l_state;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadBoolean(ref l_state);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.ignoreListenerVolume = l_state;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetPlaying(object p_obj, LuaArgReader p_reader)
+        static int GetPlaying(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as AudioSource).isPlaying);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushBoolean(l_source.isPlaying);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetVirtual(object p_obj, LuaArgReader p_reader)
+        static int GetVirtual(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as AudioSource).isVirtual);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushBoolean(l_source.isVirtual);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetLoop(object p_obj, LuaArgReader p_reader)
+        static int GetLoop(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as AudioSource).loop);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushBoolean(l_source.loop);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetLoop(object p_obj, LuaArgReader p_reader)
+        static int SetLoop(IntPtr p_state)
         {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
             bool l_state = false;
-            p_reader.ReadBoolean(ref l_state);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).loop = l_state;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadBoolean(ref l_state);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.loop = l_state;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetMaxDistance(object p_obj, LuaArgReader p_reader)
+        static int GetMaxDistance(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as AudioSource).maxDistance);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushNumber(l_source.maxDistance);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetMaxDistance(object p_obj, LuaArgReader p_reader)
+        static int SetMaxDistance(IntPtr p_state)
         {
-            float l_dist = 0f;
-            p_reader.ReadNumber(ref l_dist);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).maxDistance = l_dist;
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.maxDistance = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetMinDistance(object p_obj, LuaArgReader p_reader)
+        static int GetMinDistance(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as AudioSource).minDistance);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushNumber(l_source.minDistance);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetMinDistance(object p_obj, LuaArgReader p_reader)
+        static int SetMinDistance(IntPtr p_state)
         {
-            float l_dist = 0f;
-            p_reader.ReadNumber(ref l_dist);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).minDistance = l_dist;
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.minDistance = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetPanStereo(object p_obj, LuaArgReader p_reader)
+        static int GetPanStereo(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as AudioSource).panStereo);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushNumber(l_source.panStereo);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetPanStereo(object p_obj, LuaArgReader p_reader)
+        static int SetPanStereo(IntPtr p_state)
         {
-            float l_val = 0f;
-            p_reader.ReadNumber(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).panStereo = l_val;
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.panStereo = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetPitch(object p_obj, LuaArgReader p_reader)
+        static int GetPitch(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as AudioSource).pitch);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushNumber(l_source.pitch);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetPitch(object p_obj, LuaArgReader p_reader)
+        static int SetPitch(IntPtr p_state)
         {
-            float l_val = 0f;
-            p_reader.ReadNumber(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).pitch = l_val;
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.pitch = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetPlayOnAwake(object p_obj, LuaArgReader p_reader)
+        static int GetPlayOnAwake(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as AudioSource).playOnAwake);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushBoolean(l_source.playOnAwake);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetPlayOnAwake(object p_obj, LuaArgReader p_reader)
+        static int SetPlayOnAwake(IntPtr p_state)
         {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
             bool l_state = false;
-            p_reader.ReadBoolean(ref l_state);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).playOnAwake = l_state;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadBoolean(ref l_state);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.playOnAwake = l_state;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetPriority(object p_obj, LuaArgReader p_reader)
+        static int GetPriority(IntPtr p_state)
         {
-            p_reader.PushInteger((p_obj as AudioSource).priority);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushInteger(l_source.priority);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetPriority(object p_obj, LuaArgReader p_reader)
+        static int SetPriority(IntPtr p_state)
         {
-            int l_val = 0;
-            p_reader.ReadInteger(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).priority = l_val;
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            int l_priority = 0;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadInteger(ref l_priority);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.priority = l_priority;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetReverbZoneMix(object p_obj, LuaArgReader p_reader)
+        static int GetReverbZoneMix(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as AudioSource).reverbZoneMix);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushNumber(l_source.reverbZoneMix);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetReverbZoneMix(object p_obj, LuaArgReader p_reader)
+        static int SetReverbZoneMix(IntPtr p_state)
         {
-            float l_val = 0f;
-            p_reader.ReadNumber(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).reverbZoneMix = l_val;
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.reverbZoneMix = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetRolloffMode(object p_obj, LuaArgReader p_reader)
+        static int GetRolloffMode(IntPtr p_state)
         {
-            p_reader.PushString((p_obj as AudioSource).rolloffMode.ToString());
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushString(l_source.rolloffMode.ToString());
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetRolloffMode(object p_obj, LuaArgReader p_reader)
+        static int SetRolloffMode(IntPtr p_state)
         {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
             AudioRolloffMode l_mode = AudioRolloffMode.Logarithmic;
-            p_reader.ReadEnum(ref l_mode);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).rolloffMode = l_mode;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadEnum(ref l_mode);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.rolloffMode = l_mode;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetSpatialBlend(object p_obj, LuaArgReader p_reader)
+        static int GetSpatialBlend(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as AudioSource).spatialBlend);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushNumber(l_source.spatialBlend);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetSpatialBlend(object p_obj, LuaArgReader p_reader)
+        static int SetSpatialBlend(IntPtr p_state)
         {
-            float l_val = 0f;
-            p_reader.ReadNumber(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).spatialBlend = l_val;
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.spatialBlend = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetSpatialize(object p_obj, LuaArgReader p_reader)
+        static int GetSpatialize(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as AudioSource).spatialize);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushBoolean(l_source.spatialize);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetSpatialize(object p_obj, LuaArgReader p_reader)
+        static int SetSpatialize(IntPtr p_state)
         {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
             bool l_state = false;
-            p_reader.ReadBoolean(ref l_state);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).spatialize = l_state;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadBoolean(ref l_state);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.spatialize = l_state;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetSpatializePostEffects(object p_obj, LuaArgReader p_reader)
+        static int GetSpatializePostEffects(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as AudioSource).spatializePostEffects);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushBoolean(l_source.spatializePostEffects);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetSpatializePostEffects(object p_obj, LuaArgReader p_reader)
+        static int SetSpatializePostEffects(IntPtr p_state)
         {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
             bool l_state = false;
-            p_reader.ReadBoolean(ref l_state);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).spatializePostEffects = l_state;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadBoolean(ref l_state);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.spatializePostEffects = l_state;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetSpread(object p_obj, LuaArgReader p_reader)
+        static int GetSpread(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as AudioSource).spread);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushNumber(l_source.spread);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetSpread(object p_obj, LuaArgReader p_reader)
+        static int SetSpread(IntPtr p_state)
         {
-            float l_val = 0f;
-            p_reader.ReadNumber(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).spread = l_val;
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.spread = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetTime(object p_obj, LuaArgReader p_reader)
+        static int GetTime(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as AudioSource).time);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushNumber(l_source.time);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetTime(object p_obj, LuaArgReader p_reader)
+        static int SetTime(IntPtr p_state)
         {
-            float l_val = 0f;
-            p_reader.ReadNumber(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).time = l_val;
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.time = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetTimeSamples(object p_obj, LuaArgReader p_reader)
+        static int GetTimeSamples(IntPtr p_state)
         {
-            p_reader.PushInteger((p_obj as AudioSource).timeSamples);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushInteger(l_source.timeSamples);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetTimeSamples(object p_obj, LuaArgReader p_reader)
+        static int SetTimeSamples(IntPtr p_state)
         {
-            int l_val = 0;
-            p_reader.ReadInteger(ref l_val);
-            (p_obj as AudioSource).timeSamples = l_val;
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            int l_value = 0;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadInteger(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.timeSamples = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetVelocityUpdateMode(object p_obj, LuaArgReader p_reader)
+        static int GetVelocityUpdateMode(IntPtr p_state)
         {
-            p_reader.PushString((p_obj as AudioSource).velocityUpdateMode.ToString());
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushString(l_source.velocityUpdateMode.ToString());
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetVelocityUpdateMode(object p_obj, LuaArgReader p_reader)
+        static int SetVelocityUpdateMode(IntPtr p_state)
         {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
             AudioVelocityUpdateMode l_mode = AudioVelocityUpdateMode.Auto;
-            p_reader.ReadEnum(ref l_mode);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).velocityUpdateMode = l_mode;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadEnum(ref l_mode);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.velocityUpdateMode = l_mode;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetVolume(object p_obj, LuaArgReader p_reader)
+        static int GetVolume(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as AudioSource).volume);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            l_argReader.ReadObject(ref l_source);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_argReader.PushNumber(l_source.volume);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetVolume(object p_obj, LuaArgReader p_reader)
+        static int SetVolume(IntPtr p_state)
         {
-            float l_val = 0f;
-            p_reader.ReadNumber(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as AudioSource).volume = l_val;
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            AudioSource l_source = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_source);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_source != null)
+                    l_source.volume = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
         // Instance methods
@@ -848,83 +1551,6 @@ namespace CVRLua.Lua.LuaDefs
             }
             else
                 l_argReader.PushBoolean(false);
-
-            l_argReader.LogError();
-            return l_argReader.GetReturnValue();
-        }
-
-        // Static getter
-        static int StaticGet(IntPtr p_state)
-        {
-            var l_argReader = new LuaArgReader(p_state);
-            string l_key = "";
-            l_argReader.Skip(); // Metatable
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(ms_staticMethods.TryGetValue(l_key, out var l_func))
-                    l_argReader.PushFunction(l_func);
-                else if(ms_staticProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                    l_pair.Item1.Invoke(l_argReader);
-                else
-                    l_argReader.PushNil();
-            }
-            else
-                l_argReader.PushNil();
-
-            return l_argReader.GetReturnValue();
-        }
-
-        // Instance getter
-        static int InstanceGet(IntPtr p_state)
-        {
-            var l_argReader = new LuaArgReader(p_state);
-            AudioSource l_obj = null;
-            string l_key = "";
-            l_argReader.ReadObject(ref l_obj);
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(l_obj != null)
-                {
-                    if(ms_instanceMethods.TryGetValue(l_key, out var l_func))
-                        l_argReader.PushFunction(l_func); // Lua handles it by itself
-                    else if(ms_instanceProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                        l_pair.Item1.Invoke(l_obj, l_argReader);
-                    else
-                        l_argReader.PushNil();
-                }
-                else
-                {
-                    l_argReader.SetError(c_destroyed);
-                    l_argReader.PushNil();
-                }
-            }
-            else
-                l_argReader.PushNil();
-
-            return l_argReader.GetReturnValue();
-        }
-
-        // Instance setter
-        static int InstanceSet(IntPtr p_state)
-        {
-            // Our value is on stack top
-            var l_argReader = new LuaArgReader(p_state);
-            AudioSource l_obj = null;
-            string l_key = "";
-            l_argReader.ReadObject(ref l_obj);
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(l_obj != null)
-                {
-                    if(ms_instanceProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item2 != null))
-                        l_pair.Item2.Invoke(l_obj, l_argReader);
-                }
-                else
-                    l_argReader.SetError(c_destroyed);
-            }
 
             l_argReader.LogError();
             return l_argReader.GetReturnValue();

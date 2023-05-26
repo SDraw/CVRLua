@@ -6,41 +6,41 @@ namespace CVRLua.Lua.LuaDefs
     static class Vector3Defs
     {
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_metaMethods = new List<(string, LuaInterop.lua_CFunction)>();
-        static readonly Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> ms_staticProperties = new Dictionary<string, (StaticParseDelegate, StaticParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_staticMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
-        static readonly Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)> ms_instanceProperties = new Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_instanceMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_staticProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_staticMethods = new List<(string, LuaInterop.lua_CFunction)>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_instanceProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_instanceMethods = new List<(string, LuaInterop.lua_CFunction)>();
 
         internal static void Init()
         {
-            ms_staticProperties.Add("back", (GetBack, null));
-            ms_staticProperties.Add("down", (GetDown, null));
-            ms_staticProperties.Add("forward", (GetForward, null));
-            ms_staticProperties.Add("left", (GetLeft, null));
-            ms_staticProperties.Add("one", (GetOne, null));
-            ms_staticProperties.Add("right", (GetRight, null));
-            ms_staticProperties.Add("up", (GetUp, null));
-            ms_staticProperties.Add("zero", (GetZero, null));
+            ms_staticProperties.Add(("back", (GetBack, null)));
+            ms_staticProperties.Add(("down", (GetDown, null)));
+            ms_staticProperties.Add(("forward", (GetForward, null)));
+            ms_staticProperties.Add(("left", (GetLeft, null)));
+            ms_staticProperties.Add(("one", (GetOne, null)));
+            ms_staticProperties.Add(("right", (GetRight, null)));
+            ms_staticProperties.Add(("up", (GetUp, null)));
+            ms_staticProperties.Add(("zero", (GetZero, null)));
 
-            ms_staticMethods.Add(nameof(Angle), Angle);
-            ms_staticMethods.Add(nameof(ClampMagnitude), ClampMagnitude);
-            ms_staticMethods.Add(nameof(Cross), Cross);
-            ms_staticMethods.Add(nameof(Distance), Distance);
-            ms_staticMethods.Add(nameof(Dot), Dot);
-            ms_staticMethods.Add(nameof(Lerp), Lerp);
-            ms_staticMethods.Add(nameof(LerpUnclamped), LerpUnclamped);
-            ms_staticMethods.Add(nameof(Max), Max);
-            ms_staticMethods.Add(nameof(Min), Min);
-            ms_staticMethods.Add(nameof(MoveTowards), MoveTowards);
-            ms_staticMethods.Add(nameof(Project), Project);
-            ms_staticMethods.Add(nameof(ProjectOnPlane), Project);
-            ms_staticMethods.Add(nameof(Reflect), Reflect);
-            ms_staticMethods.Add(nameof(Scale), Scale);
-            ms_staticMethods.Add(nameof(SignedAngle), SignedAngle);
-            ms_staticMethods.Add(nameof(Slerp), Slerp);
-            ms_staticMethods.Add(nameof(SlerpUnclamped), SlerpUnclamped);
-            ms_staticMethods.Add(nameof(SmoothDamp), SmoothDamp);
-            ms_staticMethods.Add(nameof(IsVector3), IsVector3);
+            ms_staticMethods.Add((nameof(Angle), Angle));
+            ms_staticMethods.Add((nameof(ClampMagnitude), ClampMagnitude));
+            ms_staticMethods.Add((nameof(Cross), Cross));
+            ms_staticMethods.Add((nameof(Distance), Distance));
+            ms_staticMethods.Add((nameof(Dot), Dot));
+            ms_staticMethods.Add((nameof(Lerp), Lerp));
+            ms_staticMethods.Add((nameof(LerpUnclamped), LerpUnclamped));
+            ms_staticMethods.Add((nameof(Max), Max));
+            ms_staticMethods.Add((nameof(Min), Min));
+            ms_staticMethods.Add((nameof(MoveTowards), MoveTowards));
+            ms_staticMethods.Add((nameof(Project), Project));
+            ms_staticMethods.Add((nameof(ProjectOnPlane), Project));
+            ms_staticMethods.Add((nameof(Reflect), Reflect));
+            ms_staticMethods.Add((nameof(Scale), Scale));
+            ms_staticMethods.Add((nameof(SignedAngle), SignedAngle));
+            ms_staticMethods.Add((nameof(Slerp), Slerp));
+            ms_staticMethods.Add((nameof(SlerpUnclamped), SlerpUnclamped));
+            ms_staticMethods.Add((nameof(SmoothDamp), SmoothDamp));
+            ms_staticMethods.Add((nameof(IsVector3), IsVector3));
 
             ms_metaMethods.Add(("__add", Add));
             ms_metaMethods.Add(("__sub", Subtract));
@@ -50,22 +50,22 @@ namespace CVRLua.Lua.LuaDefs
             ms_metaMethods.Add(("__len", GetMagnitude));
             ms_metaMethods.Add(("__tostring", ToString));
 
-            ms_instanceProperties.Add("x", (GetX, SetX));
-            ms_instanceProperties.Add("y", (GetY, SetY));
-            ms_instanceProperties.Add("z", (GetZ, SetZ));
-            ms_instanceProperties.Add("magnitude", (Magnitude, null));
-            ms_instanceProperties.Add("normalized", (Normalized, null));
-            ms_instanceProperties.Add("sqrMagnitude", (SquareMagnitude, null));
+            ms_instanceProperties.Add(("x", (GetX, SetX)));
+            ms_instanceProperties.Add(("y", (GetY, SetY)));
+            ms_instanceProperties.Add(("z", (GetZ, SetZ)));
+            ms_instanceProperties.Add(("magnitude", (Magnitude, null)));
+            ms_instanceProperties.Add(("normalized", (Normalized, null)));
+            ms_instanceProperties.Add(("sqrMagnitude", (SqrMagnitude, null)));
 
-            ms_instanceMethods.Add("Equals", Equal);
-            ms_instanceMethods.Add(nameof(Normalize), Normalize);
-            ms_instanceMethods.Add(nameof(Set), Set);
-            ms_instanceMethods.Add(nameof(ToString), ToString);
+            ms_instanceMethods.Add(("Equals", Equal));
+            ms_instanceMethods.Add((nameof(Normalize), Normalize));
+            ms_instanceMethods.Add((nameof(Set), Set));
+            ms_instanceMethods.Add((nameof(ToString), ToString));
         }
 
         public static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(Wrappers.Vector3), Constructor, ms_metaMethods, StaticGet, null, InstanceGet, InstanceSet);
+            p_vm.RegisterClass(typeof(Wrappers.Vector3), Constructor, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         static int Constructor(IntPtr p_state)
@@ -83,14 +83,61 @@ namespace CVRLua.Lua.LuaDefs
         }
 
         // Static properties
-        static void GetBack(LuaArgReader p_reader) => p_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.back));
-        static void GetDown(LuaArgReader p_reader) => p_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.down));
-        static void GetForward(LuaArgReader p_reader) => p_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.forward));
-        static void GetLeft(LuaArgReader p_reader) => p_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.left));
-        static void GetOne(LuaArgReader p_reader) => p_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.one));
-        static void GetRight(LuaArgReader p_reader) => p_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.right));
-        static void GetUp(LuaArgReader p_reader) => p_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.up));
-        static void GetZero(LuaArgReader p_reader) => p_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.zero));
+        static int GetBack(IntPtr p_state)
+        {
+            var l_reader = new LuaArgReader(p_state);
+            l_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.back));
+            return 1;
+        }
+
+        static int GetDown(IntPtr p_state)
+        {
+            var l_reader = new LuaArgReader(p_state);
+            l_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.down));
+            return 1;
+        }
+
+        static int GetForward(IntPtr p_state)
+        {
+            var l_reader = new LuaArgReader(p_state);
+            l_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.forward));
+            return 1;
+        }
+
+        static int GetLeft(IntPtr p_state)
+        {
+            var l_reader = new LuaArgReader(p_state);
+            l_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.left));
+            return 1;
+        }
+
+        static int GetOne(IntPtr p_state)
+        {
+            var l_reader = new LuaArgReader(p_state);
+            l_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.one));
+            return 1;
+        }
+
+        static int GetRight(IntPtr p_state)
+        {
+            var l_reader = new LuaArgReader(p_state);
+            l_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.right));
+            return 1;
+        }
+
+        static int GetUp(IntPtr p_state)
+        {
+            var l_reader = new LuaArgReader(p_state);
+            l_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.up));
+            return 1;
+        }
+
+        static int GetZero(IntPtr p_state)
+        {
+            var l_reader = new LuaArgReader(p_state);
+            l_reader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.zero));
+            return 1;
+        }
 
         // Static methods
         static int Angle(IntPtr p_state)
@@ -519,55 +566,127 @@ namespace CVRLua.Lua.LuaDefs
         }
 
         // Instance properties
-        static void GetX(object p_obj, LuaArgReader p_reader)
+        static int GetX(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.Vector3).m_vec.x);
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Vector3 l_vec = null;
+            l_reader.ReadObject(ref l_vec);
+            if(!l_reader.HasErrors())
+                l_reader.PushNumber(l_vec.m_vec.x);
+            else
+                l_reader.PushBoolean(false);
+
+            l_reader.LogError();
+            return 1;
         }
-        static void SetX(object p_obj, LuaArgReader p_reader)
+        static int SetX(IntPtr p_state)
         {
-            float l_val = 0f;
-            p_reader.ReadNumber(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as Wrappers.Vector3).m_vec.x = l_val;
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Vector3 l_vec = null;
+            float l_value = 0f;
+            l_reader.ReadObject(ref l_vec);
+            l_reader.ReadNumber(ref l_value);
+            if(!l_reader.HasErrors())
+                l_vec.m_vec.x = l_value;
+
+            l_reader.LogError();
+            return 0;
         }
 
-        static void GetY(object p_obj, LuaArgReader p_reader)
+        static int GetY(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.Vector3).m_vec.y);
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Vector3 l_vec = null;
+            l_reader.ReadObject(ref l_vec);
+            if(!l_reader.HasErrors())
+                l_reader.PushNumber(l_vec.m_vec.y);
+            else
+                l_reader.PushBoolean(false);
+
+            l_reader.LogError();
+            return 1;
         }
-        static void SetY(object p_obj, LuaArgReader p_reader)
+        static int SetY(IntPtr p_state)
         {
-            float l_val = 0f;
-            p_reader.ReadNumber(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as Wrappers.Vector3).m_vec.y = l_val;
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Vector3 l_vec = null;
+            float l_value = 0f;
+            l_reader.ReadObject(ref l_vec);
+            l_reader.ReadNumber(ref l_value);
+            if(!l_reader.HasErrors())
+                l_vec.m_vec.y = l_value;
+
+            l_reader.LogError();
+            return 0;
         }
 
-        static void GetZ(object p_obj, LuaArgReader p_reader)
+        static int GetZ(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.Vector3).m_vec.z);
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Vector3 l_vec = null;
+            l_reader.ReadObject(ref l_vec);
+            if(!l_reader.HasErrors())
+                l_reader.PushNumber(l_vec.m_vec.z);
+            else
+                l_reader.PushBoolean(false);
+
+            l_reader.LogError();
+            return 1;
         }
-        static void SetZ(object p_obj, LuaArgReader p_reader)
+        static int SetZ(IntPtr p_state)
         {
-            float l_val = 0f;
-            p_reader.ReadNumber(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as Wrappers.Vector3).m_vec.z = l_val;
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Vector3 l_vec = null;
+            float l_value = 0f;
+            l_reader.ReadObject(ref l_vec);
+            l_reader.ReadNumber(ref l_value);
+            if(!l_reader.HasErrors())
+                l_vec.m_vec.z = l_value;
+
+            l_reader.LogError();
+            return 0;
         }
 
-        static void Magnitude(object p_obj, LuaArgReader p_reader)
+        static int Magnitude(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.Vector3).m_vec.magnitude);
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Vector3 l_vec = null;
+            l_reader.ReadObject(ref l_vec);
+            if(!l_reader.HasErrors())
+                l_reader.PushNumber(l_vec.m_vec.magnitude);
+            else
+                l_reader.PushBoolean(false);
+
+            l_reader.LogError();
+            return 1;
         }
 
-        static void Normalized(object p_obj, LuaArgReader p_reader)
+        static int Normalized(IntPtr p_state)
         {
-            p_reader.PushObject(new Wrappers.Vector3((p_obj as Wrappers.Vector3).m_vec.normalized));
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Vector3 l_vec = null;
+            l_reader.ReadObject(ref l_vec);
+            if(!l_reader.HasErrors())
+                l_reader.PushObject(new Wrappers.Vector3(l_vec.m_vec.normalized));
+            else
+                l_reader.PushBoolean(false);
+
+            l_reader.LogError();
+            return 1;
         }
 
-        static void SquareMagnitude(object p_obj, LuaArgReader p_reader)
+        static int SqrMagnitude(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.Vector3).m_vec.sqrMagnitude);
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Vector2 l_vec = null;
+            l_reader.ReadObject(ref l_vec);
+            if(!l_reader.HasErrors())
+                l_reader.PushNumber(l_vec.m_vec.sqrMagnitude);
+            else
+                l_reader.PushBoolean(false);
+
+            l_reader.LogError();
+            return 1;
         }
 
         // Instance methods
@@ -608,69 +727,6 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.PushBoolean(false);
 
             l_argReader.LogError();
-            return l_argReader.GetReturnValue();
-        }
-
-        // Static getter
-        static int StaticGet(IntPtr p_state)
-        {
-            var l_argReader = new LuaArgReader(p_state);
-            string l_key = "";
-            l_argReader.Skip(); // Metatable
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(ms_staticMethods.TryGetValue(l_key, out var l_func))
-                    l_argReader.PushFunction(l_func);
-                else if(ms_staticProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                    l_pair.Item1.Invoke(l_argReader);
-                else
-                    l_argReader.PushNil();
-            }
-            else
-                l_argReader.PushNil();
-
-            return l_argReader.GetReturnValue();
-        }
-
-        // Instance getter
-        static int InstanceGet(IntPtr p_state)
-        {
-            var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Vector3 l_obj = null;
-            string l_key = "";
-            l_argReader.ReadObject(ref l_obj);
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(ms_instanceMethods.TryGetValue(l_key, out var l_func))
-                    l_argReader.PushFunction(l_func); // Lua handles it by itself
-                else if(ms_instanceProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                    l_pair.Item1.Invoke(l_obj, l_argReader);
-                else
-                    l_argReader.PushNil();
-            }
-            else
-                l_argReader.PushNil();
-
-            return l_argReader.GetReturnValue();
-        }
-
-        // Instance setter
-        static int InstanceSet(IntPtr p_state)
-        {
-            // Our value is on stack top
-            var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Vector3 l_obj = null;
-            string l_key = "";
-            l_argReader.ReadObject(ref l_obj);
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(ms_instanceProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item2 != null))
-                    l_pair.Item2.Invoke(l_obj, l_argReader);
-            }
-
             return l_argReader.GetReturnValue();
         }
     }

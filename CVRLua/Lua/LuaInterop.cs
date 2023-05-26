@@ -232,5 +232,22 @@ namespace CVRLua.Lua
 
         [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void lua_settable(IntPtr L, int idx);
+
+        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int luaL_getmetafield(IntPtr L, int obj, string e);
+
+        public static void lua_call(IntPtr L, int nargs, int nresults) => lua_callk(L, nargs, nresults, 0, null);
+
+        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void lua_callk(IntPtr L, int nargs, int nresults, long ctx, lua_KFunction k);
+
+        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void lua_rotate(IntPtr L, int idx, int n);
+
+        public static void lua_remove(IntPtr L, int idx)
+        {
+            lua_rotate(L, (idx), -1);
+            lua_pop(L, 1);
+        }
     }
 }

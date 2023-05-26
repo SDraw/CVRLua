@@ -9,37 +9,37 @@ namespace CVRLua.Lua.LuaDefs
         const string c_destroyed = "CharacterController is destroyed";
 
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_metaMethods = new List<(string, LuaInterop.lua_CFunction)>();
-        static readonly Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> ms_staticProperties = new Dictionary<string, (StaticParseDelegate, StaticParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_staticMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
-        static readonly Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)> ms_instanceProperties = new Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_instanceMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_staticProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_staticMethods = new List<(string, LuaInterop.lua_CFunction)>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_instanceProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_instanceMethods = new List<(string, LuaInterop.lua_CFunction)>();
 
         internal static void Init()
         {
-            ms_staticMethods.Add(nameof(IsCharacterController), IsCharacterController);
+            ms_staticMethods.Add((nameof(IsCharacterController), IsCharacterController));
 
-            ms_instanceProperties.Add("center", (GetCenter, SetCenter));
-            ms_instanceProperties.Add("collisionFlags", (GetCollisionFlags, null));
-            ms_instanceProperties.Add("detectCollisions", (GetDetectCollisions, SetDetectCollisions));
-            ms_instanceProperties.Add("enableOverlapRecovery", (GetEnableOverlapRecovery, SetEnableOverlapRecovery));
-            ms_instanceProperties.Add("height", (GetHeight, SetHeight));
-            ms_instanceProperties.Add("isGrounded", (GetIsGrounded, null));
-            ms_instanceProperties.Add("minMoveDistance", (GetMinMoveDistance, SetMinMoveDistance));
-            ms_instanceProperties.Add("radius", (GetRadius, SetRadius));
-            ms_instanceProperties.Add("skinWidth", (GetSkinWidth, SetSkinWidth));
-            ms_instanceProperties.Add("slopeLimit", (GetSlopeLimit, SetSlopeLimit));
-            ms_instanceProperties.Add("stepOffset", (GetStepOffset, SetStepOffset));
-            ms_instanceProperties.Add("velocity", (GetVelocity, null));
+            ms_instanceProperties.Add(("center", (GetCenter, SetCenter)));
+            ms_instanceProperties.Add(("collisionFlags", (GetCollisionFlags, null)));
+            ms_instanceProperties.Add(("detectCollisions", (GetDetectCollisions, SetDetectCollisions)));
+            ms_instanceProperties.Add(("enableOverlapRecovery", (GetEnableOverlapRecovery, SetEnableOverlapRecovery)));
+            ms_instanceProperties.Add(("height", (GetHeight, SetHeight)));
+            ms_instanceProperties.Add(("isGrounded", (GetIsGrounded, null)));
+            ms_instanceProperties.Add(("minMoveDistance", (GetMinMoveDistance, SetMinMoveDistance)));
+            ms_instanceProperties.Add(("radius", (GetRadius, SetRadius)));
+            ms_instanceProperties.Add(("skinWidth", (GetSkinWidth, SetSkinWidth)));
+            ms_instanceProperties.Add(("slopeLimit", (GetSlopeLimit, SetSlopeLimit)));
+            ms_instanceProperties.Add(("stepOffset", (GetStepOffset, SetStepOffset)));
+            ms_instanceProperties.Add(("velocity", (GetVelocity, null)));
 
-            ms_instanceMethods.Add(nameof(Move), Move);
-            ms_instanceMethods.Add(nameof(SimpleMove), SimpleMove);
+            ms_instanceMethods.Add((nameof(Move), Move));
+            ms_instanceMethods.Add((nameof(SimpleMove), SimpleMove));
 
             ColliderDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         internal static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(CharacterController), null, ms_metaMethods, StaticGet, null, InstanceGet, InstanceSet);
+            p_vm.RegisterClass(typeof(CharacterController), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         // Static methods
@@ -53,172 +53,430 @@ namespace CVRLua.Lua.LuaDefs
         }
 
         // Instance properties
-        static void GetCenter(object p_obj, LuaArgReader p_reader)
+        static int GetCenter(IntPtr p_state)
         {
-            p_reader.PushObject(new Wrappers.Vector3((p_obj as CharacterController).center));
-        }
-        static void SetCenter(object p_obj, LuaArgReader p_reader)
-        {
-            Wrappers.Vector3 l_vec = null;
-            p_reader.ReadObject(ref l_vec);
-            if(!p_reader.HasErrors())
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            l_argReader.ReadObject(ref l_col);
+            if(!l_argReader.HasErrors())
             {
-                (p_obj as CharacterController).center = l_vec.m_vec;
-                p_reader.PushBoolean(true);
+                if(l_col != null)
+                    l_argReader.PushObject(new Wrappers.Vector3(l_col.center));
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
             }
             else
-                p_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetCenter(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            Wrappers.Vector3 l_center = null;
+            l_argReader.ReadObject(ref l_col);
+            l_argReader.ReadObject(ref l_center);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                    l_col.center = l_center.m_vec;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetCollisionFlags(object p_obj, LuaArgReader p_reader)
+        static int GetCollisionFlags(IntPtr p_state)
         {
-            p_reader.PushObject((p_obj as CharacterController).collisionFlags.ToString());
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            l_argReader.ReadObject(ref l_col);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                    l_argReader.PushString(l_col.collisionFlags.ToString());
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetDetectCollisions(object p_obj, LuaArgReader p_reader)
+        static int GetDetectCollisions(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as CharacterController).detectCollisions);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            l_argReader.ReadObject(ref l_col);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                    l_argReader.PushBoolean(l_col.detectCollisions);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetDetectCollisions(object p_obj, LuaArgReader p_reader)
+        static int SetDetectCollisions(IntPtr p_state)
         {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
             bool l_state = false;
-            p_reader.ReadBoolean(ref l_state);
-            if(!p_reader.HasErrors())
+            l_argReader.ReadObject(ref l_col);
+            l_argReader.ReadBoolean(ref l_state);
+            if(!l_argReader.HasErrors())
             {
-                (p_obj as CharacterController).detectCollisions = l_state;
-                p_reader.PushBoolean(true);
+                if(l_col != null)
+                    l_col.detectCollisions = l_state;
+                else
+                    l_argReader.SetError(c_destroyed);
             }
-            else
-                p_reader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetEnableOverlapRecovery(object p_obj, LuaArgReader p_reader)
+        static int GetEnableOverlapRecovery(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as CharacterController).enableOverlapRecovery);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            l_argReader.ReadObject(ref l_col);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                    l_argReader.PushBoolean(l_col.enableOverlapRecovery);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
-        static void SetEnableOverlapRecovery(object p_obj, LuaArgReader p_reader)
+        static int SetEnableOverlapRecovery(IntPtr p_state)
         {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
             bool l_state = false;
-            p_reader.ReadBoolean(ref l_state);
-            if(!p_reader.HasErrors())
+            l_argReader.ReadObject(ref l_col);
+            l_argReader.ReadBoolean(ref l_state);
+            if(!l_argReader.HasErrors())
             {
-                (p_obj as CharacterController).enableOverlapRecovery = l_state;
-                p_reader.PushBoolean(true);
+                if(l_col != null)
+                    l_col.enableOverlapRecovery = l_state;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
+        }
+
+        static int GetHeight(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            l_argReader.ReadObject(ref l_col);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                    l_argReader.PushNumber(l_col.height);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
             }
             else
-                p_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetHeight(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_col);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                    l_col.height = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetHeight(object p_obj, LuaArgReader p_reader)
+        static int GetIsGrounded(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as CharacterController).height);
-        }
-        static void SetHeight(object p_obj, LuaArgReader p_reader)
-        {
-            float l_height = 0f;
-            p_reader.ReadNumber(ref l_height);
-            if(!p_reader.HasErrors())
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            l_argReader.ReadObject(ref l_col);
+            if(!l_argReader.HasErrors())
             {
-                (p_obj as CharacterController).height = l_height;
-                p_reader.PushBoolean(true);
+                if(l_col != null)
+                    l_argReader.PushBoolean(l_col.isGrounded);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
             }
             else
-                p_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetIsGrounded(object p_obj, LuaArgReader p_reader)
+        static int GetMinMoveDistance(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as CharacterController).isGrounded);
-        }
-
-        static void GetMinMoveDistance(object p_obj, LuaArgReader p_reader)
-        {
-            p_reader.PushNumber((p_obj as CharacterController).minMoveDistance);
-        }
-        static void SetMinMoveDistance(object p_obj, LuaArgReader p_reader)
-        {
-            float l_dist = 0f;
-            p_reader.ReadNumber(ref l_dist);
-            if(!p_reader.HasErrors())
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            l_argReader.ReadObject(ref l_col);
+            if(!l_argReader.HasErrors())
             {
-                (p_obj as CharacterController).minMoveDistance = l_dist;
-                p_reader.PushBoolean(true);
+                if(l_col != null)
+                    l_argReader.PushNumber(l_col.minMoveDistance);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
             }
             else
-                p_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetMinMoveDistance(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_col);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                    l_col.minMoveDistance = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetRadius(object p_obj, LuaArgReader p_reader)
+        static int GetRadius(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as CharacterController).radius);
-        }
-        static void SetRadius(object p_obj, LuaArgReader p_reader)
-        {
-            float l_radius = 0f;
-            p_reader.ReadNumber(ref l_radius);
-            if(!p_reader.HasErrors())
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            l_argReader.ReadObject(ref l_col);
+            if(!l_argReader.HasErrors())
             {
-                (p_obj as CharacterController).radius = l_radius;
-                p_reader.PushBoolean(true);
+                if(l_col != null)
+                    l_argReader.PushNumber(l_col.radius);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
             }
             else
-                p_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetRadius(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_col);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                    l_col.radius = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetSkinWidth(object p_obj, LuaArgReader p_reader)
+        static int GetSkinWidth(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as CharacterController).skinWidth);
-        }
-        static void SetSkinWidth(object p_obj, LuaArgReader p_reader)
-        {
-            float l_width = 0f;
-            p_reader.ReadNumber(ref l_width);
-            if(!p_reader.HasErrors())
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            l_argReader.ReadObject(ref l_col);
+            if(!l_argReader.HasErrors())
             {
-                (p_obj as CharacterController).skinWidth = l_width;
-                p_reader.PushBoolean(true);
+                if(l_col != null)
+                    l_argReader.PushNumber(l_col.skinWidth);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
             }
             else
-                p_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetSkinWidth(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_col);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                    l_col.skinWidth = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetStepOffset(object p_obj, LuaArgReader p_reader)
+        static int GetStepOffset(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as CharacterController).stepOffset);
-        }
-        static void SetStepOffset(object p_obj, LuaArgReader p_reader)
-        {
-            float l_offset = 0f;
-            p_reader.ReadNumber(ref l_offset);
-            if(!p_reader.HasErrors())
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            l_argReader.ReadObject(ref l_col);
+            if(!l_argReader.HasErrors())
             {
-                (p_obj as CharacterController).stepOffset = l_offset;
-                p_reader.PushBoolean(true);
+                if(l_col != null)
+                    l_argReader.PushNumber(l_col.stepOffset);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
             }
             else
-                p_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetStepOffset(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_col);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                    l_col.stepOffset = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetSlopeLimit(object p_obj, LuaArgReader p_reader)
+        static int GetSlopeLimit(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as CharacterController).slopeLimit);
-        }
-        static void SetSlopeLimit(object p_obj, LuaArgReader p_reader)
-        {
-            float l_limit = 0f;
-            p_reader.ReadNumber(ref l_limit);
-            if(!p_reader.HasErrors())
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            l_argReader.ReadObject(ref l_col);
+            if(!l_argReader.HasErrors())
             {
-                (p_obj as CharacterController).slopeLimit = l_limit;
-                p_reader.PushBoolean(true);
+                if(l_col != null)
+                    l_argReader.PushNumber(l_col.slopeLimit);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
             }
             else
-                p_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetSlopeLimit(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            float l_value = 0f;
+            l_argReader.ReadObject(ref l_col);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                    l_col.slopeLimit = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetVelocity(object p_obj, LuaArgReader p_reader)
+        static int GetVelocity(IntPtr p_state)
         {
-            p_reader.PushObject(new Wrappers.Vector3((p_obj as CharacterController).velocity));
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            CharacterController l_col = null;
+            l_argReader.ReadObject(ref l_col);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                    l_argReader.PushObject(new Wrappers.Vector3(l_col.velocity));
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
         // Instance methods
@@ -268,83 +526,6 @@ namespace CVRLua.Lua.LuaDefs
             }
             else
                 l_argReader.PushBoolean(false);
-
-            l_argReader.LogError();
-            return l_argReader.GetReturnValue();
-        }
-
-        // Static getter
-        static int StaticGet(IntPtr p_state)
-        {
-            var l_argReader = new LuaArgReader(p_state);
-            string l_key = "";
-            l_argReader.Skip(); // Metatable
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(ms_staticMethods.TryGetValue(l_key, out var l_func))
-                    l_argReader.PushFunction(l_func);
-                else if(ms_staticProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                    l_pair.Item1.Invoke(l_argReader);
-                else
-                    l_argReader.PushNil();
-            }
-            else
-                l_argReader.PushNil();
-
-            return l_argReader.GetReturnValue();
-        }
-
-        // Instance getter
-        static int InstanceGet(IntPtr p_state)
-        {
-            var l_argReader = new LuaArgReader(p_state);
-            CharacterController l_obj = null;
-            string l_key = "";
-            l_argReader.ReadObject(ref l_obj);
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(l_obj != null)
-                {
-                    if(ms_instanceMethods.TryGetValue(l_key, out var l_func))
-                        l_argReader.PushFunction(l_func); // Lua handles it by itself
-                    else if(ms_instanceProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                        l_pair.Item1.Invoke(l_obj, l_argReader);
-                    else
-                        l_argReader.PushNil();
-                }
-                else
-                {
-                    l_argReader.SetError(c_destroyed);
-                    l_argReader.PushNil();
-                }
-            }
-            else
-                l_argReader.PushNil();
-
-            return l_argReader.GetReturnValue();
-        }
-
-        // Instance setter
-        static int InstanceSet(IntPtr p_state)
-        {
-            // Our value is on stack top
-            var l_argReader = new LuaArgReader(p_state);
-            CharacterController l_obj = null;
-            string l_key = "";
-            l_argReader.ReadObject(ref l_obj);
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(l_obj != null)
-                {
-                    if(ms_instanceProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item2 != null))
-                        l_pair.Item2.Invoke(l_obj, l_argReader);
-                }
-                else
-                    l_argReader.SetError(c_destroyed);
-            }
 
             l_argReader.LogError();
             return l_argReader.GetReturnValue();

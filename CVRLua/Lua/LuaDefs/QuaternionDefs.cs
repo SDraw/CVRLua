@@ -6,50 +6,50 @@ namespace CVRLua.Lua.LuaDefs
     static class QuaternionDefs
     {
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_metaMethods = new List<(string, LuaInterop.lua_CFunction)>();
-        static readonly Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> ms_staticProperties = new Dictionary<string, (StaticParseDelegate, StaticParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_staticMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
-        static readonly Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)> ms_instanceProperties = new Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_instanceMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_staticProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_staticMethods = new List<(string, LuaInterop.lua_CFunction)>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_instanceProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_instanceMethods = new List<(string, LuaInterop.lua_CFunction)>();
 
         internal static void Init()
         {
-            ms_staticProperties.Add("identity", (GetIdentity, null));
+            ms_staticProperties.Add(("identity", (GetIdentity, null)));
 
-            ms_staticMethods.Add(nameof(Angle), Angle);
-            ms_staticMethods.Add(nameof(AngleAxis), AngleAxis);
-            ms_staticMethods.Add(nameof(Dot), Dot);
-            ms_staticMethods.Add(nameof(Euler), Euler);
-            ms_staticMethods.Add(nameof(FromToRotation), FromToRotation);
-            ms_staticMethods.Add(nameof(Inverse), Inverse);
-            ms_staticMethods.Add(nameof(Lerp), Lerp);
-            ms_staticMethods.Add(nameof(LerpUnclamped), LerpUnclamped);
-            ms_staticMethods.Add(nameof(LookRotation), LookRotation);
-            ms_staticMethods.Add(nameof(RotateTowards), RotateTowards);
-            ms_staticMethods.Add(nameof(Slerp), Slerp);
-            ms_staticMethods.Add(nameof(SlerpUnclamped), SlerpUnclamped);
-            ms_staticMethods.Add(nameof(IsQuaternion), IsQuaternion);
+            ms_staticMethods.Add((nameof(Angle), Angle));
+            ms_staticMethods.Add((nameof(AngleAxis), AngleAxis));
+            ms_staticMethods.Add((nameof(Dot), Dot));
+            ms_staticMethods.Add((nameof(Euler), Euler));
+            ms_staticMethods.Add((nameof(FromToRotation), FromToRotation));
+            ms_staticMethods.Add((nameof(Inverse), Inverse));
+            ms_staticMethods.Add((nameof(Lerp), Lerp));
+            ms_staticMethods.Add((nameof(LerpUnclamped), LerpUnclamped));
+            ms_staticMethods.Add((nameof(LookRotation), LookRotation));
+            ms_staticMethods.Add((nameof(RotateTowards), RotateTowards));
+            ms_staticMethods.Add((nameof(Slerp), Slerp));
+            ms_staticMethods.Add((nameof(SlerpUnclamped), SlerpUnclamped));
+            ms_staticMethods.Add((nameof(IsQuaternion), IsQuaternion));
 
             ms_metaMethods.Add(("__mul", Multiply));
             ms_metaMethods.Add(("__eq", Equal));
             ms_metaMethods.Add(("__tostring", ToString));
 
-            ms_instanceProperties.Add("eulerAngles", (GetEuler, SetEuler));
-            ms_instanceProperties.Add("normalized", (GetNormalized, null));
-            ms_instanceProperties.Add("x", (GetX, SetX));
-            ms_instanceProperties.Add("y", (GetY, SetY));
-            ms_instanceProperties.Add("z", (GetZ, SetZ));
-            ms_instanceProperties.Add("w", (GetW, SetW));
+            ms_instanceProperties.Add(("x", (GetX, SetX)));
+            ms_instanceProperties.Add(("y", (GetY, SetY)));
+            ms_instanceProperties.Add(("z", (GetZ, SetZ)));
+            ms_instanceProperties.Add(("w", (GetW, SetW)));
+            ms_instanceProperties.Add(("eulerAngles", (GetEuler, SetEuler)));
+            ms_instanceProperties.Add(("normalized", (GetNormalized, null)));
 
-            ms_instanceMethods.Add(nameof(Normalize), Normalize);
-            ms_instanceMethods.Add(nameof(Set), Set);
-            ms_instanceMethods.Add(nameof(SetFromToRotation), SetFromToRotation);
-            ms_instanceMethods.Add(nameof(SetLookRotation), SetLookRotation);
-            ms_instanceMethods.Add(nameof(ToAngleAxis), ToAngleAxis);
+            ms_instanceMethods.Add((nameof(Normalize), Normalize));
+            ms_instanceMethods.Add((nameof(Set), Set));
+            ms_instanceMethods.Add((nameof(SetFromToRotation), SetFromToRotation));
+            ms_instanceMethods.Add((nameof(SetLookRotation), SetLookRotation));
+            ms_instanceMethods.Add((nameof(ToAngleAxis), ToAngleAxis));
         }
 
         public static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(Wrappers.Quaternion), Constructor, ms_metaMethods, StaticGet, null, InstanceGet, InstanceSet);
+            p_vm.RegisterClass(typeof(Wrappers.Quaternion), Constructor, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         static int Constructor(IntPtr p_state)
@@ -69,7 +69,12 @@ namespace CVRLua.Lua.LuaDefs
         }
 
         // Static properties
-        static void GetIdentity(LuaArgReader p_reader) => p_reader.PushObject(new Wrappers.Quaternion(UnityEngine.Quaternion.identity));
+        static int GetIdentity(IntPtr p_state)
+        {
+            var l_reader = new LuaArgReader(p_state);
+            l_reader.PushObject(new Wrappers.Quaternion(UnityEngine.Quaternion.identity));
+            return 1;
+        }
 
         // Static methods
         static int Angle(IntPtr p_state)
@@ -446,139 +451,153 @@ namespace CVRLua.Lua.LuaDefs
         }
 
         // Instance properties
-        static void GetEuler(object p_obj, LuaArgReader p_reader)
+        static int GetX(IntPtr p_state)
         {
-            p_reader.PushObject(new Wrappers.Vector3((p_obj as Wrappers.Quaternion).m_quat.eulerAngles));
-        }
-        static void SetEuler(object p_obj, LuaArgReader p_reader)
-        {
-            Wrappers.Vector3 l_vec = new Wrappers.Vector3();
-            if(p_reader.IsNextObject())
-                p_reader.ReadObject(ref l_vec);
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Quaternion l_vec = null;
+            l_reader.ReadObject(ref l_vec);
+            if(!l_reader.HasErrors())
+                l_reader.PushNumber(l_vec.m_quat.x);
             else
-            {
-                p_reader.ReadNumber(ref l_vec.m_vec.x);
-                p_reader.ReadNumber(ref l_vec.m_vec.y);
-                p_reader.ReadNumber(ref l_vec.m_vec.z);
-            }
-            if(!p_reader.HasErrors())
-                (p_obj as Wrappers.Quaternion).m_quat.eulerAngles = l_vec.m_vec;
+                l_reader.PushBoolean(false);
+
+            l_reader.LogError();
+            return 1;
+        }
+        static int SetX(IntPtr p_state)
+        {
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Quaternion l_vec = null;
+            float l_value = 0f;
+            l_reader.ReadObject(ref l_vec);
+            l_reader.ReadNumber(ref l_value);
+            if(!l_reader.HasErrors())
+                l_vec.m_quat.x = l_value;
+
+            l_reader.LogError();
+            return 0;
         }
 
-        static void GetNormalized(object p_obj, LuaArgReader p_reader)
+        static int GetY(IntPtr p_state)
         {
-            p_reader.PushObject(new Wrappers.Quaternion((p_obj as Wrappers.Quaternion).m_quat.normalized));
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Quaternion l_vec = null;
+            l_reader.ReadObject(ref l_vec);
+            if(!l_reader.HasErrors())
+                l_reader.PushNumber(l_vec.m_quat.y);
+            else
+                l_reader.PushBoolean(false);
+
+            l_reader.LogError();
+            return 1;
+        }
+        static int SetY(IntPtr p_state)
+        {
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Quaternion l_vec = null;
+            float l_value = 0f;
+            l_reader.ReadObject(ref l_vec);
+            l_reader.ReadNumber(ref l_value);
+            if(!l_reader.HasErrors())
+                l_vec.m_quat.y = l_value;
+
+            l_reader.LogError();
+            return 0;
         }
 
-        static void GetX(object p_obj, LuaArgReader p_reader)
+        static int GetZ(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.Quaternion).m_quat.x);
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Quaternion l_vec = null;
+            l_reader.ReadObject(ref l_vec);
+            if(!l_reader.HasErrors())
+                l_reader.PushNumber(l_vec.m_quat.z);
+            else
+                l_reader.PushBoolean(false);
+
+            l_reader.LogError();
+            return 1;
         }
-        static void SetX(object p_obj, LuaArgReader p_reader)
+        static int SetZ(IntPtr p_state)
         {
-            float l_val = 0f;
-            p_reader.ReadNumber(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as Wrappers.Quaternion).m_quat.x = l_val;
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Quaternion l_vec = null;
+            float l_value = 0f;
+            l_reader.ReadObject(ref l_vec);
+            l_reader.ReadNumber(ref l_value);
+            if(!l_reader.HasErrors())
+                l_vec.m_quat.z = l_value;
+
+            l_reader.LogError();
+            return 0;
         }
 
-        static void GetY(object p_obj, LuaArgReader p_reader)
+        static int GetW(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.Quaternion).m_quat.y);
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Quaternion l_vec = null;
+            l_reader.ReadObject(ref l_vec);
+            if(!l_reader.HasErrors())
+                l_reader.PushNumber(l_vec.m_quat.w);
+            else
+                l_reader.PushBoolean(false);
+
+            l_reader.LogError();
+            return 1;
         }
-        static void SetY(object p_obj, LuaArgReader p_reader)
+        static int SetW(IntPtr p_state)
         {
-            float l_val = 0f;
-            p_reader.ReadNumber(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as Wrappers.Quaternion).m_quat.y = l_val;
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Quaternion l_vec = null;
+            float l_value = 0f;
+            l_reader.ReadObject(ref l_vec);
+            l_reader.ReadNumber(ref l_value);
+            if(!l_reader.HasErrors())
+                l_vec.m_quat.w = l_value;
+
+            l_reader.LogError();
+            return 0;
         }
 
-        static void GetZ(object p_obj, LuaArgReader p_reader)
+        static int GetEuler(IntPtr p_state)
         {
-            p_reader.PushNumber((p_obj as Wrappers.Quaternion).m_quat.z);
-        }
-        static void SetZ(object p_obj, LuaArgReader p_reader)
-        {
-            float l_val = 0f;
-            p_reader.ReadNumber(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as Wrappers.Quaternion).m_quat.z = l_val;
-        }
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Quaternion l_vec = null;
+            l_reader.ReadObject(ref l_vec);
+            if(!l_reader.HasErrors())
+                l_reader.PushObject(new Wrappers.Vector3(l_vec.m_quat.eulerAngles));
+            else
+                l_reader.PushBoolean(false);
 
-        static void GetW(object p_obj, LuaArgReader p_reader)
-        {
-            p_reader.PushNumber((p_obj as Wrappers.Quaternion).m_quat.w);
+            l_reader.LogError();
+            return 1;
         }
-        static void SetW(object p_obj, LuaArgReader p_reader)
-        {
-            float l_val = 0f;
-            p_reader.ReadNumber(ref l_val);
-            if(!p_reader.HasErrors())
-                (p_obj as Wrappers.Quaternion).m_quat.w = l_val;
-        }
-
-        // Static getter
-        static int StaticGet(IntPtr p_state)
+        static int SetEuler(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            string l_key = "";
-            l_argReader.Skip(); // Metatable
-            l_argReader.ReadString(ref l_key);
+            Wrappers.Quaternion l_quat = null;
+            Wrappers.Vector3 l_vec = null;
+            l_argReader.ReadObject(ref l_quat);
+            l_argReader.ReadObject(ref l_vec);
             if(!l_argReader.HasErrors())
-            {
-                if(ms_staticMethods.TryGetValue(l_key, out var l_func))
-                    l_argReader.PushFunction(l_func);
-                else if(ms_staticProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                    l_pair.Item1.Invoke(l_argReader);
-                else
-                    l_argReader.PushNil();
-            }
-            else
-                l_argReader.PushNil();
+                l_quat.m_quat.eulerAngles = l_vec.m_vec;
 
-            return l_argReader.GetReturnValue();
+            l_argReader.LogError();
+            return 0;
         }
 
-        // Instance getter
-        static int InstanceGet(IntPtr p_state)
+        static int GetNormalized(IntPtr p_state)
         {
-            var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Quaternion l_obj = null;
-            string l_key = "";
-            l_argReader.ReadObject(ref l_obj);
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(ms_instanceMethods.TryGetValue(l_key, out var l_func))
-                    l_argReader.PushFunction(l_func); // Lua handles it by itself
-                else if(ms_instanceProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                    l_pair.Item1.Invoke(l_obj, l_argReader);
-                else
-                    l_argReader.PushNil();
-            }
+            var l_reader = new LuaArgReader(p_state);
+            Wrappers.Quaternion l_vec = null;
+            l_reader.ReadObject(ref l_vec);
+            if(!l_reader.HasErrors())
+                l_reader.PushObject(new Wrappers.Quaternion(l_vec.m_quat.normalized));
             else
-                l_argReader.PushNil();
+                l_reader.PushBoolean(false);
 
-            return l_argReader.GetReturnValue();
-        }
-
-        // Instance setter
-        static int InstanceSet(IntPtr p_state)
-        {
-            // Our value is on stack top
-            var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Quaternion l_obj = null;
-            string l_key = "";
-            l_argReader.ReadObject(ref l_obj);
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(ms_instanceProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item2 != null))
-                    l_pair.Item2.Invoke(l_obj, l_argReader);
-            }
-
-            return l_argReader.GetReturnValue();
+            l_reader.LogError();
+            return 1;
         }
     }
 }

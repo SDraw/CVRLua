@@ -9,33 +9,33 @@ namespace CVRLua.Lua.LuaDefs
         const string c_destroyed = "GameObject is destroyed";
 
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_metaMethods = new List<(string, LuaInterop.lua_CFunction)>();
-        static readonly Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> ms_staticProperties = new Dictionary<string, (StaticParseDelegate, StaticParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_staticMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
-        static readonly Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)> ms_instanceProperties = new Dictionary<string, (InstanceParseDelegate, InstanceParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_instanceMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_staticProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_staticMethods = new List<(string, LuaInterop.lua_CFunction)>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_instanceProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_instanceMethods = new List<(string, LuaInterop.lua_CFunction)>();
 
         internal static void Init()
         {
-            ms_staticMethods.Add(nameof(CreatePrimitive), CreatePrimitive);
-            ms_staticMethods.Add(nameof(IsGameObject), IsGameObject);
+            ms_staticMethods.Add((nameof(CreatePrimitive), CreatePrimitive));
+            ms_staticMethods.Add((nameof(IsGameObject), IsGameObject));
 
-            ms_instanceProperties.Add("activeInHierarchy", (IsActiveInHierarchy, null));
-            ms_instanceProperties.Add("activeSelf", (IsActiveSelf, null));
-            ms_instanceProperties.Add("isStatic", (GetStatic, SetStatic));
-            ms_instanceProperties.Add("layer", (GetLayer, SetLayer));
-            ms_instanceProperties.Add("tag", (GetTag, SetTag));
-            ms_instanceProperties.Add("transform", (GetTransform, null));
+            ms_instanceProperties.Add(("activeInHierarchy", (GetIsActiveInHierarchy, null)));
+            ms_instanceProperties.Add(("activeSelf", (GetIsActiveSelf, null)));
+            ms_instanceProperties.Add(("isStatic", (GetStatic, SetStatic)));
+            ms_instanceProperties.Add(("layer", (GetLayer, SetLayer)));
+            ms_instanceProperties.Add(("tag", (GetTag, SetTag)));
+            ms_instanceProperties.Add(("transform", (GetTransform, null)));
 
-            ms_instanceMethods.Add(nameof(CompareTag), CompareTag);
-            ms_instanceMethods.Add(nameof(GetComponent), GetComponent);
-            ms_instanceMethods.Add(nameof(SetActive), SetActive);
+            ms_instanceMethods.Add((nameof(CompareTag), CompareTag));
+            ms_instanceMethods.Add((nameof(GetComponent), GetComponent));
+            ms_instanceMethods.Add((nameof(SetActive), SetActive));
 
             ObjectDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         public static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(GameObject), Constructor, ms_metaMethods, StaticGet, null, InstanceGet, InstanceSet);
+            p_vm.RegisterClass(typeof(GameObject), Constructor, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         static int Constructor(IntPtr p_state)
@@ -77,58 +77,190 @@ namespace CVRLua.Lua.LuaDefs
         }
 
         // Instance properties
-        static void IsActiveInHierarchy(object p_obj, LuaArgReader p_reader)
+        static int GetIsActiveInHierarchy(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as GameObject).activeInHierarchy);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            GameObject l_obj = null;
+            l_argReader.ReadObject(ref l_obj);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_obj != null)
+                    l_argReader.PushBoolean(l_obj.activeInHierarchy);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void IsActiveSelf(object p_obj, LuaArgReader p_reader)
+        static int GetIsActiveSelf(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as GameObject).activeSelf);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            GameObject l_obj = null;
+            l_argReader.ReadObject(ref l_obj);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_obj != null)
+                    l_argReader.PushBoolean(l_obj.activeSelf);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
-        static void GetStatic(object p_obj, LuaArgReader p_reader)
+        static int GetStatic(IntPtr p_state)
         {
-            p_reader.PushBoolean((p_obj as GameObject).isStatic);
-        }
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            GameObject l_obj = null;
+            l_argReader.ReadObject(ref l_obj);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_obj != null)
+                    l_argReader.PushBoolean(l_obj.isStatic);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
 
-        static void SetStatic(object p_obj, LuaArgReader p_reader)
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetStatic(IntPtr p_state)
         {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            GameObject l_obj = null;
             bool l_state = false;
-            p_reader.ReadBoolean(ref l_state);
-            if(!p_reader.HasErrors())
-                (p_obj as GameObject).isStatic = l_state;
+            l_argReader.ReadObject(ref l_obj);
+            l_argReader.ReadBoolean(ref l_state);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_obj != null)
+                    l_obj.isStatic = l_state;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetLayer(object p_obj, LuaArgReader p_reader)
+        static int GetLayer(IntPtr p_state)
         {
-            p_reader.PushInteger((p_obj as GameObject).layer);
-        }
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            GameObject l_obj = null;
+            l_argReader.ReadObject(ref l_obj);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_obj != null)
+                    l_argReader.PushInteger(l_obj.layer);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
 
-        static void SetLayer(object p_obj, LuaArgReader p_reader)
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetLayer(IntPtr p_state)
         {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            GameObject l_obj = null;
             int l_layer = 0;
-            p_reader.ReadInteger(ref l_layer);
-            if(!p_reader.HasErrors())
-                (p_obj as GameObject).layer = l_layer;
+            l_argReader.ReadObject(ref l_obj);
+            l_argReader.ReadInteger(ref l_layer);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_obj != null)
+                    l_obj.layer = l_layer;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetTag(object p_obj, LuaArgReader p_reader)
+        static int GetTag(IntPtr p_state)
         {
-            p_reader.PushString((p_obj as GameObject).tag);
-        }
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            GameObject l_obj = null;
+            l_argReader.ReadObject(ref l_obj);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_obj != null)
+                    l_argReader.PushString(l_obj.tag);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
 
-        static void SetTag(object p_obj, LuaArgReader p_reader)
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetTag(IntPtr p_state)
         {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            GameObject l_obj = null;
             string l_tag = "";
-            p_reader.ReadString(ref l_tag);
-            if(!p_reader.HasErrors())
-                (p_obj as GameObject).tag = l_tag;
+            l_argReader.ReadObject(ref l_obj);
+            l_argReader.ReadString(ref l_tag);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_obj != null)
+                    l_obj.tag = l_tag;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
 
-        static void GetTransform(object p_obj, LuaArgReader p_reader)
+        static int GetTransform(IntPtr p_state)
         {
-            p_reader.PushObject((p_obj as GameObject).transform);
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            GameObject l_obj = null;
+            l_argReader.ReadObject(ref l_obj);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_obj != null)
+                    l_argReader.PushObject(l_obj.transform);
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
         }
 
         // Instance methods
@@ -208,83 +340,6 @@ namespace CVRLua.Lua.LuaDefs
             }
             else
                 l_argReader.PushBoolean(false);
-
-            l_argReader.LogError();
-            return l_argReader.GetReturnValue();
-        }
-
-        // Static getter
-        static int StaticGet(IntPtr p_state)
-        {
-            var l_argReader = new LuaArgReader(p_state);
-            string l_key = "";
-            l_argReader.Skip(); // Metatable
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(ms_staticMethods.TryGetValue(l_key, out var l_func))
-                    l_argReader.PushFunction(l_func);
-                else if(ms_staticProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                    l_pair.Item1.Invoke(l_argReader);
-                else
-                    l_argReader.PushNil();
-            }
-            else
-                l_argReader.PushNil();
-
-            return l_argReader.GetReturnValue();
-        }
-
-        // Instance getter
-        static int InstanceGet(IntPtr p_state)
-        {
-            var l_argReader = new LuaArgReader(p_state);
-            GameObject l_obj = null;
-            string l_key = "";
-            l_argReader.ReadObject(ref l_obj);
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(l_obj != null)
-                {
-                    if(ms_instanceMethods.TryGetValue(l_key, out var l_func))
-                        l_argReader.PushFunction(l_func); // Lua handles it by itself
-                    else if(ms_instanceProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                        l_pair.Item1.Invoke(l_obj, l_argReader);
-                    else
-                        l_argReader.PushNil();
-                }
-                else
-                {
-                    l_argReader.SetError(c_destroyed);
-                    l_argReader.PushNil();
-                }
-            }
-            else
-                l_argReader.PushNil();
-
-            return l_argReader.GetReturnValue();
-        }
-
-        // Instance setter
-        static int InstanceSet(IntPtr p_state)
-        {
-            // Our value is on stack top
-            var l_argReader = new LuaArgReader(p_state);
-            GameObject l_obj = null;
-            string l_key = "";
-            l_argReader.ReadObject(ref l_obj);
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(l_obj != null)
-                {
-                    if(ms_instanceProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item2 != null))
-                        l_pair.Item2.Invoke(l_obj, l_argReader);
-                }
-                else
-                    l_argReader.SetError(c_destroyed);
-            }
 
             l_argReader.LogError();
             return l_argReader.GetReturnValue();

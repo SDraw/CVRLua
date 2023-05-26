@@ -6,70 +6,140 @@ namespace CVRLua.Lua.LuaDefs
 {
     static class TimeDefs
     {
-        static readonly Dictionary<string, (StaticParseDelegate, StaticParseDelegate)> ms_staticProperties = new Dictionary<string, (StaticParseDelegate, StaticParseDelegate)>();
-        static readonly Dictionary<string, LuaInterop.lua_CFunction> ms_staticMethods = new Dictionary<string, LuaInterop.lua_CFunction>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_metaMethods = new List<(string, LuaInterop.lua_CFunction)>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_staticProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_staticMethods = new List<(string, LuaInterop.lua_CFunction)>();
+        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_instanceProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
+        static readonly List<(string, LuaInterop.lua_CFunction)> ms_instanceMethods = new List<(string, LuaInterop.lua_CFunction)>();
 
         internal static void Init()
         {
-            ms_staticProperties.Add("deltaTime", (GetDeltaTime, null));
-            ms_staticProperties.Add("fixedDeltaTime", (GetFixedDeltaTime, null));
-            ms_staticProperties.Add("fixedTime", (GetFixedTime, null));
-            ms_staticProperties.Add("fixedUnscaledDeltaTime", (GetFixedUnscaledDeltaTime, null));
-            ms_staticProperties.Add("fixedUnscaledTime", (GetFixedUnscaledTime, null));
-            ms_staticProperties.Add("frameCount", (GetFrameCount, null));
-            ms_staticProperties.Add("inFixedTimeStep", (GetInFixedTimeStep, null));
-            ms_staticProperties.Add("maximumDeltaTime", (GetMaximumDeltaTime, null));
-            ms_staticProperties.Add("maximumParticleDeltaTime", (GetMaximumParticleDeltaTime, null));
-            ms_staticProperties.Add("realtimeSinceStartup", (GetRealtimeSinceStartup, null));
-            ms_staticProperties.Add("smoothDeltaTime", (GetSmoothDeltaTime, null));
-            ms_staticProperties.Add("time", (GetTime, null));
-            ms_staticProperties.Add("timeSinceLevelLoad", (GetTimeSinceLevelLoad, null));
-            ms_staticProperties.Add("unscaledDeltaTime", (GetUnscaledDeltaTime, null));
-            ms_staticProperties.Add("unscaledTime", (GetUnscaledTime, null));
+            ms_staticProperties.Add(("deltaTime", (GetDeltaTime, null)));
+            ms_staticProperties.Add(("fixedDeltaTime", (GetFixedDeltaTime, null)));
+            ms_staticProperties.Add(("fixedTime", (GetFixedTime, null)));
+            ms_staticProperties.Add(("fixedUnscaledDeltaTime", (GetFixedUnscaledDeltaTime, null)));
+            ms_staticProperties.Add(("fixedUnscaledTime", (GetFixedUnscaledTime, null)));
+            ms_staticProperties.Add(("frameCount", (GetFrameCount, null)));
+            ms_staticProperties.Add(("inFixedTimeStep", (GetInFixedTimeStep, null)));
+            ms_staticProperties.Add(("maximumDeltaTime", (GetMaximumDeltaTime, null)));
+            ms_staticProperties.Add(("maximumParticleDeltaTime", (GetMaximumParticleDeltaTime, null)));
+            ms_staticProperties.Add(("realtimeSinceStartup", (GetRealtimeSinceStartup, null)));
+            ms_staticProperties.Add(("smoothDeltaTime", (GetSmoothDeltaTime, null)));
+            ms_staticProperties.Add(("time", (GetTime, null)));
+            ms_staticProperties.Add(("timeSinceLevelLoad", (GetTimeSinceLevelLoad, null)));
+            ms_staticProperties.Add(("unscaledDeltaTime", (GetUnscaledDeltaTime, null)));
+            ms_staticProperties.Add(("unscaledTime", (GetUnscaledTime, null)));
         }
 
         internal static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(Time), null, null, StaticGet, null, null, null);
+            p_vm.RegisterClass(typeof(Time), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         // static properties
-        static void GetDeltaTime(LuaArgReader p_reader) => p_reader.PushNumber(Time.deltaTime);
-        static void GetFixedDeltaTime(LuaArgReader p_reader) => p_reader.PushNumber(Time.fixedDeltaTime);
-        static void GetFixedTime(LuaArgReader p_reader) => p_reader.PushNumber(Time.fixedTime);
-        static void GetFixedUnscaledDeltaTime(LuaArgReader p_reader) => p_reader.PushNumber(Time.fixedUnscaledDeltaTime);
-        static void GetFixedUnscaledTime(LuaArgReader p_reader) => p_reader.PushNumber(Time.fixedUnscaledTime);
-        static void GetFrameCount(LuaArgReader p_reader) => p_reader.PushInteger(Time.frameCount);
-        static void GetInFixedTimeStep(LuaArgReader p_reader) => p_reader.PushBoolean(Time.inFixedTimeStep);
-        static void GetMaximumDeltaTime(LuaArgReader p_reader) => p_reader.PushNumber(Time.maximumDeltaTime);
-        static void GetMaximumParticleDeltaTime(LuaArgReader p_reader) => p_reader.PushNumber(Time.maximumParticleDeltaTime);
-        static void GetRealtimeSinceStartup(LuaArgReader p_reader) => p_reader.PushNumber(Time.realtimeSinceStartup);
-        static void GetSmoothDeltaTime(LuaArgReader p_reader) => p_reader.PushNumber(Time.smoothDeltaTime);
-        static void GetTime(LuaArgReader p_reader) => p_reader.PushNumber(Time.time);
-        static void GetTimeSinceLevelLoad(LuaArgReader p_reader) => p_reader.PushNumber(Time.timeSinceLevelLoad);
-        static void GetUnscaledDeltaTime(LuaArgReader p_reader) => p_reader.PushNumber(Time.unscaledDeltaTime);
-        static void GetUnscaledTime(LuaArgReader p_reader) => p_reader.PushNumber(Time.unscaledTime);
-
-        // Static getter
-        static int StaticGet(IntPtr p_state)
+        static int GetDeltaTime(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            string l_key = "";
-            l_argReader.Skip(); // Metatable
-            l_argReader.ReadString(ref l_key);
-            if(!l_argReader.HasErrors())
-            {
-                if(ms_staticMethods.TryGetValue(l_key, out var l_func))
-                    l_argReader.PushFunction(l_func);
-                else if(ms_staticProperties.TryGetValue(l_key, out var l_pair) && (l_pair.Item1 != null))
-                    l_pair.Item1.Invoke(l_argReader);
-                else
-                    l_argReader.PushNil();
-            }
-            else
-                l_argReader.PushNil();
+            l_argReader.PushNumber(Time.deltaTime);
+            return 1;
+        }
 
-            return l_argReader.GetReturnValue();
+        static int GetFixedDeltaTime(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushNumber(Time.fixedDeltaTime);
+            return 1;
+        }
+
+        static int GetFixedTime(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushNumber(Time.fixedTime);
+            return 1;
+        }
+
+        static int GetFixedUnscaledDeltaTime(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushNumber(Time.fixedUnscaledDeltaTime);
+            return 1;
+        }
+
+        static int GetFixedUnscaledTime(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushNumber(Time.fixedUnscaledTime);
+            return 1;
+        }
+
+        static int GetFrameCount(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushInteger(Time.frameCount);
+            return 1;
+        }
+
+        static int GetInFixedTimeStep(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushBoolean(Time.inFixedTimeStep);
+            return 1;
+        }
+
+        static int GetMaximumDeltaTime(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushNumber(Time.maximumDeltaTime);
+            return 1;
+        }
+
+        static int GetMaximumParticleDeltaTime(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushNumber(Time.maximumParticleDeltaTime);
+            return 1;
+        }
+
+        static int GetRealtimeSinceStartup(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushNumber(Time.realtimeSinceStartup);
+            return 1;
+        }
+
+        static int GetSmoothDeltaTime(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushNumber(Time.smoothDeltaTime);
+            return 1;
+        }
+
+        static int GetTime(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushNumber(Time.time);
+            return 1;
+        }
+
+        static int GetTimeSinceLevelLoad(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushNumber(Time.timeSinceLevelLoad);
+            return 1;
+        }
+
+        static int GetUnscaledDeltaTime(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushNumber(Time.unscaledDeltaTime);
+            return 1;
+        }
+
+        static int GetUnscaledTime(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushNumber(Time.unscaledTime);
+            return 1;
         }
     }
 }
