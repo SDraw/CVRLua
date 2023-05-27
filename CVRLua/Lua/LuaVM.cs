@@ -21,6 +21,7 @@ namespace CVRLua.Lua
         const string c_propGet = "__propGet";
         const string c_propSet = "__propSet";
         const string c_methods = "__methods";
+        const string c_objectsPool = "___ObjectsPool";
 
         static readonly Dictionary<IntPtr, LuaVM> ms_VMs = new Dictionary<IntPtr, LuaVM>();
 
@@ -43,6 +44,16 @@ namespace CVRLua.Lua
             m_objectsMap = new Dictionary<long, ReferencedObject>();
 
             RegisterGlobalFunction(nameof(Log), Log);
+
+            // Table weak values
+            LuaInterop.lua_newtable(m_state);
+            LuaInterop.lua_newtable(m_state);
+            LuaInterop.lua_pushstring(m_state, "v");
+            LuaInterop.lua_setfield(m_state, -2, "__mode");
+            LuaInterop.lua_pushcfunction(m_state, NilResultFunction);
+            LuaInterop.lua_setfield(m_state, -2, "__metatable");
+            LuaInterop.lua_setmetatable(m_state, -2); // Combines two previous tables
+            LuaInterop.lua_setfield(m_state, LuaInterop.LUA_REGISTRYINDEX, c_objectsPool);
         }
         ~LuaVM()
         {
@@ -81,28 +92,27 @@ namespace CVRLua.Lua
         }
 
         // Objects push/get
-        public void PushObject<T>(T p_obj) where T : class
+        public void PushObject(object p_obj)
         {
-            long l_hash = Utils.CombineInts(RuntimeHelpers.GetHashCode(p_obj), typeof(T).GetHashCode()); // Help ...
+            Type l_type = p_obj.GetType();
+            long l_hash = Utils.CombineInts(RuntimeHelpers.GetHashCode(p_obj), l_type.GetHashCode()); // Help ...
             if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
                 l_refObj.m_references++;
             else
                 m_objectsMap.Add(l_hash, new ReferencedObject(p_obj));
 
-            LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash);
-            LuaInterop.luaL_setmetatable(m_state, typeof(T).Name);
-        }
-
-        public void PushObject<T>(T p_obj, string p_type) where T : class
-        {
-            long l_hash = Utils.CombineInts(RuntimeHelpers.GetHashCode(p_obj), typeof(T).GetHashCode()); // Help ...
-            if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
-                l_refObj.m_references++;
-            else
-                m_objectsMap.Add(l_hash, new ReferencedObject(p_obj));
-
-            LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash);
-            LuaInterop.luaL_setmetatable(m_state, p_type);
+            int l_top = LuaInterop.lua_gettop(m_state);
+            LuaInterop.lua_getfield(m_state, LuaInterop.LUA_REGISTRYINDEX, c_objectsPool); //top+1
+            if(LuaInterop.lua_geti(m_state, l_top + 1, l_hash) == LuaInterop.LUA_TNIL)
+            {
+                LuaInterop.lua_pop(m_state, 1);
+                LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash); // top+2
+                LuaInterop.luaL_setmetatable(m_state, l_type.Name);
+                LuaInterop.lua_settop(m_state, l_top + 3);
+                LuaInterop.lua_copy(m_state, l_top + 2, l_top + 3);
+                LuaInterop.lua_seti(m_state, l_top + 1, l_hash);
+            }
+            LuaInterop.lua_remove(m_state, l_top + 1);
         }
 
         public bool GetObject<T>(ref T p_obj, int p_index) where T : class
@@ -123,7 +133,7 @@ namespace CVRLua.Lua
         public bool IsObject(int p_index) => IsUserdata(p_index);
 
         // Variables
-        public void SetGlobalVariable<T>(string p_name, T p_obj)
+        public void SetGlobalVariable(string p_name, object p_obj)
         {
             PushValue(p_obj);
             LuaInterop.lua_setglobal(m_state, p_name);
@@ -217,7 +227,7 @@ namespace CVRLua.Lua
                 case TypeCode.Object:
                 {
                     if(p_value.GetType().IsClass)
-                        PushObject(p_value, p_value.GetType().Name);
+                        PushObject(p_value);
                     else
                         PushNil();
                 }

@@ -339,20 +339,11 @@ namespace CVRLua.Lua
             }
         }
 
-        public void PushObject<T>(T p_obj) where T : class
+        public void PushObject(object p_obj)
         {
             if(m_vm != null)
             {
                 m_vm.PushObject(p_obj);
-                m_returnCount++;
-            }
-        }
-
-        public void PushObject<T>(T p_obj, string p_type) where T : class
-        {
-            if(m_vm != null)
-            {
-                m_vm.PushObject(p_obj, p_type);
                 m_returnCount++;
             }
         }

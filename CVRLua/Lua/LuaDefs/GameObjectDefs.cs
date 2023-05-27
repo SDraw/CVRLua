@@ -328,7 +328,7 @@ namespace CVRLua.Lua.LuaDefs
                 {
                     var l_component = l_obj.GetComponent(l_typeName);
                     if(l_component != null)
-                        l_argReader.PushObject(l_component, l_typeName);
+                        l_argReader.PushObject(l_component);
                     else
                         l_argReader.PushBoolean(false);
                 }

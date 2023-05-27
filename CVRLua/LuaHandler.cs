@@ -135,7 +135,7 @@ namespace CVRLua
                 m_vm.CallFunctionByReference(m_eventFunctions[p_event], p_args);
         }
 
-        public void SetGlobalVariable<T>(string p_name, T p_val) => m_vm.SetGlobalVariable(p_name, p_val);
+        public void SetGlobalVariable(string p_name, object p_val) => m_vm.SetGlobalVariable(p_name, p_val);
 
         internal void ParseEvents()
         {

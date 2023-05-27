@@ -1,7 +1,9 @@
-﻿using System;
+﻿using ABI_RC.Core.Player;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace CVRLua
 {
@@ -39,16 +41,28 @@ namespace CVRLua
 
         public static bool IsSafeToDestroy(this UnityEngine.Object p_object)
         {
-            if(p_object is UnityEngine.Component)
-                return ((p_object as UnityEngine.Component).gameObject.scene.name != "DontDestroyOnLoad");
+            GameObject l_rootObject = null;
+            if(p_object is Component)
+                l_rootObject = (p_object as Component).transform.root.gameObject;
+            if(p_object is GameObject)
+                l_rootObject = (p_object as GameObject).transform.root.gameObject;
 
-            if(p_object is UnityEngine.GameObject)
-                return ((p_object as UnityEngine.GameObject).scene.name != "DontDestroyOnLoad");
+            if(l_rootObject == null)
+                return true;
+
+            if(l_rootObject.scene.name == "DontDestroyOnLoad")
+                return false;
+
+            if(l_rootObject.name.StartsWith("p+"))
+                return false;
+
+            if(l_rootObject.GetComponent<PuppetMaster>() != null)
+                return false;
 
             return true;
         }
 
-        public static bool IsInternal(UnityEngine.Component p_col)
+        public static bool IsInternal(Component p_col)
         {
             return (p_col.gameObject.scene.name == "DontDestroyOnLoad");
         }

@@ -249,5 +249,23 @@ namespace CVRLua.Lua
             lua_rotate(L, (idx), -1);
             lua_pop(L, 1);
         }
+
+        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int lua_rawgetp(IntPtr L, int idx, IntPtr p);
+
+        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void lua_rawsetp(IntPtr L, int idx, IntPtr p);
+
+        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void lua_pushlightuserdata(IntPtr L, IntPtr p);
+
+        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int lua_rawget(IntPtr L, int idx);
+
+        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int lua_geti(IntPtr L, int idx, long n);
+
+        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void lua_seti(IntPtr L, int idx, long n);
     }
 }

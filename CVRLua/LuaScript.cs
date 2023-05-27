@@ -38,7 +38,7 @@ namespace CVRLua
             if((VariableObjectNames.Count > 0) && (VariableObjectValues.Count > 0))
             {
                 for(int i = 0, j = Mathf.Min(VariableObjectNames.Count, VariableObjectValues.Count); i < j; i++)
-                    m_luaHandler.SetGlobalVariable(VariableObjectNames[i], (object)VariableObjectValues[i]);
+                    m_luaHandler.SetGlobalVariable(VariableObjectNames[i], VariableObjectValues[i]);
             }
 
             foreach(var l_script in Scripts)
