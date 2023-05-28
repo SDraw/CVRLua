@@ -101,18 +101,16 @@ namespace CVRLua.Lua
             else
                 m_objectsMap.Add(l_hash, new ReferencedObject(p_obj));
 
-            int l_top = LuaInterop.lua_gettop(m_state);
-            LuaInterop.lua_getfield(m_state, LuaInterop.LUA_REGISTRYINDEX, c_objectsPool); //top+1
-            if(LuaInterop.lua_geti(m_state, l_top + 1, l_hash) == LuaInterop.LUA_TNIL)
+            LuaInterop.lua_getfield(m_state, LuaInterop.LUA_REGISTRYINDEX, c_objectsPool);
+            if(LuaInterop.lua_geti(m_state, -1, l_hash) == LuaInterop.LUA_TNIL)
             {
                 LuaInterop.lua_pop(m_state, 1);
-                LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash); // top+2
+                LuaInterop.lua_newuserdata(m_state, IntPtr.Size).SetInt(l_hash);
                 LuaInterop.luaL_setmetatable(m_state, l_type.Name);
-                LuaInterop.lua_settop(m_state, l_top + 3);
-                LuaInterop.lua_copy(m_state, l_top + 2, l_top + 3);
-                LuaInterop.lua_seti(m_state, l_top + 1, l_hash);
+                LuaInterop.lua_pushvalue(m_state, -1);
+                LuaInterop.lua_seti(m_state, -3, l_hash);
             }
-            LuaInterop.lua_remove(m_state, l_top + 1);
+            LuaInterop.lua_remove(m_state, -2);
         }
 
         public bool GetObject<T>(ref T p_obj, int p_index) where T : class
@@ -438,7 +436,6 @@ namespace CVRLua.Lua
         static int ClassStaticGet(IntPtr p_state)
         {
             // Current stack - 1-table, 2-key
-            int l_top = LuaInterop.lua_gettop(p_state);
             if(!LuaInterop.lua_isstring(p_state, 2)) // Not a string as key
             {
                 LuaInterop.lua_pushnil(p_state);
@@ -446,22 +443,21 @@ namespace CVRLua.Lua
             }
             string l_key = LuaInterop.lua_tostring(p_state, 2);
 
-            LuaInterop.luaL_getmetafield(p_state, 1, c_methods); // table is on top+1
-            if(LuaInterop.lua_getfield(p_state, l_top + 1, l_key) == LuaInterop.LUA_TFUNCTION)
+            LuaInterop.luaL_getmetafield(p_state, 1, c_methods); // table on top
+            if(LuaInterop.lua_getfield(p_state, -1, l_key) == LuaInterop.LUA_TFUNCTION)
             {
-                // function is on top+2
-                LuaInterop.lua_remove(p_state, l_top + 1); // remove table and shift stack down
+                // function is on top
+                LuaInterop.lua_remove(p_state, -2); // remove table and shift stack down
                 return 1;
             }
 
             // Not a method, maybe a prop?
             LuaInterop.lua_pop(p_state, 2); // remove undesired value and table from stack
-            LuaInterop.luaL_getmetafield(p_state, 1, c_propGet); // table is on top+1
-            if(LuaInterop.lua_getfield(p_state, l_top + 1, l_key) == LuaInterop.LUA_TFUNCTION)
+            LuaInterop.luaL_getmetafield(p_state, 1, c_propGet); // table is on top
+            if(LuaInterop.lua_getfield(p_state, -1, l_key) == LuaInterop.LUA_TFUNCTION)
             {
-                // now actual top is top+2, function is on top
-                LuaInterop.lua_call(p_state, 0, 1);
-                LuaInterop.lua_remove(p_state, l_top + 1); // remove table and shift stack down
+                LuaInterop.lua_call(p_state, 0, 1); // result is on top
+                LuaInterop.lua_remove(p_state, -2); // remove table and shift stack down
                 return 1;
             }
 
@@ -474,19 +470,16 @@ namespace CVRLua.Lua
         static int ClassStaticSet(IntPtr p_state)
         {
             // Current stack - 1-table, 2-key, 3-value
-            int l_top = LuaInterop.lua_gettop(p_state);
-
             if(!LuaInterop.lua_isstring(p_state, 2)) // Not a string as key
                 return 0;
             string l_key = LuaInterop.lua_tostring(p_state, 2);
 
-            LuaInterop.luaL_getmetafield(p_state, 1, c_propSet); // table on top+1
-            if(LuaInterop.lua_getfield(p_state, l_top + 1, l_key) == LuaInterop.LUA_TFUNCTION)
+            LuaInterop.luaL_getmetafield(p_state, 1, c_propSet); // table on top
+            if(LuaInterop.lua_getfield(p_state, -1, l_key) == LuaInterop.LUA_TFUNCTION)
             {
-                // now actual top is top+2, function is on top
-                LuaInterop.lua_settop(p_state, l_top + 3);
-                LuaInterop.lua_copy(p_state, 3, l_top + 3);
-                LuaInterop.lua_call(p_state, 1, 0);
+                // now function is on top
+                LuaInterop.lua_pushvalue(p_state, 3); // copy value
+                LuaInterop.lua_call(p_state, 1, 0); // call, no result should return
                 LuaInterop.lua_pop(p_state, 1); // remove table from stack
                 return 0;
             }
@@ -499,7 +492,6 @@ namespace CVRLua.Lua
         static int ClassInstanceGet(IntPtr p_state)
         {
             // Current stack - 1-userdata, 2-key
-            int l_top = LuaInterop.lua_gettop(p_state);
             if(!LuaInterop.lua_isstring(p_state, 2)) // Not a string as key
             {
                 LuaInterop.lua_pushnil(p_state);
@@ -507,24 +499,23 @@ namespace CVRLua.Lua
             }
             string l_key = LuaInterop.lua_tostring(p_state, 2);
 
-            LuaInterop.luaL_getmetafield(p_state, 1, c_methods); // table is on top+1
-            if(LuaInterop.lua_getfield(p_state, l_top + 1, l_key) == LuaInterop.LUA_TFUNCTION)
+            LuaInterop.luaL_getmetafield(p_state, 1, c_methods); // table is on top
+            if(LuaInterop.lua_getfield(p_state, -1, l_key) == LuaInterop.LUA_TFUNCTION)
             {
-                // function is on top+2
-                LuaInterop.lua_remove(p_state, l_top + 1); // remove table and shift stack down
+                // result function on top
+                LuaInterop.lua_remove(p_state, -2); // remove table and shift stack down
                 return 1;
             }
 
             // Not a method, maybe a prop?
             LuaInterop.lua_pop(p_state, 2); // remove undesired value and table from stack
-            LuaInterop.luaL_getmetafield(p_state, 1, c_propGet); // table is on top+1
-            if(LuaInterop.lua_getfield(p_state, l_top + 1, l_key) == LuaInterop.LUA_TFUNCTION)
+            LuaInterop.luaL_getmetafield(p_state, 1, c_propGet); // table is on top
+            if(LuaInterop.lua_getfield(p_state, -1, l_key) == LuaInterop.LUA_TFUNCTION)
             {
-                // now actual top is top+2, function is on top
-                LuaInterop.lua_settop(p_state, l_top + 3);
-                LuaInterop.lua_copy(p_state, 1, l_top + 3);
-                LuaInterop.lua_call(p_state, 1, 1);
-                LuaInterop.lua_remove(p_state, l_top + 1); // remove table and shift stack down
+                // function is on top
+                LuaInterop.lua_pushvalue(p_state, 1); // copy userdata on top
+                LuaInterop.lua_call(p_state, 1, 1); // result on top
+                LuaInterop.lua_remove(p_state, -2); // remove table and shift stack down
                 return 1;
             }
 
@@ -537,20 +528,17 @@ namespace CVRLua.Lua
         static int ClassInstanceSet(IntPtr p_state)
         {
             // Current stack - 1-userdata, 2-key, 3-value
-            int l_top = LuaInterop.lua_gettop(p_state);
-
             if(!LuaInterop.lua_isstring(p_state, 2)) // Not a string as key
                 return 0;
             string l_key = LuaInterop.lua_tostring(p_state, 2);
 
-            LuaInterop.luaL_getmetafield(p_state, 1, c_propSet); // table on top+1
-            if(LuaInterop.lua_getfield(p_state, l_top + 1, l_key) == LuaInterop.LUA_TFUNCTION)
+            LuaInterop.luaL_getmetafield(p_state, 1, c_propSet); // table on top
+            if(LuaInterop.lua_getfield(p_state, -1, l_key) == LuaInterop.LUA_TFUNCTION)
             {
-                // now actual top is top+2, function is on top
-                LuaInterop.lua_settop(p_state, l_top + 4);
-                LuaInterop.lua_copy(p_state, 1, l_top + 3);
-                LuaInterop.lua_copy(p_state, 3, l_top + 4);
-                LuaInterop.lua_call(p_state, 2, 0);
+                // function is on top
+                LuaInterop.lua_pushvalue(p_state, 1); // copy userdata on top
+                LuaInterop.lua_pushvalue(p_state, 3); // copy value on top
+                LuaInterop.lua_call(p_state, 2, 0); // call, no result should return
                 LuaInterop.lua_pop(p_state, 1); // remove table from stack
                 return 0;
             }
