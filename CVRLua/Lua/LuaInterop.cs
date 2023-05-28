@@ -85,6 +85,9 @@ namespace CVRLua.Lua
         public static extern int luaopen_math(IntPtr L);
 
         [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int luaopen_utf8(IntPtr L);
+
+        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void luaL_newmetatable(IntPtr L, string tname);
 
         [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
@@ -217,12 +220,6 @@ namespace CVRLua.Lua
         public static extern int lua_setmetatable(IntPtr L, int objindex);
 
         [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void lua_rawset(IntPtr L, int idx);
-
-        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void lua_copy(IntPtr L, int fromidx, int toidx);
-
-        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int lua_getstack(IntPtr L, int level, ref lua_Debug ar);
 
         [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
@@ -249,18 +246,6 @@ namespace CVRLua.Lua
             lua_rotate(L, (idx), -1);
             lua_pop(L, 1);
         }
-
-        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int lua_rawgetp(IntPtr L, int idx, IntPtr p);
-
-        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void lua_rawsetp(IntPtr L, int idx, IntPtr p);
-
-        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void lua_pushlightuserdata(IntPtr L, IntPtr p);
-
-        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int lua_rawget(IntPtr L, int idx);
 
         [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int lua_geti(IntPtr L, int idx, long n);

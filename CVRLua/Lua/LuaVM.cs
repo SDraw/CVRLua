@@ -40,6 +40,7 @@ namespace CVRLua.Lua
             LuaInterop.luaL_requiref(m_state, "table", LuaInterop.luaopen_table, 1);
             LuaInterop.luaL_requiref(m_state, "string", LuaInterop.luaopen_string, 1);
             LuaInterop.luaL_requiref(m_state, "math", LuaInterop.luaopen_math, 1);
+            LuaInterop.luaL_requiref(m_state, "utf8", LuaInterop.luaopen_utf8, 1);
 
             m_objectsMap = new Dictionary<long, ReferencedObject>();
 
