@@ -18,7 +18,8 @@ Scripting approach is kept very close to Unity's CSharp scripting. That means me
    * Import it into your world project
    * Add `LuaScript` component to your GameObject(s)
 # Scripting documentation
-Visit [wiki pages](../../wiki) for in-depth information about scripting state and usage.
+Visit [wiki pages](../../wiki) for in-depth information about scripting state and usage.  
+Project uses pre-built Lua 5.4.2 from [LuaBinaries](https://luabinaries.sourceforge.net).
 
 # Why?
 Me when waiting for official game scripting: [link](https://www.youtube.com/watch?v=a6zKohQnFJk)  
