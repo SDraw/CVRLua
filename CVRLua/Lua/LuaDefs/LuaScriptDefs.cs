@@ -48,9 +48,10 @@ namespace CVRLua.Lua.LuaDefs
                 if(l_script != null)
                 {
                     List<object> l_args = new List<object>();
+                    List<object> l_results = new List<object>();
                     l_argReader.ReadArguments(l_args); // Never errors
-                    l_script.SendScriptMessage(l_args);
-                    l_argReader.PushBoolean(true);
+                    l_script.SendScriptMessage(l_args, l_results);
+                    l_argReader.PushTable(l_results);
                 }
                 else
                 {

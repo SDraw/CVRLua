@@ -273,15 +273,16 @@ namespace CVRLua.Lua
                         m_currentArgument++;
                         continue;
                     }
+                    if(m_vm.IsInteger(m_currentArgument))
+                    {
+                        p_args.Add(m_vm.ToInteger(m_currentArgument));
+                        m_currentArgument++;
+                        continue;
+                    }
                     if(m_vm.IsNumber(m_currentArgument))
                     {
                         p_args.Add(m_vm.ToNumber(m_currentArgument));
                         m_currentArgument++;
-                        continue;
-                    }
-                    if(m_vm.IsInteger(m_currentArgument))
-                    {
-                        p_args.Add(m_vm.ToInteger(m_currentArgument));
                         continue;
                     }
                     if(m_vm.IsString(m_currentArgument))
@@ -298,7 +299,10 @@ namespace CVRLua.Lua
                         else
                             p_args.Add(null);
                         m_currentArgument++;
+                        continue;
                     }
+                    p_args.Add(null);
+                    m_currentArgument++;
                 }
             }
         }

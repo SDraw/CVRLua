@@ -135,9 +135,9 @@ namespace CVRLua
         }
 
         // Custom events
-        public void SendScriptMessage(List<object> p_args)
+        public void SendScriptMessage(List<object> p_args, List<object> p_result)
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnMessage, p_args.ToArray());
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnMessage, p_result, p_args.ToArray());
         }
 
         // Game events

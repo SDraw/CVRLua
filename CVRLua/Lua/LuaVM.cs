@@ -88,7 +88,7 @@ namespace CVRLua.Lua
         // Execution
         internal void Execute(string p_script)
         {
-            if((LuaInterop.luaL_loadstring(m_state, p_script) != 0) || (LuaInterop.lua_pcall(m_state, 0, 0, 0) != 0))
+            if((LuaInterop.luaL_loadstring(m_state, p_script) != LuaInterop.LUA_OK) || (LuaInterop.lua_pcall(m_state, 0, 0, 0) != LuaInterop.LUA_OK))
                 LuaLogger.Log(LuaInterop.lua_tostring(m_state, -1));
         }
 
@@ -158,13 +158,79 @@ namespace CVRLua.Lua
             return l_result;
         }
 
-        public void CallFunctionByReference(int p_ref, params object[] p_args)
+        public void CallFunction(int p_ref, params object[] p_args)
         {
-            LuaInterop.lua_rawgeti(m_state, LuaInterop.LUA_REGISTRYINDEX, p_ref);
-            foreach(var l_value in p_args)
-                PushValue(l_value);
-            if(LuaInterop.lua_pcall(m_state, p_args.Length, 0, 0) != 0)
-                LuaLogger.Log(LuaInterop.lua_tostring(m_state, -1));
+            if(LuaInterop.lua_rawgeti(m_state, LuaInterop.LUA_REGISTRYINDEX, p_ref) == LuaInterop.LUA_TFUNCTION)
+            {
+                foreach(var l_value in p_args)
+                    PushValue(l_value);
+                if(LuaInterop.lua_pcall(m_state, p_args.Length, 0, 0) != 0)
+                {
+                    LuaLogger.Log(LuaInterop.lua_tostring(m_state, -1));
+                    LuaInterop.lua_pop(m_state, 1);
+                }
+            }
+            else
+                LuaInterop.lua_pop(m_state, 1);
+        }
+
+        public void CallFunctionWithResults(int p_ref, List<object> p_results, params object[] p_args)
+        {
+            if(LuaInterop.lua_rawgeti(m_state, LuaInterop.LUA_REGISTRYINDEX, p_ref) == LuaInterop.LUA_TFUNCTION)
+            {
+                int l_top = LuaInterop.lua_gettop(m_state);
+                foreach(var l_value in p_args)
+                    PushValue(l_value);
+                if(LuaInterop.lua_pcall(m_state, p_args.Length, LuaInterop.LUA_MULTRET, 0) != LuaInterop.LUA_OK)
+                {
+                    LuaLogger.Log(LuaInterop.lua_tostring(m_state, -1));
+                    LuaInterop.lua_pop(m_state, 1);
+                }
+                else
+                {
+                    for(int i = l_top, j = LuaInterop.lua_gettop(m_state); i <= j; i++)
+                    {
+                        if(LuaInterop.lua_isnil(m_state, i))
+                        {
+                            p_results.Add(null);
+                            continue;
+                        }
+                        if(LuaInterop.lua_isboolean(m_state, i))
+                        {
+                            p_results.Add(LuaInterop.lua_toboolean(m_state, i) == 1);
+                            continue;
+                        }
+                        if(LuaInterop.lua_isinteger(m_state, i) == 1)
+                        {
+                            p_results.Add(LuaInterop.lua_tointeger(m_state, i));
+                            continue;
+                        }
+                        if(LuaInterop.lua_isnumber(m_state, i))
+                        {
+                            p_results.Add(LuaInterop.lua_tonumber(m_state, i));
+                            continue;
+                        }
+                        if(LuaInterop.lua_isstring(m_state, i))
+                        {
+                            p_results.Add(LuaInterop.lua_tostring(m_state, i));
+                            continue;
+                        }
+                        if(LuaInterop.lua_isuserdata(m_state, i))
+                        {
+                            long l_hash = LuaInterop.lua_touserdata(m_state, i).GetInt();
+                            if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
+                                p_results.Add(l_refObj.m_object);
+                            else
+                                p_results.Add(null);
+                            continue;
+                        }
+                        p_results.Add(null);
+                    }
+                    LuaInterop.lua_settop(m_state, l_top);
+                }
+            }
+            else
+                LuaInterop.lua_pop(m_state, 1);
         }
 
         public void RegisterGlobalFunction(string p_name, LuaInterop.lua_CFunction p_func) => LuaInterop.lua_register(m_state, p_name, p_func);
@@ -202,6 +268,12 @@ namespace CVRLua.Lua
         // Extended pushes
         public void PushValue(object p_value)
         {
+            if(p_value == null)
+            {
+                PushNil();
+                return;
+            }
+
             // Always pushes something
             switch(Type.GetTypeCode(p_value.GetType()))
             {

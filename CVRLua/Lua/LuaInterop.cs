@@ -9,6 +9,14 @@ namespace CVRLua.Lua
 
         public const int LUAI_MAXSTACK = 1000000; // for x64
         public const int LUA_REGISTRYINDEX = (-LUAI_MAXSTACK - 1000);
+        public const int LUA_MULTRET = -1;
+
+        public const int LUA_OK = 0;
+        public const int LUA_YIELD = 1;
+        public const int LUA_ERRRUN = 2;
+        public const int LUA_ERRSYNTAX = 3;
+        public const int LUA_ERRMEM = 4;
+        public const int LUA_ERRERR = 5;
 
         public const int LUA_TNIL = 0;
         public const int LUA_TBOOLEAN = 1;
