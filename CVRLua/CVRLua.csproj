@@ -94,6 +94,9 @@
     <Compile Include="Lua\LuaDefs\AudioClipDefs.cs" />
     <Compile Include="Lua\LuaDefs\AudioSourceDefs.cs" />
     <Compile Include="Lua\LuaDefs\BehaviourDefs.cs" />
+    <Compile Include="Lua\LuaDefs\CVRInteractableDefs.cs" />
+    <Compile Include="Lua\LuaDefs\CVRPickupObjectDefs.cs" />
+    <Compile Include="Lua\LuaDefs\CVRVideoPlayerDefs.cs" />
     <Compile Include="Lua\LuaDefs\TerrainColliderDefs.cs" />
     <Compile Include="Lua\LuaDefs\WheelColliderDefs.cs" />
     <Compile Include="Lua\LuaDefs\SphereColliderDefs.cs" />

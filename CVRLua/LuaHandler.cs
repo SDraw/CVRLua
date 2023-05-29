@@ -73,6 +73,9 @@ namespace CVRLua
             Lua.LuaDefs.MathfDefs.Init();
 
             Lua.LuaDefs.CVRPointerDefs.Init();
+            Lua.LuaDefs.CVRVideoPlayerDefs.Init();
+            Lua.LuaDefs.CVRInteractableDefs.Init();
+            Lua.LuaDefs.CVRPickupObjectDefs.Init();
 
             Lua.LuaDefs.LocalPlayerDefs.Init();
         }
@@ -120,6 +123,9 @@ namespace CVRLua
             Lua.LuaDefs.MathfDefs.RegisterInVM(m_vm);
 
             Lua.LuaDefs.CVRPointerDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.CVRVideoPlayerDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.CVRInteractableDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.CVRPickupObjectDefs.RegisterInVM(m_vm);
 
             Lua.LuaDefs.LocalPlayerDefs.RegisterInVM(m_vm);
         }
