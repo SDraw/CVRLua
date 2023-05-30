@@ -57,6 +57,7 @@ namespace CVRLua
             Lua.LuaDefs.TerrainColliderDefs.Init();
 
             Lua.LuaDefs.AnimatorDefs.Init();
+            Lua.LuaDefs.RigidbodyDefs.Init();
 
             Lua.LuaDefs.ContactPointDefs.Init();
             Lua.LuaDefs.CollisionDefs.Init();
@@ -107,6 +108,7 @@ namespace CVRLua
             Lua.LuaDefs.TerrainColliderDefs.RegisterInVM(m_vm);
 
             Lua.LuaDefs.AnimatorDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.RigidbodyDefs.RegisterInVM(m_vm);
 
             Lua.LuaDefs.ContactPointDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CollisionDefs.RegisterInVM(m_vm);
