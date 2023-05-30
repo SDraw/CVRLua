@@ -261,47 +261,7 @@ namespace CVRLua.Lua
             {
                 while(m_currentArgument <= m_argumentsCount)
                 {
-                    if(m_vm.IsNil(m_currentArgument))
-                    {
-                        p_args.Add(null);
-                        m_currentArgument++;
-                        continue;
-                    }
-                    if(m_vm.IsBoolean(m_currentArgument))
-                    {
-                        p_args.Add(m_vm.ToBoolean(m_currentArgument));
-                        m_currentArgument++;
-                        continue;
-                    }
-                    if(m_vm.IsInteger(m_currentArgument))
-                    {
-                        p_args.Add(m_vm.ToInteger(m_currentArgument));
-                        m_currentArgument++;
-                        continue;
-                    }
-                    if(m_vm.IsNumber(m_currentArgument))
-                    {
-                        p_args.Add(m_vm.ToNumber(m_currentArgument));
-                        m_currentArgument++;
-                        continue;
-                    }
-                    if(m_vm.IsString(m_currentArgument))
-                    {
-                        p_args.Add(m_vm.ToString(m_currentArgument));
-                        m_currentArgument++;
-                        continue;
-                    }
-                    if(m_vm.IsObject(m_currentArgument))
-                    {
-                        object p_obj = null;
-                        if(m_vm.GetObject(ref p_obj, m_currentArgument))
-                            p_args.Add(p_obj);
-                        else
-                            p_args.Add(null);
-                        m_currentArgument++;
-                        continue;
-                    }
-                    p_args.Add(null);
+                    p_args.Add(m_vm.ReadValue(m_currentArgument));
                     m_currentArgument++;
                 }
             }

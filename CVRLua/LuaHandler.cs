@@ -144,7 +144,7 @@ namespace CVRLua
         public void CallEvent(ScriptEvent p_event, List<object> p_result, params object[] p_args)
         {
             if(m_eventFunctions.TryGetValue(p_event, out int l_ref))
-                m_vm.CallFunctionWithResults(l_ref, p_result, p_args);
+                m_vm.CallFunction(l_ref, p_result, p_args);
         }
 
         public void SetGlobalVariable(string p_name, object p_val) => m_vm.SetGlobalVariable(p_name, p_val);

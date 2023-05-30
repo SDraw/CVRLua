@@ -64,32 +64,40 @@ namespace CVRLua.Lua
 
         // Generic Lua stuff
         public int GetTop() => LuaInterop.lua_gettop(m_state);
-        public void SetGlobal(string p_name) => LuaInterop.lua_setglobal(m_state, p_name);
+
         public bool IsBoolean(int p_index) => LuaInterop.lua_isboolean(m_state, p_index);
         public bool ToBoolean(int p_index) => (LuaInterop.lua_toboolean(m_state, p_index) == 1);
         public void PushBoolean(bool p_val) => LuaInterop.lua_pushboolean(m_state, p_val ? 1 : 0);
-        public bool IsNumber(int p_index) => LuaInterop.lua_isnumber(m_state, p_index);
-        public double ToNumber(int p_index) => LuaInterop.lua_tonumber(m_state, p_index);
-        public void PushNumber(double p_val) => LuaInterop.lua_pushnumber(m_state, p_val);
-        public bool IsString(int p_index) => LuaInterop.lua_isstring(m_state, p_index);
-        public string ToString(int p_index) => LuaInterop.lua_tostring(m_state, p_index);
-        public void PushString(string p_str) => LuaInterop.lua_pushstring(m_state, p_str);
+
         public bool IsInteger(int p_index) => (LuaInterop.lua_isinteger(m_state, p_index) == 1);
         public long ToInteger(int p_index) => LuaInterop.lua_tointeger(m_state, p_index);
         public void PushInteger(long p_val) => LuaInterop.lua_pushinteger(m_state, p_val);
-        public bool IsLightUserdata(int p_index) => LuaInterop.lua_islightuserdata(m_state, p_index);
-        public IntPtr ToLightUserdata(int p_index) => LuaInterop.lua_topointer(m_state, p_index);
+
+        public bool IsNumber(int p_index) => LuaInterop.lua_isnumber(m_state, p_index);
+        public double ToNumber(int p_index) => LuaInterop.lua_tonumber(m_state, p_index);
+        public void PushNumber(double p_val) => LuaInterop.lua_pushnumber(m_state, p_val);
+
+        public bool IsString(int p_index) => LuaInterop.lua_isstring(m_state, p_index);
+        public string ToString(int p_index) => LuaInterop.lua_tostring(m_state, p_index);
+        public void PushString(string p_str) => LuaInterop.lua_pushstring(m_state, p_str);
+
         public bool IsUserdata(int p_index) => LuaInterop.lua_isuserdata(m_state, p_index);
         public IntPtr ToUserdata(int p_index) => LuaInterop.lua_touserdata(m_state, p_index);
+
         public bool IsNil(int p_index) => LuaInterop.lua_isnil(m_state, p_index);
         public void PushNil() => LuaInterop.lua_pushnil(m_state);
+
+        public bool IsFunction(int p_index) => LuaInterop.lua_isfunction(m_state, p_index);
         public void PushFunction(LuaInterop.lua_CFunction p_func) => LuaInterop.lua_pushcfunction(m_state, p_func);
 
         // Execution
         internal void Execute(string p_script)
         {
             if((LuaInterop.luaL_loadstring(m_state, p_script) != LuaInterop.LUA_OK) || (LuaInterop.lua_pcall(m_state, 0, 0, 0) != LuaInterop.LUA_OK))
+            {
                 LuaLogger.Log(LuaInterop.lua_tostring(m_state, -1));
+                LuaInterop.lua_pop(m_state, 1);
+            }
         }
 
         // Objects push/get
@@ -174,7 +182,7 @@ namespace CVRLua.Lua
                 LuaInterop.lua_pop(m_state, 1);
         }
 
-        public void CallFunctionWithResults(int p_ref, List<object> p_results, params object[] p_args)
+        public void CallFunction(int p_ref, List<object> p_results, params object[] p_args)
         {
             if(LuaInterop.lua_rawgeti(m_state, LuaInterop.LUA_REGISTRYINDEX, p_ref) == LuaInterop.LUA_TFUNCTION)
             {
@@ -189,44 +197,9 @@ namespace CVRLua.Lua
                 else
                 {
                     for(int i = l_top, j = LuaInterop.lua_gettop(m_state); i <= j; i++)
-                    {
-                        if(LuaInterop.lua_isnil(m_state, i))
-                        {
-                            p_results.Add(null);
-                            continue;
-                        }
-                        if(LuaInterop.lua_isboolean(m_state, i))
-                        {
-                            p_results.Add(LuaInterop.lua_toboolean(m_state, i) == 1);
-                            continue;
-                        }
-                        if(LuaInterop.lua_isinteger(m_state, i) == 1)
-                        {
-                            p_results.Add(LuaInterop.lua_tointeger(m_state, i));
-                            continue;
-                        }
-                        if(LuaInterop.lua_isnumber(m_state, i))
-                        {
-                            p_results.Add(LuaInterop.lua_tonumber(m_state, i));
-                            continue;
-                        }
-                        if(LuaInterop.lua_isstring(m_state, i))
-                        {
-                            p_results.Add(LuaInterop.lua_tostring(m_state, i));
-                            continue;
-                        }
-                        if(LuaInterop.lua_isuserdata(m_state, i))
-                        {
-                            long l_hash = LuaInterop.lua_touserdata(m_state, i).GetInt();
-                            if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
-                                p_results.Add(l_refObj.m_object);
-                            else
-                                p_results.Add(null);
-                            continue;
-                        }
-                        p_results.Add(null);
-                    }
-                    LuaInterop.lua_settop(m_state, l_top);
+                        p_results.Add(ReadValue(i));
+                    if(p_results.Count > 0)
+                        LuaInterop.lua_pop(m_state, p_results.Count);
                 }
             }
             else
@@ -265,16 +238,46 @@ namespace CVRLua.Lua
             return 0;
         }
 
-        // Extended pushes
+        // Extended reads/pushes
+        public object ReadValue(int p_index)
+        {
+            object l_result = null;
+            if(LuaInterop.lua_isinteger(m_state, p_index) == 1)
+                l_result = LuaInterop.lua_tointeger(m_state, p_index);
+            else
+            {
+                switch(LuaInterop.lua_type(m_state, p_index))
+                {
+                    case LuaInterop.LUA_TBOOLEAN:
+                        l_result = (LuaInterop.lua_toboolean(m_state, p_index) == 1);
+                        break;
+                    case LuaInterop.LUA_TNUMBER:
+                        l_result = LuaInterop.lua_tonumber(m_state, p_index);
+                        break;
+                    case LuaInterop.LUA_TSTRING:
+                        l_result = LuaInterop.lua_tostring(m_state, p_index);
+                        break;
+                    case LuaInterop.LUA_TUSERDATA:
+                    {
+                        long l_hash = LuaInterop.lua_touserdata(m_state, p_index).GetInt();
+                        if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
+                            l_result = l_refObj.m_object;
+                    }
+                    break;
+                }
+            }
+            return l_result;
+        }
+
         public void PushValue(object p_value)
         {
+            // Always pushes something
             if(p_value == null)
             {
                 PushNil();
                 return;
             }
 
-            // Always pushes something
             switch(Type.GetTypeCode(p_value.GetType()))
             {
                 case TypeCode.Boolean:
@@ -370,14 +373,15 @@ namespace CVRLua.Lua
         }
 
         // Classes
-        internal void RegisterClass(Type p_type,
+        internal void RegisterClass(
+            Type p_type,
             LuaInterop.lua_CFunction p_ctor,
             List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> p_staticProperties,
             List<(string, LuaInterop.lua_CFunction)> p_staticMethods,
             List<(string, LuaInterop.lua_CFunction)> p_metaMethods,
             List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> p_instanceProperties,
             List<(string, LuaInterop.lua_CFunction)> p_instanceMethods
-       )
+        )
         {
             // Static definition
             LuaInterop.lua_newtable(m_state); // {}
