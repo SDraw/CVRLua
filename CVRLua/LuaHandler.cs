@@ -36,16 +36,26 @@ namespace CVRLua
 
         internal static void Init()
         {
+            // Unity defs
             Lua.LuaDefs.ObjectDefs.Init();
             Lua.LuaDefs.ComponentDefs.Init();
             Lua.LuaDefs.BehaviourDefs.Init();
             Lua.LuaDefs.MonoBehaviourDefs.Init();
 
-            Lua.LuaDefs.TransformDefs.Init();
-            Lua.LuaDefs.GameObjectDefs.Init();
-
+            Lua.LuaDefs.AnimatorDefs.Init();
             Lua.LuaDefs.AudioClipDefs.Init();
             Lua.LuaDefs.AudioSourceDefs.Init();
+            Lua.LuaDefs.CollisionDefs.Init();
+            Lua.LuaDefs.ContactPointDefs.Init();
+            Lua.LuaDefs.GameObjectDefs.Init();
+            Lua.LuaDefs.MathfDefs.Init();
+            Lua.LuaDefs.QuaternionDefs.Init();
+            Lua.LuaDefs.RigidbodyDefs.Init();
+            Lua.LuaDefs.TimeDefs.Init();
+            Lua.LuaDefs.TransformDefs.Init();
+            Lua.LuaDefs.Vector2Defs.Init();
+            Lua.LuaDefs.Vector3Defs.Init();
+            Lua.LuaDefs.Vector4Defs.Init();
 
             Lua.LuaDefs.ColliderDefs.Init();
             Lua.LuaDefs.CharacterControllerDefs.Init();
@@ -56,29 +66,16 @@ namespace CVRLua
             Lua.LuaDefs.WheelColliderDefs.Init();
             Lua.LuaDefs.TerrainColliderDefs.Init();
 
-            Lua.LuaDefs.AnimatorDefs.Init();
-            Lua.LuaDefs.RigidbodyDefs.Init();
-
-            Lua.LuaDefs.ContactPointDefs.Init();
-            Lua.LuaDefs.CollisionDefs.Init();
-
-            Lua.LuaDefs.LuaScriptDefs.Init();
-
-            Lua.LuaDefs.QuaternionDefs.Init();
-            Lua.LuaDefs.Vector2Defs.Init();
-            Lua.LuaDefs.Vector3Defs.Init();
-            Lua.LuaDefs.Vector4Defs.Init();
-
-            Lua.LuaDefs.TimeDefs.Init();
-            Lua.LuaDefs.DateTimeDefs.Init();
-            Lua.LuaDefs.MathfDefs.Init();
-
+            // CVR defs
             Lua.LuaDefs.CVRPointerDefs.Init();
             Lua.LuaDefs.CVRVideoPlayerDefs.Init();
             Lua.LuaDefs.CVRInteractableDefs.Init();
             Lua.LuaDefs.CVRPickupObjectDefs.Init();
 
+            // Own defs
+            Lua.LuaDefs.DateTimeDefs.Init();
             Lua.LuaDefs.LocalPlayerDefs.Init();
+            Lua.LuaDefs.LuaScriptDefs.Init();
         }
 
         internal LuaHandler(string p_name = "")
@@ -87,16 +84,26 @@ namespace CVRLua
 
             m_vm = new Lua.LuaVM(p_name);
 
+            // Unity defs
             Lua.LuaDefs.ObjectDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.ComponentDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.BehaviourDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.MonoBehaviourDefs.RegisterInVM(m_vm);
 
-            Lua.LuaDefs.TransformDefs.RegisterInVM(m_vm);
-            Lua.LuaDefs.GameObjectDefs.RegisterInVM(m_vm);
-
+            Lua.LuaDefs.AnimatorDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.AudioClipDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.AudioSourceDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.CollisionDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.ContactPointDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.GameObjectDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.MathfDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.QuaternionDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.RigidbodyDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.TimeDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.TransformDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.Vector2Defs.RegisterInVM(m_vm);
+            Lua.LuaDefs.Vector3Defs.RegisterInVM(m_vm);
+            Lua.LuaDefs.Vector4Defs.RegisterInVM(m_vm);
 
             Lua.LuaDefs.ColliderDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CharacterControllerDefs.RegisterInVM(m_vm);
@@ -107,29 +114,16 @@ namespace CVRLua
             Lua.LuaDefs.WheelColliderDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.TerrainColliderDefs.RegisterInVM(m_vm);
 
-            Lua.LuaDefs.AnimatorDefs.RegisterInVM(m_vm);
-            Lua.LuaDefs.RigidbodyDefs.RegisterInVM(m_vm);
-
-            Lua.LuaDefs.ContactPointDefs.RegisterInVM(m_vm);
-            Lua.LuaDefs.CollisionDefs.RegisterInVM(m_vm);
-
-            Lua.LuaDefs.LuaScriptDefs.RegisterInVM(m_vm);
-
-            Lua.LuaDefs.QuaternionDefs.RegisterInVM(m_vm);
-            Lua.LuaDefs.Vector2Defs.RegisterInVM(m_vm);
-            Lua.LuaDefs.Vector3Defs.RegisterInVM(m_vm);
-            Lua.LuaDefs.Vector4Defs.RegisterInVM(m_vm);
-
-            Lua.LuaDefs.TimeDefs.RegisterInVM(m_vm);
-            Lua.LuaDefs.DateTimeDefs.RegisterInVM(m_vm);
-            Lua.LuaDefs.MathfDefs.RegisterInVM(m_vm);
-
+            // CVR defs
             Lua.LuaDefs.CVRPointerDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CVRVideoPlayerDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CVRInteractableDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CVRPickupObjectDefs.RegisterInVM(m_vm);
 
+            // Own defs
+            Lua.LuaDefs.DateTimeDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.LocalPlayerDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.LuaScriptDefs.RegisterInVM(m_vm);
         }
 
         public void Execute(string p_code)
