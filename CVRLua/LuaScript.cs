@@ -42,7 +42,10 @@ namespace CVRLua
             }
 
             foreach(var l_script in Scripts)
-                m_luaHandler.Execute(l_script.text);
+            {
+                byte[] l_data = l_script.bytes;
+                m_luaHandler.Execute(ref l_data);
+            }
 
             m_luaHandler.ParseEvents();
             m_luaHandler.CallEvent(LuaHandler.ScriptEvent.Start);

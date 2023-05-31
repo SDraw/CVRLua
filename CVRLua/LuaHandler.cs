@@ -49,7 +49,9 @@ namespace CVRLua
             Lua.LuaDefs.ContactPointDefs.Init();
             Lua.LuaDefs.GameObjectDefs.Init();
             Lua.LuaDefs.MathfDefs.Init();
+            Lua.LuaDefs.PhysicsDefs.Init();
             Lua.LuaDefs.QuaternionDefs.Init();
+            Lua.LuaDefs.RaycastHitDefs.Init();
             Lua.LuaDefs.RigidbodyDefs.Init();
             Lua.LuaDefs.TimeDefs.Init();
             Lua.LuaDefs.TransformDefs.Init();
@@ -97,7 +99,9 @@ namespace CVRLua
             Lua.LuaDefs.ContactPointDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.GameObjectDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.MathfDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.PhysicsDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.QuaternionDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.RaycastHitDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.RigidbodyDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.TimeDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.TransformDefs.RegisterInVM(m_vm);
@@ -129,6 +133,10 @@ namespace CVRLua
         public void Execute(string p_code)
         {
             m_vm.Execute(p_code);
+        }
+        public void Execute(ref byte[] p_data)
+        {
+            m_vm.Execute(ref p_data);
         }
 
         public void CallEvent(ScriptEvent p_event, params object[] p_args)

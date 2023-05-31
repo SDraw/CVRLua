@@ -260,5 +260,10 @@ namespace CVRLua.Lua
 
         [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void lua_seti(IntPtr L, int idx, long n);
+
+        [DllImport(ms_binaryName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int luaL_loadbufferx(IntPtr L, byte[] buff, long sz, string name, string mode);
+
+        public static int luaL_loadbuffer(IntPtr L, ref byte[] s, long sz, string n) => luaL_loadbufferx(L, s, sz, n, "bt");
     }
 }

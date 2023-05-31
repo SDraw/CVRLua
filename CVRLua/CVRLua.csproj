@@ -97,6 +97,8 @@
     <Compile Include="Lua\LuaDefs\CVRInteractableDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRPickupObjectDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRVideoPlayerDefs.cs" />
+    <Compile Include="Lua\LuaDefs\PhysicsDefs.cs" />
+    <Compile Include="Lua\LuaDefs\RaycastHitDefs.cs" />
     <Compile Include="Lua\LuaDefs\RigidbodyDefs.cs" />
     <Compile Include="Lua\LuaDefs\TerrainColliderDefs.cs" />
     <Compile Include="Lua\LuaDefs\WheelColliderDefs.cs" />
@@ -134,6 +136,7 @@
     <Compile Include="Wrappers\ContactPoint.cs" />
     <Compile Include="Wrappers\LocalPlayer.cs" />
     <Compile Include="Wrappers\Quaternion.cs" />
+    <Compile Include="Wrappers\RaycastHit.cs" />
     <Compile Include="Wrappers\Vector2.cs" />
     <Compile Include="Wrappers\Vector4.cs" />
     <Compile Include="Wrappers\Vector3.cs" />

@@ -996,7 +996,7 @@ namespace CVRLua.Lua.LuaDefs
             l_argReader.ReadNumber(ref l_force);
             l_argReader.ReadObject(ref l_pos);
             l_argReader.ReadNumber(ref l_radius);
-            l_argReader.ReadNextNumber(ref l_radius);
+            l_argReader.ReadNextNumber(ref l_upwards);
             l_argReader.ReadNextEnum(ref l_mode);
             if(!l_argReader.HasErrors())
             {

@@ -100,6 +100,15 @@ namespace CVRLua.Lua
             }
         }
 
+        internal void Execute(ref byte[] p_data)
+        {
+            if((LuaInterop.luaL_loadbuffer(m_state, ref p_data, p_data.Length, m_name) != LuaInterop.LUA_OK) || (LuaInterop.lua_pcall(m_state, 0, 0, 0) != LuaInterop.LUA_OK))
+            {
+                LuaLogger.Log(LuaInterop.lua_tostring(m_state, -1));
+                LuaInterop.lua_pop(m_state, 1);
+            }
+        }
+
         // Objects push/get
         public void PushObject(object p_obj)
         {

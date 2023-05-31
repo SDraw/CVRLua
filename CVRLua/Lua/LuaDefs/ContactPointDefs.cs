@@ -6,7 +6,6 @@ namespace CVRLua.Lua.LuaDefs
     static class ContactPointDefs
     {
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_metaMethods = new List<(string, LuaInterop.lua_CFunction)>();
-        static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_staticProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_staticMethods = new List<(string, LuaInterop.lua_CFunction)>();
         static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_instanceProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_instanceMethods = new List<(string, LuaInterop.lua_CFunction)>();
@@ -15,6 +14,7 @@ namespace CVRLua.Lua.LuaDefs
         {
             ms_staticMethods.Add((nameof(IsContactPoint), IsContactPoint));
 
+            ms_metaMethods.Add(("__eq", Equal));
             ms_metaMethods.Add(("__tostring", ToString));
 
             ms_instanceProperties.Add(("normal", (GetNormal, null)));
@@ -26,7 +26,7 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(Wrappers.ContactPoint), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterClass(typeof(Wrappers.ContactPoint), null, null, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         // Static methods
@@ -40,6 +40,21 @@ namespace CVRLua.Lua.LuaDefs
         }
 
         // Metamethods
+        static int Equal(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.ContactPoint l_pointA = null;
+            Wrappers.ContactPoint l_pointB = null;
+            l_argReader.ReadObject(ref l_pointA);
+            l_argReader.ReadObject(ref l_pointB);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushBoolean(l_pointA == l_pointB);
+            else
+                l_argReader.PushBoolean(false);
+
+            return l_argReader.GetReturnValue();
+        }
+
         static int ToString(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
