@@ -52,19 +52,19 @@ namespace CVRLua.Lua.LuaDefs
         // Static methods
         static int CreatePrimitive(IntPtr p_state)
         {
-            var l_luaArgReader = new LuaArgReader(p_state);
+            var l_argReader = new LuaArgReader(p_state);
             PrimitiveType l_type = PrimitiveType.Sphere;
-            l_luaArgReader.ReadEnum(ref l_type);
-            if(!l_luaArgReader.HasErrors())
+            l_argReader.ReadEnum(ref l_type);
+            if(!l_argReader.HasErrors())
             {
                 GameObject l_obj = GameObject.CreatePrimitive(l_type);
-                l_luaArgReader.PushObject(l_obj);
+                l_argReader.PushObject(l_obj);
             }
             else
-                l_luaArgReader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
 
-            l_luaArgReader.LogError();
-            return l_luaArgReader.GetReturnValue();
+            l_argReader.LogError();
+            return l_argReader.GetReturnValue();
         }
 
         static int IsGameObject(IntPtr p_state)

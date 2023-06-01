@@ -1,8 +1,10 @@
 ﻿using ABI.CCK.Components;
 using ABI_RC.Core.InteractionSystem;
+using ABI_RC.Core.Player;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEngine;
 
 namespace CVRLua
 {
@@ -11,6 +13,7 @@ namespace CVRLua
         static public Core Instance { get; private set; } = null;
 
         readonly List<LuaScript> m_scripts = null;
+
 
         internal Core()
         {
@@ -23,6 +26,7 @@ namespace CVRLua
                 Instance = this;
 
             LibrariesHandler.ExtractDependencies();
+            LuaHandler.Init();
 
             // Patches
             // Interactable
@@ -51,7 +55,12 @@ namespace CVRLua
                 new HarmonyLib.HarmonyMethod(typeof(Core).GetMethod(nameof(OnInteractableGazeExit_Postfix), BindingFlags.NonPublic | BindingFlags.Static))
             );
 
-            LuaHandler.Init();
+            // PuppetMaster
+            HarmonyInstance.Patch(
+                typeof(PuppetMaster).GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance),
+                null,
+                new HarmonyLib.HarmonyMethod(typeof(Core).GetMethod(nameof(OnPuppetMasterStart_Postfix), BindingFlags.NonPublic | BindingFlags.Static))
+            );
         }
 
         public override void OnDeinitializeMelon()
@@ -160,6 +169,41 @@ namespace CVRLua
             {
                 foreach(var l_script in m_scripts)
                     l_script.OnInteractableGazeExit(p_interact);
+            }
+            catch(Exception e)
+            {
+                MelonLoader.MelonLogger.Error(e);
+            }
+        }
+
+        static void OnPuppetMasterStart_Postfix(ref PuppetMaster __instance) => Instance?.OnPuppetMasterStart(__instance.gameObject);
+        void OnPuppetMasterStart(GameObject p_obj)
+        {
+            try
+            {
+                p_obj.AddComponent<DestructionDetector>().Detection += this.OnPuppetMasterDestroy;
+                Wrappers.Player l_player = PlayersManager.AddPlayer(p_obj);
+                foreach(var l_script in m_scripts)
+                    l_script.OnPlayerJoin(l_player);
+            }
+            catch(Exception e)
+            {
+                MelonLoader.MelonLogger.Error(e);
+            }
+        }
+
+        internal void OnPuppetMasterDestroy(GameObject p_obj)
+        {
+            try
+            {
+                Wrappers.Player l_player = PlayersManager.GetFromGameObject(p_obj);
+                if(l_player != null)
+                {
+                    foreach(var l_script in m_scripts)
+                        l_script.OnPlayerLeft(l_player);
+
+                    PlayersManager.RemovePlayerByGameObject(p_obj);
+                }
             }
             catch(Exception e)
             {

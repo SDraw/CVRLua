@@ -14,20 +14,20 @@ namespace CVRLua
         public List<Object> VariableObjectValues = new List<Object>();
 
         LuaHandler m_luaHandler = null;
-        Wrappers.LocalPlayer m_localPlayer = null;
+        Wrappers.Player m_localPlayer = null;
 
         CVRInteractable m_interactable = null;
 
         void Awake()
         {
-            m_localPlayer = new Wrappers.LocalPlayer();
+            m_localPlayer = new Wrappers.Player();
             m_interactable = this.GetComponent<CVRInteractable>();
 
             m_luaHandler = new LuaHandler(this.name);
             Core.Instance?.RegisterScript(this);
 
             m_luaHandler.SetGlobalVariable("this", this.gameObject);
-            m_luaHandler.SetGlobalVariable("localPlayer", m_localPlayer);
+            m_luaHandler.SetGlobalVariable("localPlayer", PlayersManager.GetLocalPlayer());
 
             if((VariableNames.Count > 0) && (VariableValues.Count > 0))
             {
@@ -178,6 +178,15 @@ namespace CVRLua
         {
             if(m_interactable == p_instance)
                 m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnInteractableGazeExit);
+        }
+
+        internal void OnPlayerJoin(Wrappers.Player p_player)
+        {
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnPlayerJoin, p_player);
+        }
+        internal void OnPlayerLeft(Wrappers.Player p_player)
+        {
+            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnPlayerLeft, p_player);
         }
     }
 }

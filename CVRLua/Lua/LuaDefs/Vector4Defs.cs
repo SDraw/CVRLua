@@ -356,151 +356,151 @@ namespace CVRLua.Lua.LuaDefs
         // Instance properties
         static int GetX(IntPtr p_state)
         {
-            var l_reader = new LuaArgReader(p_state);
+            var l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector4 l_vec = null;
-            l_reader.ReadObject(ref l_vec);
-            if(!l_reader.HasErrors())
-                l_reader.PushNumber(l_vec.m_vec.x);
+            l_argReader.ReadObject(ref l_vec);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushNumber(l_vec.m_vec.x);
             else
-                l_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
 
-            l_reader.LogError();
+            l_argReader.LogError();
             return 1;
         }
         static int SetX(IntPtr p_state)
         {
-            var l_reader = new LuaArgReader(p_state);
+            var l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector4 l_vec = null;
             float l_value = 0f;
-            l_reader.ReadObject(ref l_vec);
-            l_reader.ReadNumber(ref l_value);
-            if(!l_reader.HasErrors())
+            l_argReader.ReadObject(ref l_vec);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
                 l_vec.m_vec.x = l_value;
 
-            l_reader.LogError();
+            l_argReader.LogError();
             return 0;
         }
 
         static int GetY(IntPtr p_state)
         {
-            var l_reader = new LuaArgReader(p_state);
+            var l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector4 l_vec = null;
-            l_reader.ReadObject(ref l_vec);
-            if(!l_reader.HasErrors())
-                l_reader.PushNumber(l_vec.m_vec.y);
+            l_argReader.ReadObject(ref l_vec);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushNumber(l_vec.m_vec.y);
             else
-                l_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
 
-            l_reader.LogError();
+            l_argReader.LogError();
             return 1;
         }
         static int SetY(IntPtr p_state)
         {
-            var l_reader = new LuaArgReader(p_state);
+            var l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector4 l_vec = null;
             float l_value = 0f;
-            l_reader.ReadObject(ref l_vec);
-            l_reader.ReadNumber(ref l_value);
-            if(!l_reader.HasErrors())
+            l_argReader.ReadObject(ref l_vec);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
                 l_vec.m_vec.y = l_value;
 
-            l_reader.LogError();
+            l_argReader.LogError();
             return 0;
         }
 
         static int GetZ(IntPtr p_state)
         {
-            var l_reader = new LuaArgReader(p_state);
+            var l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector4 l_vec = null;
-            l_reader.ReadObject(ref l_vec);
-            if(!l_reader.HasErrors())
-                l_reader.PushNumber(l_vec.m_vec.z);
+            l_argReader.ReadObject(ref l_vec);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushNumber(l_vec.m_vec.z);
             else
-                l_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
 
-            l_reader.LogError();
+            l_argReader.LogError();
             return 1;
         }
         static int SetZ(IntPtr p_state)
         {
-            var l_reader = new LuaArgReader(p_state);
+            var l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector4 l_vec = null;
             float l_value = 0f;
-            l_reader.ReadObject(ref l_vec);
-            l_reader.ReadNumber(ref l_value);
-            if(!l_reader.HasErrors())
+            l_argReader.ReadObject(ref l_vec);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
                 l_vec.m_vec.z = l_value;
 
-            l_reader.LogError();
+            l_argReader.LogError();
             return 0;
         }
 
         static int GetW(IntPtr p_state)
         {
-            var l_reader = new LuaArgReader(p_state);
+            var l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector4 l_vec = null;
-            l_reader.ReadObject(ref l_vec);
-            if(!l_reader.HasErrors())
-                l_reader.PushNumber(l_vec.m_vec.w);
+            l_argReader.ReadObject(ref l_vec);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushNumber(l_vec.m_vec.w);
             else
-                l_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
 
-            l_reader.LogError();
+            l_argReader.LogError();
             return 1;
         }
         static int SetW(IntPtr p_state)
         {
-            var l_reader = new LuaArgReader(p_state);
+            var l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector4 l_vec = null;
             float l_value = 0f;
-            l_reader.ReadObject(ref l_vec);
-            l_reader.ReadNumber(ref l_value);
-            if(!l_reader.HasErrors())
+            l_argReader.ReadObject(ref l_vec);
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
                 l_vec.m_vec.w = l_value;
 
-            l_reader.LogError();
+            l_argReader.LogError();
             return 0;
         }
 
         static int Magnitude(IntPtr p_state)
         {
-            var l_reader = new LuaArgReader(p_state);
+            var l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector4 l_vec = null;
-            l_reader.ReadObject(ref l_vec);
-            if(!l_reader.HasErrors())
-                l_reader.PushNumber(l_vec.m_vec.magnitude);
+            l_argReader.ReadObject(ref l_vec);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushNumber(l_vec.m_vec.magnitude);
             else
-                l_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
 
-            l_reader.LogError();
+            l_argReader.LogError();
             return 1;
         }
 
         static int Normalized(IntPtr p_state)
         {
-            var l_reader = new LuaArgReader(p_state);
+            var l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector4 l_vec = null;
-            l_reader.ReadObject(ref l_vec);
-            if(!l_reader.HasErrors())
-                l_reader.PushObject(new Wrappers.Vector4(l_vec.m_vec.normalized));
+            l_argReader.ReadObject(ref l_vec);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushObject(new Wrappers.Vector4(l_vec.m_vec.normalized));
             else
-                l_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
 
-            l_reader.LogError();
+            l_argReader.LogError();
             return 1;
         }
 
         static int SqrMagnitude(IntPtr p_state)
         {
-            var l_reader = new LuaArgReader(p_state);
+            var l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector2 l_vec = null;
-            l_reader.ReadObject(ref l_vec);
-            if(!l_reader.HasErrors())
-                l_reader.PushNumber(l_vec.m_vec.sqrMagnitude);
+            l_argReader.ReadObject(ref l_vec);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushNumber(l_vec.m_vec.sqrMagnitude);
             else
-                l_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
 
-            l_reader.LogError();
+            l_argReader.LogError();
             return 1;
         }
 

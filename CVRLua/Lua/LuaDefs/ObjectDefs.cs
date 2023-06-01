@@ -64,7 +64,7 @@ namespace CVRLua.Lua.LuaDefs
             LuaArgReader l_argReader = new LuaArgReader(p_state);
             UnityEngine.Object l_obj = null;
             l_argReader.ReadObject(ref l_obj);
-            if(l_argReader.HasErrors())
+            if(!l_argReader.HasErrors())
             {
                 if(l_obj != null)
                 {
@@ -94,7 +94,7 @@ namespace CVRLua.Lua.LuaDefs
             LuaArgReader l_argReader = new LuaArgReader(p_state);
             UnityEngine.Object l_obj = null;
             l_argReader.ReadObject(ref l_obj);
-            if(l_argReader.HasErrors())
+            if(!l_argReader.HasErrors())
             {
                 if(l_obj != null)
                 {

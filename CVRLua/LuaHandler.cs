@@ -29,6 +29,8 @@ namespace CVRLua
             OnInteractableDown,
             OnInteractableGazeEnter,
             OnInteractableGazeExit,
+            OnPlayerJoin,
+            OnPlayerLeft
         }
 
         readonly Lua.LuaVM m_vm = null;
@@ -76,7 +78,7 @@ namespace CVRLua
 
             // Own defs
             Lua.LuaDefs.DateTimeDefs.Init();
-            Lua.LuaDefs.LocalPlayerDefs.Init();
+            Lua.LuaDefs.PlayerDefs.Init();
             Lua.LuaDefs.LuaScriptDefs.Init();
         }
 
@@ -126,7 +128,7 @@ namespace CVRLua
 
             // Own defs
             Lua.LuaDefs.DateTimeDefs.RegisterInVM(m_vm);
-            Lua.LuaDefs.LocalPlayerDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.PlayerDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.LuaScriptDefs.RegisterInVM(m_vm);
         }
 

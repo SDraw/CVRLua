@@ -1,7 +1,11 @@
-﻿using ABI_RC.Core.Player;
+﻿using ABI.CCK.Components;
+using ABI_RC.Core.Player;
+using ABI_RC.Core.Player.AvatarTracking.Remote;
+using ABI_RC.Systems.MovementSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -9,6 +13,12 @@ namespace CVRLua
 {
     static class Utils
     {
+        static readonly FieldInfo ms_puppetLastScale = typeof(PuppetMaster).GetField("lastAvatarScale", BindingFlags.NonPublic | BindingFlags.Instance);
+        static readonly FieldInfo ms_puppetViewPoint = typeof(PuppetMaster).GetField("_viewPoint", BindingFlags.NonPublic | BindingFlags.Instance);
+        static readonly FieldInfo ms_puppetAvatar = typeof(PuppetMaster).GetField("_avatar", BindingFlags.NonPublic | BindingFlags.Instance);
+        static readonly FieldInfo ms_puppetAnimator = typeof(PuppetMaster).GetField("_animator", BindingFlags.NonPublic | BindingFlags.Instance);
+        static readonly FieldInfo ms_movementGrounded = typeof(MovementSystem).GetField("_isGrounded", BindingFlags.NonPublic | BindingFlags.Instance);
+
         public static long GetInt(this IntPtr p_source)
         {
             long l_result = 0;
@@ -68,5 +78,14 @@ namespace CVRLua
         }
 
         public static long CombineInts(int left, int right) => ((((long)left) << 32) | (uint)right);
+
+        // PuppetMaster extenions
+        public static Vector3 GetAvatarScale(this PuppetMaster p_instance) => (Vector3)ms_puppetLastScale.GetValue(p_instance);
+        public static RemoteHeadPoint GetHeadPoint(this PuppetMaster p_instance) => (RemoteHeadPoint)ms_puppetViewPoint.GetValue(p_instance);
+        public static CVRAvatar GetAvatar(this PuppetMaster p_instance) => (CVRAvatar)ms_puppetAvatar.GetValue(p_instance);
+        public static Animator GetAnimator(this PuppetMaster p_instance) => (Animator)ms_puppetAnimator.GetValue(p_instance);
+
+        // MovementSystem
+        public static bool IsGrounded(this MovementSystem p_instance) => (bool)ms_movementGrounded.GetValue(p_instance);
     }
 }
