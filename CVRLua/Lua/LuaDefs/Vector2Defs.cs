@@ -58,10 +58,10 @@ namespace CVRLua.Lua.LuaDefs
 
         public static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(Wrappers.Vector2), Constructor, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterClass(typeof(Wrappers.Vector2), Create, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
-        static int Constructor(IntPtr p_state)
+        static int Create(IntPtr p_state)
         {
             LuaArgReader l_argReader = new LuaArgReader(p_state);
             float l_val1 = 0f;

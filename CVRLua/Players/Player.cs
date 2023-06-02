@@ -7,15 +7,15 @@ using ABI_RC.Systems.IK.SubSystems;
 using ABI_RC.Systems.MovementSystem;
 using UnityEngine;
 
-namespace CVRLua.Wrappers
+namespace CVRLua.Players
 {
     class Player
     {
         bool m_local = false;
         bool m_remote = false;
-        GameObject m_gameObject = null; // Remote only
-        PlayerDescriptor m_descriptor = null; // Remote only
-        PuppetMaster m_puppetMaster = null; // Remote only
+        readonly GameObject m_gameObject = null; // Remote only
+        readonly PlayerDescriptor m_descriptor = null; // Remote only
+        readonly PuppetMaster m_puppetMaster = null; // Remote only
 
         public Player()
         {

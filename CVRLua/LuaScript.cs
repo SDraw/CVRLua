@@ -14,117 +14,118 @@ namespace CVRLua
         public List<Object> VariableObjectValues = new List<Object>();
 
         LuaHandler m_luaHandler = null;
-        Wrappers.Player m_localPlayer = null;
 
         CVRInteractable m_interactable = null;
 
         void Awake()
         {
-            m_localPlayer = new Wrappers.Player();
-            m_interactable = this.GetComponent<CVRInteractable>();
-
-            m_luaHandler = new LuaHandler(this.name);
-            Core.Instance?.RegisterScript(this);
-
-            m_luaHandler.SetGlobalVariable("this", this.gameObject);
-            m_luaHandler.SetGlobalVariable("localPlayer", PlayersManager.GetLocalPlayer());
-
-            if((VariableNames.Count > 0) && (VariableValues.Count > 0))
+            if(m_luaHandler == null)
             {
-                for(int i = 0, j = Mathf.Min(VariableNames.Count, VariableValues.Count); i < j; i++)
-                    m_luaHandler.Execute(string.Format("{0} = {1}", VariableNames[i], VariableValues[i]));
+                m_interactable = this.GetComponent<CVRInteractable>();
+
+                m_luaHandler = new LuaHandler(this.name);
+                Core.Instance?.RegisterScript(this);
+
+                m_luaHandler.SetGlobalVariable("this", this.gameObject);
+                m_luaHandler.SetGlobalVariable("localPlayer", Players.PlayersManager.GetLocalPlayer());
+
+                if((VariableNames.Count > 0) && (VariableValues.Count > 0))
+                {
+                    for(int i = 0, j = Mathf.Min(VariableNames.Count, VariableValues.Count); i < j; i++)
+                        m_luaHandler.Execute(string.Format("{0} = {1}", VariableNames[i], VariableValues[i]));
+                }
+
+                if((VariableObjectNames.Count > 0) && (VariableObjectValues.Count > 0))
+                {
+                    for(int i = 0, j = Mathf.Min(VariableObjectNames.Count, VariableObjectValues.Count); i < j; i++)
+                        m_luaHandler.SetGlobalVariable(VariableObjectNames[i], VariableObjectValues[i]);
+                }
+
+                foreach(var l_script in Scripts)
+                {
+                    byte[] l_data = l_script.bytes;
+                    m_luaHandler.Execute(ref l_data);
+                }
+
+                m_luaHandler.ParseEvents();
+                m_luaHandler.CallEvent(LuaHandler.ScriptEvent.Start);
+
+                StartCoroutine(CheckEndOfFrame());
             }
-
-            if((VariableObjectNames.Count > 0) && (VariableObjectValues.Count > 0))
-            {
-                for(int i = 0, j = Mathf.Min(VariableObjectNames.Count, VariableObjectValues.Count); i < j; i++)
-                    m_luaHandler.SetGlobalVariable(VariableObjectNames[i], VariableObjectValues[i]);
-            }
-
-            foreach(var l_script in Scripts)
-            {
-                byte[] l_data = l_script.bytes;
-                m_luaHandler.Execute(ref l_data);
-            }
-
-            m_luaHandler.ParseEvents();
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.Start);
-
-            StartCoroutine(CheckEndOfFrame());
         }
 
         void OnDestroy()
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnDestroy);
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnDestroy);
             Core.Instance?.UnregisterScript(this);
         }
 
         void Update()
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.Update);
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.Update);
         }
 
         void LateUpdate()
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.LateUpdate);
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.LateUpdate);
         }
 
         void FixedUpdate()
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.FixedUpdate);
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.FixedUpdate);
         }
 
         void OnEnable()
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnEnable);
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnEnable);
         }
 
         void OnDisable()
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnDisable);
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnDisable);
         }
 
         void OnGUI()
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnGUI);
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnGUI);
         }
 
         void OnCollisionEnter(Collision p_col)
         {
             // Add later
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnCollisionEnter, p_col);
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnCollisionEnter, p_col);
         }
 
         void OnCollisionExit(Collision p_col)
         {
             // Add later
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnCollisionExit, p_col);
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnCollisionExit, p_col);
         }
 
         void OnCollisionStay(Collision p_col)
         {
             // Add later
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnCollisionStay, p_col);
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnCollisionStay, p_col);
         }
 
         void OnTriggerEnter(Collider p_col)
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnTriggerEnter, p_col, Utils.IsInternal(p_col));
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnTriggerEnter, p_col, Utils.IsInternal(p_col));
         }
 
         void OnTriggerExit(Collider p_col)
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnTriggerExit, p_col, Utils.IsInternal(p_col));
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnTriggerExit, p_col, Utils.IsInternal(p_col));
         }
 
         void OnTriggerStay(Collider p_col)
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnTriggerStay, p_col, Utils.IsInternal(p_col));
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnTriggerStay, p_col, Utils.IsInternal(p_col));
         }
 
         void OnAnimatorIK(int p_layer)
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnAnimatorIK, p_layer);
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnAnimatorIK, p_layer);
         }
 
         // GC
@@ -133,60 +134,60 @@ namespace CVRLua
             while(true)
             {
                 yield return new WaitForEndOfFrame();
-                m_luaHandler.PerformGC();
+                m_luaHandler?.PerformGC();
             }
         }
 
         // Custom events
         public void SendScriptMessage(List<object> p_args, List<object> p_result)
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnMessage, p_result, p_args.ToArray());
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnMessage, p_result, p_args.ToArray());
         }
 
         // Game events
         internal void OnInteractableGrab(CVRInteractable p_instance)
         {
             if(m_interactable == p_instance)
-                m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnInteractableGrab);
+                m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnInteractableGrab);
         }
 
         internal void OnInteractableDrop(CVRInteractable p_instance)
         {
             if(m_interactable == p_instance)
-                m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnInteractableDrop);
+                m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnInteractableDrop);
         }
 
         internal void OnInteractableUp(CVRInteractable p_instance)
         {
             if(m_interactable == p_instance)
-                m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnInteractableUp);
+                m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnInteractableUp);
         }
 
         internal void OnInteractableDown(CVRInteractable p_instance)
         {
             if(m_interactable == p_instance)
-                m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnInteractableDown);
+                m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnInteractableDown);
         }
 
         internal void OnInteractableGazeEnter(CVRInteractable p_instance)
         {
             if(m_interactable == p_instance)
-                m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnInteractableGazeEnter);
+                m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnInteractableGazeEnter);
         }
 
         internal void OnInteractableGazeExit(CVRInteractable p_instance)
         {
             if(m_interactable == p_instance)
-                m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnInteractableGazeExit);
+                m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnInteractableGazeExit);
         }
 
-        internal void OnPlayerJoin(Wrappers.Player p_player)
+        internal void OnPlayerJoin(Players.Player p_player)
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnPlayerJoin, p_player);
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnPlayerJoin, p_player);
         }
-        internal void OnPlayerLeft(Wrappers.Player p_player)
+        internal void OnPlayerLeft(Players.Player p_player)
         {
-            m_luaHandler.CallEvent(LuaHandler.ScriptEvent.OnPlayerLeft, p_player);
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnPlayerLeft, p_player);
         }
     }
 }

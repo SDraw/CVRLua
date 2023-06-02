@@ -47,12 +47,14 @@ namespace CVRLua
             Lua.LuaDefs.AnimatorDefs.Init();
             Lua.LuaDefs.AudioClipDefs.Init();
             Lua.LuaDefs.AudioSourceDefs.Init();
+            Lua.LuaDefs.BoundsDefs.Init();
             Lua.LuaDefs.CollisionDefs.Init();
             Lua.LuaDefs.ContactPointDefs.Init();
             Lua.LuaDefs.GameObjectDefs.Init();
             Lua.LuaDefs.MathfDefs.Init();
             Lua.LuaDefs.PhysicsDefs.Init();
             Lua.LuaDefs.QuaternionDefs.Init();
+            Lua.LuaDefs.RayDefs.Init();
             Lua.LuaDefs.RaycastHitDefs.Init();
             Lua.LuaDefs.RigidbodyDefs.Init();
             Lua.LuaDefs.TimeDefs.Init();
@@ -97,12 +99,14 @@ namespace CVRLua
             Lua.LuaDefs.AnimatorDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.AudioClipDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.AudioSourceDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.BoundsDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CollisionDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.ContactPointDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.GameObjectDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.MathfDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.PhysicsDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.QuaternionDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.RayDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.RaycastHitDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.RigidbodyDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.TimeDefs.RegisterInVM(m_vm);
@@ -130,6 +134,7 @@ namespace CVRLua
             Lua.LuaDefs.DateTimeDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.PlayerDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.LuaScriptDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.UtilityDefs.RegisterInVM(m_vm);
         }
 
         public void Execute(string p_code)

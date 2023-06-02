@@ -44,8 +44,6 @@ namespace CVRLua.Lua
 
             m_objectsMap = new Dictionary<long, ReferencedObject>();
 
-            RegisterGlobalFunction(nameof(Log), Log);
-
             // Table weak values
             LuaInterop.lua_newtable(m_state);
             LuaInterop.lua_newtable(m_state);
@@ -366,23 +364,8 @@ namespace CVRLua.Lua
             p_line = l_debug.currentline;
         }
 
-        // Utility
-        static int Log(IntPtr p_state)
-        {
-            var l_argReader = new LuaArgReader(p_state);
-            string l_text = "";
-            l_argReader.ReadString(ref l_text);
-            if(!l_argReader.HasErrors())
-                LuaLogger.Log(l_text);
-            else
-                l_argReader.PushBoolean(false);
-
-            l_argReader.LogError();
-            return l_argReader.GetReturnValue();
-        }
-
         // Classes
-        internal void RegisterClass(
+        public void RegisterClass(
             Type p_type,
             LuaInterop.lua_CFunction p_ctor,
             List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> p_staticProperties,

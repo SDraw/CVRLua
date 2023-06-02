@@ -26,7 +26,15 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(Wrappers.ContactPoint), null, null, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterClass(typeof(Wrappers.ContactPoint), Create, null, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+        }
+
+        // Ctor
+        static int Create(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushObject(new Wrappers.ContactPoint(new UnityEngine.ContactPoint()));
+            return l_argReader.GetReturnValue();
         }
 
         // Static methods

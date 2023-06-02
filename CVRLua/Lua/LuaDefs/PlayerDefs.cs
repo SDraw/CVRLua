@@ -67,21 +67,21 @@ namespace CVRLua.Lua.LuaDefs
 
         public static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(Wrappers.Player), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterClass(typeof(Players.Player), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         // Static properties
         static int GetLocalPlayer(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            l_argReader.PushObject(PlayersManager.GetLocalPlayer());
+            l_argReader.PushObject(Players.PlayersManager.GetLocalPlayer());
             return 1;
         }
 
         static int GetRemotePlayers(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            var l_list = PlayersManager.GetRemotePlayers();
+            var l_list = Players.PlayersManager.GetRemotePlayers();
             l_argReader.PushTable(l_list);
             return 1;
         }
@@ -89,7 +89,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetAllPlayers(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            var l_list = PlayersManager.GetAllPlayers();
+            var l_list = Players.PlayersManager.GetAllPlayers();
             l_argReader.PushTable(l_list);
             return 1;
         }
@@ -104,7 +104,7 @@ namespace CVRLua.Lua.LuaDefs
                 l_argReader.ReadString(ref l_id);
                 if(!l_argReader.HasErrors())
                 {
-                    Wrappers.Player l_player = PlayersManager.GetFromId(l_id);
+                    Players.Player l_player = Players.PlayersManager.GetFromId(l_id);
                     if(l_player != null)
                         l_argReader.PushObject(l_player);
                     else
@@ -121,7 +121,7 @@ namespace CVRLua.Lua.LuaDefs
                 {
                     if(l_obj != null)
                     {
-                        Wrappers.Player l_player = PlayersManager.GetFromGameObject(l_obj);
+                        Players.Player l_player = Players.PlayersManager.GetFromGameObject(l_obj);
                         if(l_player != null)
                             l_argReader.PushObject(l_player);
                         else
@@ -145,7 +145,7 @@ namespace CVRLua.Lua.LuaDefs
         static int IsPlayer(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadNextObject(ref l_player);
             l_argReader.PushBoolean(l_player != null);
             return l_argReader.GetReturnValue();
@@ -155,7 +155,7 @@ namespace CVRLua.Lua.LuaDefs
         static int ToString(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(l_argReader.HasErrors())
                 l_argReader.PushString(l_player.ToString());
@@ -169,12 +169,12 @@ namespace CVRLua.Lua.LuaDefs
         static int Equal(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_playerA = null;
-            Wrappers.Player l_playerB = null;
+            Players.Player l_playerA = null;
+            Players.Player l_playerB = null;
             l_argReader.ReadObject(ref l_playerA);
             l_argReader.ReadObject(ref l_playerB);
             if(!l_argReader.HasErrors())
-                l_argReader.PushBoolean(Wrappers.Player.Compare(l_playerA, l_playerB));
+                l_argReader.PushBoolean(Players.Player.Compare(l_playerA, l_playerB));
             else
                 l_argReader.PushBoolean(false);
 
@@ -185,7 +185,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetIsLocal(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsLocal());
@@ -199,7 +199,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetIsRemote(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsRemote());
@@ -213,7 +213,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetIsConnected(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsConnected());
@@ -227,7 +227,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetName(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetName(out string l_name))
                 l_argReader.PushString(l_name);
@@ -240,7 +240,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetUuid(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetId(out string l_id))
                 l_argReader.PushString(l_id);
@@ -254,7 +254,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetPosition(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetPosition(out UnityEngine.Vector3 l_pos))
                 l_argReader.PushObject(new Wrappers.Vector3(l_pos));
@@ -268,7 +268,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetRotation(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetRotation(out UnityEngine.Quaternion l_rot))
                 l_argReader.PushObject(new Wrappers.Quaternion(l_rot));
@@ -282,7 +282,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetAvatarHeight(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetAvatarHeight(out float l_height))
                 l_argReader.PushNumber(l_height);
@@ -296,7 +296,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetAvatarScale(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetAvatarScale(out float l_scale))
                 l_argReader.PushNumber(l_scale);
@@ -310,7 +310,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetPlayerHeight(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetPlayerHeight(out float l_height))
                 l_argReader.PushNumber(l_height);
@@ -324,7 +324,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetPlayerScale(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetPlayerScale(out float l_scale))
                 l_argReader.PushNumber(l_scale);
@@ -338,7 +338,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetCameraPosition(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetCameraPosition(out var l_pos))
                 l_argReader.PushObject(new Wrappers.Vector3(l_pos));
@@ -352,7 +352,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetCameraRotation(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetCameraRotation(out var l_rot))
                 l_argReader.PushObject(new Wrappers.Quaternion(l_rot));
@@ -366,7 +366,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetInVR(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsInVR());
@@ -380,7 +380,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetFBT(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsInFullbody());
@@ -394,7 +394,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetAvatar(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.HasAvatar());
@@ -408,7 +408,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetAvatarLoading(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsAvatarLoading());
@@ -422,7 +422,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetAvatarHumanoid(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsAvatarHumanoid());
@@ -436,7 +436,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetFlying(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsFlying());
@@ -450,7 +450,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetCrouching(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsCrouching());
@@ -464,7 +464,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetProning(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsProning());
@@ -478,7 +478,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetSitting(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsSitting());
@@ -492,7 +492,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetSprinting(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsSprinting());
@@ -506,7 +506,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetJumping(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsJumping());
@@ -520,7 +520,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetGrounded(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsGrounded());
@@ -534,7 +534,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetLeftHandPosition(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetLeftHandPosition(out var l_pos))
                 l_argReader.PushObject(new Wrappers.Vector3(l_pos));
@@ -548,7 +548,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetLeftHandRotation(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetLeftHandRotation(out var l_rot))
                 l_argReader.PushObject(new Wrappers.Quaternion(l_rot));
@@ -562,7 +562,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetRightHandPosition(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetRightHandPosition(out var l_pos))
                 l_argReader.PushObject(new Wrappers.Vector3(l_pos));
@@ -576,7 +576,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetRightHandRotation(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetRightHandRotation(out var l_rot))
                 l_argReader.PushObject(new Wrappers.Quaternion(l_rot));
@@ -590,7 +590,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetLeftHandGesture(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetLeftHandGetsture(out float l_gesture))
                 l_argReader.PushNumber(l_gesture);
@@ -604,7 +604,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetRightHandGesture(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetRightHandGetsture(out float l_gesture))
                 l_argReader.PushNumber(l_gesture);
@@ -618,7 +618,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetZoom(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
                 l_argReader.PushBoolean(l_player.IsZooming());
@@ -632,7 +632,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetZoomFactor(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetZoomFactor(out float l_factor))
                 l_argReader.PushNumber(l_factor);
@@ -646,7 +646,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetMovementVector(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetMovementVector(out var l_move))
                 l_argReader.PushObject(new Wrappers.Vector2(l_move));
@@ -661,7 +661,7 @@ namespace CVRLua.Lua.LuaDefs
         static int Teleport(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             Wrappers.Vector3 l_pos = null;
             Wrappers.Quaternion l_rot = null;
             l_argReader.ReadObject(ref l_player);
@@ -685,7 +685,7 @@ namespace CVRLua.Lua.LuaDefs
         static int SetImmobilized(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             bool l_state = false;
             l_argReader.ReadObject(ref l_player);
             l_argReader.ReadBoolean(ref l_state);
@@ -704,7 +704,7 @@ namespace CVRLua.Lua.LuaDefs
         static int Respawn(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors())
             {
@@ -721,7 +721,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetBonePosition(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             UnityEngine.HumanBodyBones l_bone = UnityEngine.HumanBodyBones.LastBone;
             l_argReader.ReadObject(ref l_player);
             l_argReader.ReadEnum(ref l_bone);
@@ -737,7 +737,7 @@ namespace CVRLua.Lua.LuaDefs
         static int GetBoneRotation(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Player l_player = null;
+            Players.Player l_player = null;
             UnityEngine.HumanBodyBones l_bone = UnityEngine.HumanBodyBones.LastBone;
             l_argReader.ReadObject(ref l_player);
             l_argReader.ReadEnum(ref l_bone);

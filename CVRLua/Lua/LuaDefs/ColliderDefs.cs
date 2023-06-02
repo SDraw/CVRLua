@@ -18,8 +18,8 @@ namespace CVRLua.Lua.LuaDefs
         {
             ms_staticMethods.Add((nameof(IsCollider), IsCollider));
 
-            //ms_instanceProperties.Add("attachedRigidbody", (?, ?)); // Requires RigidBody defs
-            //ms_instanceProperties.Add("bounds", (?, ?)); // Requires Bound defs
+            ms_instanceProperties.Add(("attachedRigidbody", (GetAttachedRigidBody, null)));
+            ms_instanceProperties.Add(("bounds", (GetBounds, null)));
             ms_instanceProperties.Add(("contactOffset", (GetContactOffset, SetContactOffset)));
             ms_instanceProperties.Add(("enabled", (GetEnabled, SetEnabled)));
             ms_instanceProperties.Add(("isTrigger", (GetTrigger, SetTrigger)));
@@ -28,7 +28,7 @@ namespace CVRLua.Lua.LuaDefs
 
             ms_instanceMethods.Add((nameof(ClosestPoint), ClosestPoint));
             ms_instanceMethods.Add((nameof(ClosestPointOnBounds), ClosestPointOnBounds));
-            //ms_instanceMethods.Add(nameof(Raycast), Raycast); // Requires some defs
+            ms_instanceMethods.Add((nameof(Raycast), Raycast));
 
             ComponentDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
@@ -73,6 +73,55 @@ namespace CVRLua.Lua.LuaDefs
         }
 
         // Instance properties
+        static int GetAttachedRigidBody(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            Collider l_col = null;
+            l_argReader.ReadObject(ref l_col);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                {
+                    if(l_col.attachedRigidbody != null)
+                        l_argReader.PushObject(l_col.attachedRigidbody);
+                    else
+                        l_argReader.PushBoolean(false);
+                }
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+
+        static int GetBounds(IntPtr p_state)
+        {
+            LuaArgReader l_argReader = new LuaArgReader(p_state);
+            Collider l_col = null;
+            l_argReader.ReadObject(ref l_col);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                    l_argReader.PushObject(new Wrappers.Bounds(l_col.bounds));
+                else
+                {
+                    l_argReader.PushBoolean(false);
+                    l_argReader.SetError(c_destroyed);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+
         static int GetContactOffset(IntPtr p_state)
         {
             LuaArgReader l_argReader = new LuaArgReader(p_state);
@@ -229,6 +278,37 @@ namespace CVRLua.Lua.LuaDefs
             {
                 if(l_col != null)
                     l_argReader.PushObject(new Wrappers.Vector3(l_col.ClosestPointOnBounds(l_vec.m_vec)));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return l_argReader.GetReturnValue();
+        }
+
+        static int Raycast(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Collider l_col = null;
+            Wrappers.Ray l_ray = null;
+            float l_maxDistance = 0f;
+            l_argReader.ReadObject(ref l_col);
+            l_argReader.ReadObject(ref l_ray);
+            l_argReader.ReadNumber(ref l_maxDistance);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_col != null)
+                {
+                    if(l_col.Raycast(l_ray.m_ray, out RaycastHit l_hit, l_maxDistance))
+                        l_argReader.PushObject(new Wrappers.RaycastHit(l_hit));
+                    else
+                        l_argReader.PushBoolean(false);
+                }
                 else
                 {
                     l_argReader.SetError(c_destroyed);

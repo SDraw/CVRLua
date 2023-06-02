@@ -182,7 +182,7 @@ namespace CVRLua
             try
             {
                 p_obj.AddComponent<DestructionDetector>().Detection += this.OnPuppetMasterDestroy;
-                Wrappers.Player l_player = PlayersManager.AddPlayer(p_obj);
+                Players.Player l_player = Players.PlayersManager.AddPlayer(p_obj);
                 foreach(var l_script in m_scripts)
                     l_script.OnPlayerJoin(l_player);
             }
@@ -196,13 +196,13 @@ namespace CVRLua
         {
             try
             {
-                Wrappers.Player l_player = PlayersManager.GetFromGameObject(p_obj);
+                Players.Player l_player = Players.PlayersManager.GetFromGameObject(p_obj);
                 if(l_player != null)
                 {
                     foreach(var l_script in m_scripts)
                         l_script.OnPlayerLeft(l_player);
 
-                    PlayersManager.RemovePlayerByGameObject(p_obj);
+                    Players.PlayersManager.RemovePlayerByGameObject(p_obj);
                 }
             }
             catch(Exception e)

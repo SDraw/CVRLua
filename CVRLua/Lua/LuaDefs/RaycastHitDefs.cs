@@ -18,12 +18,12 @@ namespace CVRLua.Lua.LuaDefs
             ms_metaMethods.Add(("__tostring", ToString));
 
             //ms_instanceProperties.Add(("articulationBody", (?,?)));
-            ms_instanceProperties.Add(("barycentricCoordinate", (GetBarycentricCoordinate, null)));
+            ms_instanceProperties.Add(("barycentricCoordinate", (GetBarycentricCoordinate, SetBarycentricCoordinate)));
             ms_instanceProperties.Add(("collider", (GetCollider, null)));
-            ms_instanceProperties.Add(("distance", (GetDistance, null)));
+            ms_instanceProperties.Add(("distance", (GetDistance, SetDistance)));
             ms_instanceProperties.Add(("lightmapCoord", (GetLightmapCoord, null)));
-            ms_instanceProperties.Add(("normal", (GetNormal, null)));
-            ms_instanceProperties.Add(("point", (GetPoint, null)));
+            ms_instanceProperties.Add(("normal", (GetNormal, SetNormal)));
+            ms_instanceProperties.Add(("point", (GetPoint, SetPoint)));
             ms_instanceProperties.Add(("rigidbody", (GetRigidbody, null)));
             ms_instanceProperties.Add(("textureCoord", (GetTextureCoord, null)));
             ms_instanceProperties.Add(("textureCoord2", (GetTextureCoord2, null)));
@@ -33,7 +33,15 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(RaycastHit), null, null, ms_staticMethods, ms_metaMethods, ms_instanceProperties, null);
+            p_vm.RegisterClass(typeof(RaycastHit), Create, null, ms_staticMethods, ms_metaMethods, ms_instanceProperties, null);
+        }
+
+        // Ctor
+        static int Create(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            l_argReader.PushObject(new Wrappers.RaycastHit(new RaycastHit()));
+            return l_argReader.GetReturnValue();
         }
 
         // Static methods
@@ -65,10 +73,10 @@ namespace CVRLua.Lua.LuaDefs
         static int ToString(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.RaycastHit l_col = null;
-            l_argReader.ReadObject(ref l_col);
+            Wrappers.RaycastHit l_hit = null;
+            l_argReader.ReadObject(ref l_hit);
             if(!l_argReader.HasErrors())
-                l_argReader.PushString(l_col.ToString());
+                l_argReader.PushString(l_hit.m_hit.ToString());
             else
                 l_argReader.PushBoolean(false);
 
@@ -89,6 +97,19 @@ namespace CVRLua.Lua.LuaDefs
 
             l_argReader.LogError();
             return 1;
+        }
+        static int SetBarycentricCoordinate(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.RaycastHit l_hit = null;
+            Wrappers.Vector3 l_coord = null;
+            l_argReader.ReadObject(ref l_hit);
+            l_argReader.ReadObject(ref l_coord);
+            if(!l_argReader.HasErrors())
+                l_hit.m_hit.barycentricCoordinate = l_coord.m_vec;
+
+            l_argReader.LogError();
+            return 0;
         }
 
         static int GetCollider(IntPtr p_state)
@@ -123,6 +144,19 @@ namespace CVRLua.Lua.LuaDefs
             l_argReader.LogError();
             return 1;
         }
+        static int SetDistance(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.RaycastHit l_hit = null;
+            float l_distance = 0f;
+            l_argReader.ReadObject(ref l_hit);
+            l_argReader.ReadNumber(ref l_distance);
+            if(!l_argReader.HasErrors())
+                l_hit.m_hit.distance = l_distance;
+
+            l_argReader.LogError();
+            return 0;
+        }
 
         static int GetLightmapCoord(IntPtr p_state)
         {
@@ -151,6 +185,19 @@ namespace CVRLua.Lua.LuaDefs
             l_argReader.LogError();
             return 1;
         }
+        static int SetNormal(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.RaycastHit l_hit = null;
+            Wrappers.Vector3 l_normal = null;
+            l_argReader.ReadObject(ref l_hit);
+            l_argReader.ReadObject(ref l_normal);
+            if(!l_argReader.HasErrors())
+                l_hit.m_hit.normal = l_normal.m_vec;
+
+            l_argReader.LogError();
+            return 0;
+        }
 
         static int GetPoint(IntPtr p_state)
         {
@@ -164,6 +211,19 @@ namespace CVRLua.Lua.LuaDefs
 
             l_argReader.LogError();
             return 1;
+        }
+        static int SetPoint(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.RaycastHit l_hit = null;
+            Wrappers.Vector3 l_point = null;
+            l_argReader.ReadObject(ref l_hit);
+            l_argReader.ReadObject(ref l_point);
+            if(!l_argReader.HasErrors())
+                l_hit.m_hit.point = l_point.m_vec;
+
+            l_argReader.LogError();
+            return 0;
         }
 
         static int GetRigidbody(IntPtr p_state)

@@ -4,33 +4,33 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace CVRLua
+namespace CVRLua.Players
 {
     static class PlayersManager
     {
-        static readonly Dictionary<GameObject, Wrappers.Player> ms_players = new Dictionary<GameObject, Wrappers.Player>();
-        static readonly Wrappers.Player ms_localPlayer = new Wrappers.Player();
+        static readonly Dictionary<GameObject, Player> ms_players = new Dictionary<GameObject, Player>();
+        static readonly Player ms_localPlayer = new Player();
 
-        public static Wrappers.Player GetLocalPlayer() => ms_localPlayer;
+        public static Player GetLocalPlayer() => ms_localPlayer;
 
-        public static List<Wrappers.Player> GetRemotePlayers()
+        public static List<Player> GetRemotePlayers()
         {
-            var l_list = new List<Wrappers.Player>();
+            var l_list = new List<Player>();
             foreach(var l_pair in ms_players)
                 l_list.Add(l_pair.Value);
             return l_list;
         }
 
-        public static List<Wrappers.Player> GetAllPlayers()
+        public static List<Player> GetAllPlayers()
         {
-            var l_list = new List<Wrappers.Player>();
+            var l_list = new List<Player>();
             l_list.Add(ms_localPlayer);
             foreach(var l_pair in ms_players)
                 l_list.Add(l_pair.Value);
             return l_list;
         }
 
-        public static Wrappers.Player GetFromId(string p_id)
+        public static Player GetFromId(string p_id)
         {
             if(MetaPort.Instance.ownerId == p_id)
                 return ms_localPlayer;
@@ -44,21 +44,21 @@ namespace CVRLua
             return null;
         }
 
-        public static Wrappers.Player GetFromGameObject(GameObject p_obj)
+        public static Player GetFromGameObject(GameObject p_obj)
         {
-            Wrappers.Player l_result = null;
+            Player l_result = null;
             if(!ms_players.TryGetValue(p_obj, out l_result) && (p_obj == PlayerSetup.Instance.gameObject))
                 l_result = ms_localPlayer;
             return l_result;
         }
 
         // Core call only
-        internal static Wrappers.Player AddPlayer(GameObject p_obj)
+        internal static Player AddPlayer(GameObject p_obj)
         {
-            Wrappers.Player l_result = null;
+            Player l_result = null;
             if(!ms_players.TryGetValue(p_obj, out l_result))
             {
-                l_result = new Wrappers.Player(p_obj);
+                l_result = new Player(p_obj);
                 ms_players.Add(p_obj, l_result);
             }
             return l_result;
