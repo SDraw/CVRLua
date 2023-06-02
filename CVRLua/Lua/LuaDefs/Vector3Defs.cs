@@ -444,12 +444,12 @@ namespace CVRLua.Lua.LuaDefs
             LuaArgReader l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector3 l_vecA = null;
             Wrappers.Vector3 l_vecB = null;
-            double l_distance = .0;
+            float l_distance = 0f;
             l_argReader.ReadObject(ref l_vecA);
             l_argReader.ReadObject(ref l_vecB);
             l_argReader.ReadNextNumber(ref l_distance);
             if(!l_argReader.HasErrors())
-                l_argReader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.MoveTowards(l_vecA.m_vec, l_vecB.m_vec, (float)l_distance)));
+                l_argReader.PushObject(new Wrappers.Vector3(UnityEngine.Vector3.MoveTowards(l_vecA.m_vec, l_vecB.m_vec, l_distance)));
             else
                 l_argReader.PushBoolean(false);
 

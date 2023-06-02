@@ -957,7 +957,6 @@ namespace CVRLua.Lua.LuaDefs
                     l_argReader.SetError(c_destroyed);
                     l_argReader.PushBoolean(false);
                 }
-
             }
 
             l_argReader.LogError();
@@ -985,7 +984,6 @@ namespace CVRLua.Lua.LuaDefs
                     l_argReader.SetError(c_destroyed);
                     l_argReader.PushBoolean(false);
                 }
-
             }
 
             l_argReader.LogError();

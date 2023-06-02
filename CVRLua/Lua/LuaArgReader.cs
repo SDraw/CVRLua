@@ -59,9 +59,10 @@ namespace CVRLua.Lua
 
         public void ReadNextBoolean(ref bool p_val)
         {
-            if((m_vm != null) && !m_hasErrors && m_vm.IsBoolean(m_currentArgument))
+            if((m_vm != null) && !m_hasErrors && (m_currentArgument <= m_argumentsCount))
             {
-                p_val = m_vm.ToBoolean(m_currentArgument);
+                if(m_vm.IsBoolean(m_currentArgument))
+                    p_val = m_vm.ToBoolean(m_currentArgument);
                 m_currentArgument++;
             }
         }
@@ -106,18 +107,20 @@ namespace CVRLua.Lua
 
         public void ReadNextNumber(ref double p_val)
         {
-            if((m_vm != null) && !m_hasErrors && m_vm.IsNumber(m_currentArgument))
+            if((m_vm != null) && !m_hasErrors && (m_currentArgument <= m_argumentsCount))
             {
-                p_val = m_vm.ToNumber(m_currentArgument);
+                if(m_vm.IsNumber(m_currentArgument))
+                    p_val = m_vm.ToNumber(m_currentArgument);
                 m_currentArgument++;
             }
         }
 
         public void ReadNextNumber(ref float p_val)
         {
-            if((m_vm != null) && !m_hasErrors && m_vm.IsNumber(m_currentArgument))
+            if((m_vm != null) && !m_hasErrors && (m_currentArgument <= m_argumentsCount))
             {
-                p_val = (float)m_vm.ToNumber(m_currentArgument);
+                if(m_vm.IsNumber(m_currentArgument))
+                    p_val = (float)m_vm.ToNumber(m_currentArgument);
                 m_currentArgument++;
             }
         }
@@ -162,18 +165,20 @@ namespace CVRLua.Lua
 
         public void ReadNextInteger(ref long p_val)
         {
-            if((m_vm != null) && !m_hasErrors && m_vm.IsInteger(m_currentArgument))
+            if((m_vm != null) && !m_hasErrors && (m_currentArgument <= m_argumentsCount))
             {
-                p_val = m_vm.ToInteger(m_currentArgument);
+                if(m_vm.IsInteger(m_currentArgument))
+                    p_val = m_vm.ToInteger(m_currentArgument);
                 m_currentArgument++;
             }
         }
 
         public void ReadNextInteger(ref int p_val)
         {
-            if((m_vm != null) && !m_hasErrors && m_vm.IsInteger(m_currentArgument))
+            if((m_vm != null) && !m_hasErrors && (m_currentArgument <= m_argumentsCount))
             {
-                p_val = (int)m_vm.ToInteger(m_currentArgument);
+                if(m_vm.IsInteger(m_currentArgument))
+                    p_val = (int)m_vm.ToInteger(m_currentArgument);
                 m_currentArgument++;
             }
         }
@@ -199,9 +204,10 @@ namespace CVRLua.Lua
 
         public void ReadNextString(ref string p_val)
         {
-            if((m_vm != null) && !m_hasErrors && m_vm.IsString(m_currentArgument))
+            if((m_vm != null) && !m_hasErrors && (m_currentArgument <= m_argumentsCount))
             {
-                p_val = m_vm.ToString(m_currentArgument);
+                if(m_vm.IsString(m_currentArgument))
+                    p_val = m_vm.ToString(m_currentArgument);
                 m_currentArgument++;
             }
         }
@@ -224,8 +230,12 @@ namespace CVRLua.Lua
 
         public void ReadNextObject<T>(ref T p_val) where T : class
         {
-            if((m_vm != null) && !m_hasErrors && m_vm.IsObject(m_currentArgument) && m_vm.GetObject(ref p_val, m_currentArgument))
+            if((m_vm != null) && !m_hasErrors && (m_currentArgument <= m_argumentsCount))
+            {
+                if(m_vm.IsObject(m_currentArgument))
+                    m_vm.GetObject(ref p_val, m_currentArgument);
                 m_currentArgument++;
+            }
         }
 
         public void ReadEnum<T>(ref T p_enum) where T : struct
@@ -251,8 +261,12 @@ namespace CVRLua.Lua
 
         public void ReadNextEnum<T>(ref T p_enum) where T : struct
         {
-            if((m_vm != null) && !m_hasErrors && m_vm.IsString(m_currentArgument) && Enum.TryParse(m_vm.ToString(m_currentArgument), out p_enum))
+            if((m_vm != null) && !m_hasErrors && (m_currentArgument <= m_argumentsCount))
+            {
+                if(m_vm.IsString(m_currentArgument))
+                    Enum.TryParse(m_vm.ToString(m_currentArgument), out p_enum);
                 m_currentArgument++;
+            }
         }
 
         public void ReadArguments(List<object> p_args)

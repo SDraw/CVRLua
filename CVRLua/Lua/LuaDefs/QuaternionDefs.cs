@@ -250,12 +250,12 @@ namespace CVRLua.Lua.LuaDefs
             LuaArgReader l_argReader = new LuaArgReader(p_state);
             Wrappers.Quaternion l_quatA = null;
             Wrappers.Quaternion l_quatB = null;
-            double l_delta = .0;
+            float l_delta = 0f;
             l_argReader.ReadObject(ref l_quatA);
             l_argReader.ReadObject(ref l_quatB);
             l_argReader.ReadNumber(ref l_delta);
             if(!l_argReader.HasErrors())
-                l_argReader.PushObject(new Wrappers.Quaternion(UnityEngine.Quaternion.RotateTowards(l_quatA.m_quat, l_quatB.m_quat, (float)l_delta)));
+                l_argReader.PushObject(new Wrappers.Quaternion(UnityEngine.Quaternion.RotateTowards(l_quatA.m_quat, l_quatB.m_quat, l_delta)));
             else
                 l_argReader.PushBoolean(false);
 
@@ -268,12 +268,12 @@ namespace CVRLua.Lua.LuaDefs
             LuaArgReader l_argReader = new LuaArgReader(p_state);
             Wrappers.Quaternion l_quatA = null;
             Wrappers.Quaternion l_quatB = null;
-            double l_delta = .0;
+            float l_delta = 0f;
             l_argReader.ReadObject(ref l_quatA);
             l_argReader.ReadObject(ref l_quatB);
             l_argReader.ReadNumber(ref l_delta);
             if(!l_argReader.HasErrors())
-                l_argReader.PushObject(new Wrappers.Quaternion(UnityEngine.Quaternion.Slerp(l_quatA.m_quat, l_quatB.m_quat, (float)l_delta)));
+                l_argReader.PushObject(new Wrappers.Quaternion(UnityEngine.Quaternion.Slerp(l_quatA.m_quat, l_quatB.m_quat, l_delta)));
             else
                 l_argReader.PushBoolean(false);
 
@@ -368,10 +368,10 @@ namespace CVRLua.Lua.LuaDefs
         {
             LuaArgReader l_argReader = new LuaArgReader(p_state);
             Wrappers.Quaternion l_quat = null;
-            double l_valX = .0;
-            double l_valY = .0;
-            double l_valZ = .0;
-            double l_valW = .0;
+            float l_valX = 0f;
+            float l_valY = 0f;
+            float l_valZ = 0f;
+            float l_valW = 0f;
             l_argReader.ReadObject(ref l_quat);
             l_argReader.ReadNumber(ref l_valX);
             l_argReader.ReadNumber(ref l_valY);
@@ -379,7 +379,7 @@ namespace CVRLua.Lua.LuaDefs
             l_argReader.ReadNumber(ref l_valW);
             if(!l_argReader.HasErrors())
             {
-                l_quat.m_quat.Set((float)l_valX, (float)l_valY, (float)l_valZ, (float)l_valW);
+                l_quat.m_quat.Set(l_valX, l_valY, l_valZ, l_valW);
                 l_argReader.PushBoolean(true);
             }
             else

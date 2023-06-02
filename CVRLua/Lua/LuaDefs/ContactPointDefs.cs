@@ -8,7 +8,6 @@ namespace CVRLua.Lua.LuaDefs
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_metaMethods = new List<(string, LuaInterop.lua_CFunction)>();
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_staticMethods = new List<(string, LuaInterop.lua_CFunction)>();
         static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_instanceProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
-        static readonly List<(string, LuaInterop.lua_CFunction)> ms_instanceMethods = new List<(string, LuaInterop.lua_CFunction)>();
 
         internal static void Init()
         {
@@ -26,7 +25,7 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(Wrappers.ContactPoint), Create, null, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterClass(typeof(Wrappers.ContactPoint), Create, null, ms_staticMethods, ms_metaMethods, ms_instanceProperties, null);
         }
 
         // Ctor

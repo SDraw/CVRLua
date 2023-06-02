@@ -383,13 +383,15 @@ namespace CVRLua.Lua.LuaDefs
             var l_argReader = new LuaArgReader(p_state);
             Collider l_colA = null;
             Collider l_colB = null;
+            bool l_state = false;
             l_argReader.ReadObject(ref l_colA);
             l_argReader.ReadObject(ref l_colB);
+            l_argReader.ReadBoolean(ref l_state);
             if(!l_argReader.HasErrors())
             {
                 if((l_colA != null) && (l_colB != null))
                 {
-                    Physics.IgnoreCollision(l_colA, l_colB);
+                    Physics.IgnoreCollision(l_colA, l_colB, l_state);
                     l_argReader.PushBoolean(true);
                 }
                 else

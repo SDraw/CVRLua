@@ -1356,7 +1356,7 @@ namespace CVRLua.Lua.LuaDefs
                     }
                     else
                     {
-                        l_argReader.SetError("Destroyed AudioClip");
+                        l_argReader.SetError("Destroyed or invalid AudioClip");
                         l_argReader.PushBoolean(false);
                     }
                 }
