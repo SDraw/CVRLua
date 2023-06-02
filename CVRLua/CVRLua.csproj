@@ -105,6 +105,10 @@
     <Compile Include="Lua\LuaDefs\CVRPickupObjectDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRVideoPlayerDefs.cs" />
     <Compile Include="Lua\LuaDefs\NavMeshAgentDefs.cs" />
+    <Compile Include="Lua\LuaDefs\NavMeshHitDefs.cs" />
+    <Compile Include="Lua\LuaDefs\NavMeshPathDefs.cs" />
+    <Compile Include="Lua\LuaDefs\OffMeshLinkDataDefs.cs" />
+    <Compile Include="Lua\LuaDefs\OffMeshLinkDefs.cs" />
     <Compile Include="Lua\LuaDefs\PhysicsDefs.cs" />
     <Compile Include="Lua\LuaDefs\RaycastHitDefs.cs" />
     <Compile Include="Lua\LuaDefs\RayDefs.cs" />
@@ -147,6 +151,8 @@
     <Compile Include="Wrappers\Bounds.cs" />
     <Compile Include="Wrappers\ContactPoint.cs" />
     <Compile Include="Players\Player.cs" />
+    <Compile Include="Wrappers\OffMeshLinkData.cs" />
+    <Compile Include="Wrappers\NavMeshHit.cs" />
     <Compile Include="Wrappers\Quaternion.cs" />
     <Compile Include="Wrappers\Ray.cs" />
     <Compile Include="Wrappers\RaycastHit.cs" />

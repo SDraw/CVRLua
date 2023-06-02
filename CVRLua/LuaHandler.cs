@@ -53,6 +53,10 @@ namespace CVRLua
             Lua.LuaDefs.GameObjectDefs.Init();
             Lua.LuaDefs.MathfDefs.Init();
             Lua.LuaDefs.NavMeshAgentDefs.Init();
+            Lua.LuaDefs.NavMeshHitDefs.Init();
+            Lua.LuaDefs.NavMeshPathDefs.Init();
+            Lua.LuaDefs.OffMeshLinkDefs.Init();
+            Lua.LuaDefs.OffMeshLinkDataDefs.Init();
             Lua.LuaDefs.PhysicsDefs.Init();
             Lua.LuaDefs.QuaternionDefs.Init();
             Lua.LuaDefs.RayDefs.Init();
@@ -106,6 +110,10 @@ namespace CVRLua
             Lua.LuaDefs.GameObjectDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.MathfDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.NavMeshAgentDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.NavMeshHitDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.NavMeshPathDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.OffMeshLinkDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.OffMeshLinkDataDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.PhysicsDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.QuaternionDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.RayDefs.RegisterInVM(m_vm);

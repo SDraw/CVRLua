@@ -27,20 +27,20 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceProperties.Add(("autoTraverseOffMeshLink", (GetAutoTraverseOffMeshLink, SetAutoTraverseOffMeshLink)));
             ms_instanceProperties.Add(("avoidancePriority", (GetAvoidancePriority, SetAvoidancePriority)));
             ms_instanceProperties.Add(("baseOffset", (GetBaseOffset, SetBaseOffset)));
-            //ms_instanceProperties.Add(("currentOffMeshLinkData", (?, ?)));
+            ms_instanceProperties.Add(("currentOffMeshLinkData", (GetCurrentOffMeshLinkData, null)));
             ms_instanceProperties.Add(("desiredVelocity", (GetDesiredVelocity, null)));
-            ms_instanceProperties.Add(("destination", (GetDestination, SetDestination)));
+            ms_instanceProperties.Add(("destination", (GetDestination, SetDestinationProp)));
             ms_instanceProperties.Add(("hasPath", (GetHasPath, null)));
             ms_instanceProperties.Add(("height", (GetHeight, SetHeight)));
             ms_instanceProperties.Add(("isOnNavMesh", (GetIsOnNavMesh, null)));
             ms_instanceProperties.Add(("isOnOffMeshLink", (GetIsOnOffMeshLink, null)));
             ms_instanceProperties.Add(("isPathStale", (GetIsPathStale, null)));
             ms_instanceProperties.Add(("isStopped", (GetIsStopped, SetIsStopped)));
-            //ms_instanceProperties.Add(("navMeshOwner", (?, ?)));
-            //ms_instanceProperties.Add(("nextOffMeshLinkData", (?, ?)));
+            //ms_instanceProperties.Add(("navMeshOwner", (?, ?))); // It's Unity.Object, but what exactly?
+            ms_instanceProperties.Add(("nextOffMeshLinkData", (GetNextOffMeshLinkData, null)));
             ms_instanceProperties.Add(("nextPosition", (GetNextPosition, SetNextPosition)));
             ms_instanceProperties.Add(("obstacleAvoidanceType", (GetObstacleAvoidanceType, SetObstacleAvoidanceType)));
-            //ms_instanceProperties.Add(("path", (?, ?))); // Required Path defs
+            ms_instanceProperties.Add(("path", (GetPath, SetPathProp)));
             ms_instanceProperties.Add(("pathPending", (GetPathPending, null)));
             ms_instanceProperties.Add(("pathStatus", (GetPathStatus, null)));
             ms_instanceProperties.Add(("radius", (GetRadius, SetRadius)));
@@ -54,17 +54,17 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceProperties.Add(("velocity", (GetVelocity, SetVelocity)));
 
             ms_instanceMethods.Add((nameof(ActivateCurrentOffMeshLink), ActivateCurrentOffMeshLink));
-            //ms_instanceMethods.Add((nameof(CalculatePath), CalculatePath)); // Required Path defs
+            ms_instanceMethods.Add((nameof(CalculatePath), CalculatePath));
             ms_instanceMethods.Add((nameof(CompleteOffMeshLink), CompleteOffMeshLink));
-            //ms_instanceMethods.Add((nameof(FindClosestEdge), FindClosestEdge)); // Require NavMeshHit defs
+            ms_instanceMethods.Add((nameof(FindClosestEdge), FindClosestEdge));
             ms_instanceMethods.Add((nameof(GetAreaCost), GetAreaCost));
             ms_instanceMethods.Add((nameof(Move), Move));
-            //ms_instanceMethods.Add((nameof(Raycast), Raycast)); // Require NavMeshHit defs
+            ms_instanceMethods.Add((nameof(Raycast), Raycast));
             ms_instanceMethods.Add((nameof(ResetPath), ResetPath));
-            //ms_instanceMethods.Add((nameof(SamplePathPosition), SamplePathPosition)); // Require NavMeshHit defs
+            ms_instanceMethods.Add((nameof(SamplePathPosition), SamplePathPosition));
             ms_instanceMethods.Add((nameof(SetAreaCost), SetAreaCost));
             ms_instanceMethods.Add((nameof(SetDestination), SetDestination));
-            //ms_instanceMethods.Add((nameof(SetPath), SetPath)); // Required Path defs
+            ms_instanceMethods.Add((nameof(SetPath), SetPath));
             ms_instanceMethods.Add((nameof(Warp), Warp));
 
             BehaviourDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
@@ -446,6 +446,28 @@ namespace CVRLua.Lua.LuaDefs
             return 0;
         }
 
+        static int GetCurrentOffMeshLinkData(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            NavMeshAgent l_agent = null;
+            l_argReader.ReadObject(ref l_agent);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_agent != null)
+                    l_argReader.PushObject(new Wrappers.OffMeshLinkData(l_agent.currentOffMeshLinkData));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+
         static int GetDesiredVelocity(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
@@ -489,7 +511,7 @@ namespace CVRLua.Lua.LuaDefs
             l_argReader.LogError();
             return 1;
         }
-        static int SetDestination(IntPtr p_state)
+        static int SetDestinationProp(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
             NavMeshAgent l_agent = null;
@@ -676,6 +698,28 @@ namespace CVRLua.Lua.LuaDefs
             return 0;
         }
 
+        static int GetNextOffMeshLinkData(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            NavMeshAgent l_agent = null;
+            l_argReader.ReadObject(ref l_agent);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_agent != null)
+                    l_argReader.PushObject(new Wrappers.OffMeshLinkData(l_agent.nextOffMeshLinkData));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+
         static int GetNextPosition(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
@@ -748,6 +792,51 @@ namespace CVRLua.Lua.LuaDefs
             {
                 if(l_agent != null)
                     l_agent.obstacleAvoidanceType = l_value;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
+        }
+
+        static int GetPath(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            NavMeshAgent l_agent = null;
+            l_argReader.ReadObject(ref l_agent);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_agent != null)
+                {
+                    if(l_agent.path != null)
+                        l_argReader.PushObject(l_agent.path);
+                    else
+                        l_argReader.PushBoolean(false);
+                }
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+        static int SetPathProp(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            NavMeshAgent l_agent = null;
+            NavMeshPath l_path = null;
+            l_argReader.ReadObject(ref l_agent);
+            l_argReader.ReadNextObject(ref l_path);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_agent != null)
+                    l_agent.path = l_path;
                 else
                     l_argReader.SetError(c_destroyed);
             }
@@ -1152,6 +1241,32 @@ namespace CVRLua.Lua.LuaDefs
             return l_argReader.GetReturnValue();
         }
 
+        static int CalculatePath(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            NavMeshAgent l_agent = null;
+            Wrappers.Vector3 l_pos = null;
+            NavMeshPath l_path = null;
+            l_argReader.ReadObject(ref l_agent);
+            l_argReader.ReadObject(ref l_pos);
+            l_argReader.ReadObject(ref l_path);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_agent != null)
+                    l_argReader.PushBoolean(l_agent.CalculatePath(l_pos.m_vec, l_path));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return l_argReader.GetReturnValue();
+        }
+
         static int CompleteOffMeshLink(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
@@ -1163,6 +1278,33 @@ namespace CVRLua.Lua.LuaDefs
                 {
                     l_agent.CompleteOffMeshLink();
                     l_argReader.PushBoolean(true);
+                }
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return l_argReader.GetReturnValue();
+        }
+
+        static int FindClosestEdge(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            NavMeshAgent l_agent = null;
+            l_argReader.ReadObject(ref l_agent);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_agent != null)
+                {
+                    if(l_agent.FindClosestEdge(out var l_hit))
+                        l_argReader.PushObject(new Wrappers.NavMeshHit(l_hit));
+                    else
+                        l_argReader.PushBoolean(true);
                 }
                 else
                 {
@@ -1228,6 +1370,35 @@ namespace CVRLua.Lua.LuaDefs
             return l_argReader.GetReturnValue();
         }
 
+        static int Raycast(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            NavMeshAgent l_agent = null;
+            Wrappers.Vector3 l_pos = null;
+            l_argReader.ReadObject(ref l_agent);
+            l_argReader.ReadObject(ref l_pos);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_agent != null)
+                {
+                    if(l_agent.Raycast(l_pos.m_vec, out var l_hit))
+                        l_argReader.PushObject(new Wrappers.NavMeshHit(l_hit));
+                    else
+                        l_argReader.PushBoolean(true);
+                }
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return l_argReader.GetReturnValue();
+        }
+
         static int ResetPath(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
@@ -1239,6 +1410,37 @@ namespace CVRLua.Lua.LuaDefs
                 {
                     l_agent.ResetPath();
                     l_argReader.PushBoolean(true);
+                }
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return l_argReader.GetReturnValue();
+        }
+
+        static int SamplePathPosition(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            NavMeshAgent l_agent = null;
+            int l_mask = 0;
+            float l_distance = 0f;
+            l_argReader.ReadObject(ref l_agent);
+            l_argReader.ReadInteger(ref l_mask);
+            l_argReader.ReadNumber(ref l_distance);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_agent != null)
+                {
+                    if(l_agent.SamplePathPosition(l_mask, l_distance, out var l_hit))
+                        l_argReader.PushObject(new Wrappers.NavMeshHit(l_hit));
+                    else
+                        l_argReader.PushBoolean(true);
                 }
                 else
                 {
@@ -1269,6 +1471,54 @@ namespace CVRLua.Lua.LuaDefs
                     l_agent.SetAreaCost(l_index, l_value);
                     l_argReader.PushBoolean(true);
                 }
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return l_argReader.GetReturnValue();
+        }
+
+        static int SetDestination(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            NavMeshAgent l_agent = null;
+            Wrappers.Vector3 l_value = null;
+            l_argReader.ReadObject(ref l_agent);
+            l_argReader.ReadObject(ref l_value);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_agent != null)
+                    l_argReader.PushBoolean(l_agent.SetDestination(l_value.m_vec));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return l_argReader.GetReturnValue();
+        }
+
+        static int SetPath(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            NavMeshAgent l_agent = null;
+            NavMeshPath l_path = null;
+            l_argReader.ReadObject(ref l_agent);
+            l_argReader.ReadObject(ref l_path);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_agent != null)
+                    l_argReader.PushBoolean(l_agent.SetPath(l_path));
                 else
                 {
                     l_argReader.SetError(c_destroyed);
