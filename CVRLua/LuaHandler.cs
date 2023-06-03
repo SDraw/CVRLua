@@ -59,6 +59,7 @@ namespace CVRLua
             Lua.LuaDefs.OffMeshLinkDataDefs.Init();
             Lua.LuaDefs.PhysicsDefs.Init();
             Lua.LuaDefs.QuaternionDefs.Init();
+            Lua.LuaDefs.RandomDefs.Init();
             Lua.LuaDefs.RayDefs.Init();
             Lua.LuaDefs.RaycastHitDefs.Init();
             Lua.LuaDefs.RigidbodyDefs.Init();
@@ -116,6 +117,7 @@ namespace CVRLua
             Lua.LuaDefs.OffMeshLinkDataDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.PhysicsDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.QuaternionDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.RandomDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.RayDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.RaycastHitDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.RigidbodyDefs.RegisterInVM(m_vm);

@@ -110,6 +110,7 @@
     <Compile Include="Lua\LuaDefs\OffMeshLinkDataDefs.cs" />
     <Compile Include="Lua\LuaDefs\OffMeshLinkDefs.cs" />
     <Compile Include="Lua\LuaDefs\PhysicsDefs.cs" />
+    <Compile Include="Lua\LuaDefs\RandomDefs.cs" />
     <Compile Include="Lua\LuaDefs\RaycastHitDefs.cs" />
     <Compile Include="Lua\LuaDefs\RayDefs.cs" />
     <Compile Include="Lua\LuaDefs\RigidbodyDefs.cs" />
