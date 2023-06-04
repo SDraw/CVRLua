@@ -269,6 +269,15 @@ namespace CVRLua.Lua
             }
         }
 
+        public void ReadValue(ref object p_obj)
+        {
+            if((m_vm != null) && !m_hasErrors && (m_currentArgument <= m_argumentsCount))
+            {
+                p_obj = m_vm.ReadValue(m_currentArgument);
+                m_currentArgument++;
+            }
+        }
+
         public void ReadArguments(List<object> p_args)
         {
             if((m_vm != null) && !m_hasErrors)

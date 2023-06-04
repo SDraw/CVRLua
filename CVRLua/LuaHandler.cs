@@ -49,6 +49,7 @@ namespace CVRLua
             Lua.LuaDefs.AudioSourceDefs.Init();
             Lua.LuaDefs.BoundsDefs.Init();
             Lua.LuaDefs.CollisionDefs.Init();
+            Lua.LuaDefs.ColorDefs.Init();
             Lua.LuaDefs.ContactPointDefs.Init();
             Lua.LuaDefs.GameObjectDefs.Init();
             Lua.LuaDefs.MathfDefs.Init();
@@ -62,6 +63,7 @@ namespace CVRLua
             Lua.LuaDefs.RandomDefs.Init();
             Lua.LuaDefs.RayDefs.Init();
             Lua.LuaDefs.RaycastHitDefs.Init();
+            Lua.LuaDefs.RenderSettingsDefs.Init();
             Lua.LuaDefs.RigidbodyDefs.Init();
             Lua.LuaDefs.TimeDefs.Init();
             Lua.LuaDefs.TransformDefs.Init();
@@ -107,6 +109,7 @@ namespace CVRLua
             Lua.LuaDefs.AudioSourceDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.BoundsDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CollisionDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.ColorDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.ContactPointDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.GameObjectDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.MathfDefs.RegisterInVM(m_vm);
@@ -120,6 +123,7 @@ namespace CVRLua
             Lua.LuaDefs.RandomDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.RayDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.RaycastHitDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.RenderSettingsDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.RigidbodyDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.TimeDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.TransformDefs.RegisterInVM(m_vm);

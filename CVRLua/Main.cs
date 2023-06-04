@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using ABI_RC.Core.Savior;
 
 namespace CVRLua
 {
@@ -176,6 +177,7 @@ namespace CVRLua
             }
         }
 
+        // Playeres managment
         static void OnPuppetMasterStart_Postfix(ref PuppetMaster __instance) => Instance?.OnPuppetMasterStart(__instance.gameObject);
         void OnPuppetMasterStart(GameObject p_obj)
         {

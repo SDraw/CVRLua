@@ -20,7 +20,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_staticMethods.Add((nameof(Clamp), Clamp));
             ms_staticMethods.Add((nameof(Clamp01), Clamp01));
             ms_staticMethods.Add((nameof(ClosestPowerOfTwo), ClosestPowerOfTwo));
-            //ms_staticMethods.Add((nameof(CorrelatedColorTemperatureToRGB), CorrelatedColorTemperatureToRGB)); // Needs Color defs
+            ms_staticMethods.Add((nameof(CorrelatedColorTemperatureToRGB), CorrelatedColorTemperatureToRGB));
             ms_staticMethods.Add((nameof(DeltaAngle), DeltaAngle));
             ms_staticMethods.Add((nameof(FloorToInt), FloorToInt));
             ms_staticMethods.Add((nameof(GammaToLinearSpace), GammaToLinearSpace));
@@ -140,6 +140,20 @@ namespace CVRLua.Lua.LuaDefs
             l_argReader.ReadInteger(ref l_value);
             if(!l_argReader.HasErrors())
                 l_argReader.PushInteger(Mathf.ClosestPowerOfTwo(l_value));
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return l_argReader.GetReturnValue();
+        }
+
+        static int CorrelatedColorTemperatureToRGB(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            float l_value = 0;
+            l_argReader.ReadNumber(ref l_value);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushObject(new Wrappers.Color(Mathf.CorrelatedColorTemperatureToRGB(l_value)));
             else
                 l_argReader.PushBoolean(false);
 

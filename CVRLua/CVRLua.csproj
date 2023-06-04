@@ -101,6 +101,7 @@
     <Compile Include="Lua\LuaDefs\AudioSourceDefs.cs" />
     <Compile Include="Lua\LuaDefs\BehaviourDefs.cs" />
     <Compile Include="Lua\LuaDefs\BoundsDefs.cs" />
+    <Compile Include="Lua\LuaDefs\ColorDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRInteractableDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRPickupObjectDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRVideoPlayerDefs.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Lua\LuaDefs\RandomDefs.cs" />
     <Compile Include="Lua\LuaDefs\RaycastHitDefs.cs" />
     <Compile Include="Lua\LuaDefs\RayDefs.cs" />
+    <Compile Include="Lua\LuaDefs\RenderSettingsDefs.cs" />
     <Compile Include="Lua\LuaDefs\RigidbodyDefs.cs" />
     <Compile Include="Lua\LuaDefs\TerrainColliderDefs.cs" />
     <Compile Include="Lua\LuaDefs\UtilityDefs.cs" />
@@ -150,6 +152,7 @@
     <Compile Include="LuaScript.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Wrappers\Bounds.cs" />
+    <Compile Include="Wrappers\Color.cs" />
     <Compile Include="Wrappers\ContactPoint.cs" />
     <Compile Include="Players\Player.cs" />
     <Compile Include="Wrappers\OffMeshLinkData.cs" />

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CVRLua.Lua.LuaDefs
 {
@@ -21,7 +18,7 @@ namespace CVRLua.Lua.LuaDefs
             //ms_staticProperties.Add(("state", (?, ?)));
             ms_staticProperties.Add(("value", (GetValue, null)));
 
-            //ms_staticMethods.Add((nameof(ColorHSV), ColorHSV));
+            ms_staticMethods.Add((nameof(ColorHSV), ColorHSV));
             ms_staticMethods.Add((nameof(InitState), InitState));
             ms_staticMethods.Add((nameof(Range), Range));
         }
@@ -75,6 +72,29 @@ namespace CVRLua.Lua.LuaDefs
         }
 
         // Static methods
+        static int ColorHSV(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            float l_hMin = 0f;
+            float l_hMax = 1f;
+            float l_sMin = 0f;
+            float l_sMax = 1f;
+            float l_vMin = 0f;
+            float l_vMax = 1f;
+            float l_aMin = 1f;
+            float l_aMax = 1f;
+            l_argReader.ReadNextNumber(ref l_hMin);
+            l_argReader.ReadNextNumber(ref l_hMax);
+            l_argReader.ReadNextNumber(ref l_sMin);
+            l_argReader.ReadNextNumber(ref l_sMax);
+            l_argReader.ReadNextNumber(ref l_vMin);
+            l_argReader.ReadNextNumber(ref l_vMax);
+            l_argReader.ReadNextNumber(ref l_aMin);
+            l_argReader.ReadNextNumber(ref l_aMax);
+            l_argReader.PushObject(new Wrappers.Color(UnityEngine.Random.ColorHSV(l_hMin, l_hMax, l_sMin, l_sMax, l_vMin, l_vMax, l_aMin, l_aMax)));
+            return l_argReader.GetReturnValue();
+        }
+
         static int InitState(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
@@ -100,7 +120,7 @@ namespace CVRLua.Lua.LuaDefs
             l_argReader.ReadNumber(ref l_min);
             l_argReader.ReadNumber(ref l_max);
             if(!l_argReader.HasErrors())
-                l_argReader.PushNumber(UnityEngine.Random.Range(l_min,l_max));
+                l_argReader.PushNumber(UnityEngine.Random.Range(l_min, l_max));
             else
                 l_argReader.PushBoolean(false);
 
