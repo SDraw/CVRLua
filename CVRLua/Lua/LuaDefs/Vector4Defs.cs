@@ -281,12 +281,20 @@ namespace CVRLua.Lua.LuaDefs
         static int Multiply(IntPtr p_state)
         {
             LuaArgReader l_argReader = new LuaArgReader(p_state);
-            Wrappers.Vector4 l_vecA = null;
+            Wrappers.Vector4 l_vec = null;
             float l_val = 0f;
-            l_argReader.ReadObject(ref l_vecA);
-            l_argReader.ReadNumber(ref l_val);
+            if(l_argReader.IsNextNumber())
+            {
+                l_argReader.ReadNumber(ref l_val);
+                l_argReader.ReadObject(ref l_vec);
+            }
+            else
+            {
+                l_argReader.ReadObject(ref l_vec);
+                l_argReader.ReadNumber(ref l_val);
+            }
             if(!l_argReader.HasErrors())
-                l_argReader.PushObject(new Wrappers.Vector4(l_vecA.m_vec * l_val));
+                l_argReader.PushObject(new Wrappers.Vector4(l_vec.m_vec * l_val));
             else
                 l_argReader.PushBoolean(false);
 

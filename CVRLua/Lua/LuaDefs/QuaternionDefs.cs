@@ -314,19 +314,10 @@ namespace CVRLua.Lua.LuaDefs
             LuaArgReader l_argReader = new LuaArgReader(p_state);
             Wrappers.Quaternion l_quatA = null;
             Wrappers.Quaternion l_quatB = null;
-            Wrappers.Vector3 l_vecA = null;
             l_argReader.ReadObject(ref l_quatA);
-            l_argReader.ReadNextObject(ref l_quatB);
-            l_argReader.ReadNextObject(ref l_vecA);
+            l_argReader.ReadObject(ref l_quatB);
             if(!l_argReader.HasErrors())
-            {
-                if(l_quatB != null)
-                    l_argReader.PushObject(new Wrappers.Quaternion(l_quatA.m_quat * l_quatB.m_quat));
-                else if(l_vecA != null)
-                    l_argReader.PushObject(new Wrappers.Vector3(l_quatA.m_quat * l_vecA.m_vec));
-                else
-                    l_argReader.PushBoolean(false);
-            }
+                l_argReader.PushObject(new Wrappers.Quaternion(l_quatA.m_quat * l_quatB.m_quat));
             else
                 l_argReader.PushBoolean(false);
 
