@@ -686,7 +686,7 @@ namespace CVRLua.Lua.LuaDefs
         static int SqrMagnitude(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
-            Wrappers.Vector2 l_vec = null;
+            Wrappers.Vector3 l_vec = null;
             l_argReader.ReadObject(ref l_vec);
             if(!l_argReader.HasErrors())
                 l_argReader.PushNumber(l_vec.m_vec.sqrMagnitude);

@@ -29,7 +29,7 @@ namespace CVRLua.Lua
         readonly IntPtr m_state = IntPtr.Zero;
         readonly Dictionary<long, ReferencedObject> m_objectsMap = null;
 
-        internal LuaVM(string p_name = "")
+        internal LuaVM(string p_name)
         {
             m_name = p_name;
             m_state = LuaInterop.luaL_newstate();
@@ -98,9 +98,9 @@ namespace CVRLua.Lua
             }
         }
 
-        internal void Execute(ref byte[] p_data)
+        internal void Execute(string p_blockName, ref byte[] p_data)
         {
-            if((LuaInterop.luaL_loadbuffer(m_state, ref p_data, p_data.Length, m_name) != LuaInterop.LUA_OK) || (LuaInterop.lua_pcall(m_state, 0, 0, 0) != LuaInterop.LUA_OK))
+            if((LuaInterop.luaL_loadbuffer(m_state, ref p_data, p_data.Length, p_blockName) != LuaInterop.LUA_OK) || (LuaInterop.lua_pcall(m_state, 0, 0, 0) != LuaInterop.LUA_OK))
             {
                 LuaLogger.Log(LuaInterop.lua_tostring(m_state, -1));
                 LuaInterop.lua_pop(m_state, 1);
@@ -359,9 +359,9 @@ namespace CVRLua.Lua
         {
             LuaInterop.lua_Debug l_debug = new LuaInterop.lua_Debug();
             LuaInterop.lua_getstack(m_state, 1, ref l_debug);
-            LuaInterop.lua_getinfo(m_state, "nl", ref l_debug);
-            p_name = m_name;
+            LuaInterop.lua_getinfo(m_state, "l", ref l_debug);
             p_line = l_debug.currentline;
+            p_name = m_name;
         }
 
         // Classes

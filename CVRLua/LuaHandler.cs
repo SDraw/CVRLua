@@ -100,7 +100,7 @@ namespace CVRLua
             Lua.LuaDefs.LuaScriptDefs.Init();
         }
 
-        internal LuaHandler(string p_name = "")
+        internal LuaHandler(string p_name)
         {
             m_eventFunctions = new Dictionary<ScriptEvent, int>();
 
@@ -171,9 +171,9 @@ namespace CVRLua
         {
             m_vm.Execute(p_code);
         }
-        public void Execute(ref byte[] p_data)
+        public void Execute(string p_blockName, ref byte[] p_data)
         {
-            m_vm.Execute(ref p_data);
+            m_vm.Execute(p_blockName, ref p_data);
         }
 
         public void CallEvent(ScriptEvent p_event, params object[] p_args)

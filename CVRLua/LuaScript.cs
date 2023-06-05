@@ -18,6 +18,11 @@ namespace CVRLua
         CVRInteractable m_interactable = null;
         CVRAttachment m_attachment = null;
 
+        ~LuaScript()
+        {
+            Core.Instance?.UnregisterScript(this); // Yes, it works
+        }
+
         void Awake()
         {
             if(m_luaHandler == null)
@@ -53,20 +58,22 @@ namespace CVRLua
                 foreach(var l_script in Scripts)
                 {
                     byte[] l_data = l_script.bytes;
-                    m_luaHandler.Execute(ref l_data);
+                    m_luaHandler.Execute(string.Format("{0}-{1}", this.name, l_script.name), ref l_data);
                 }
 
                 m_luaHandler.ParseEvents();
-                m_luaHandler.CallEvent(LuaHandler.ScriptEvent.Start);
-
-                StartCoroutine(CheckEndOfFrame());
             }
+        }
+
+        void Start()
+        {
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.Start);
+            StartCoroutine(CheckEndOfFrame());
         }
 
         void OnDestroy()
         {
             m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnDestroy);
-            Core.Instance?.UnregisterScript(this);
         }
 
         void Update()
