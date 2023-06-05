@@ -16,12 +16,20 @@ namespace CVRLua
         LuaHandler m_luaHandler = null;
 
         CVRInteractable m_interactable = null;
+        CVRAttachment m_attachment = null;
 
         void Awake()
         {
             if(m_luaHandler == null)
             {
                 m_interactable = this.GetComponent<CVRInteractable>();
+
+                m_attachment = this.GetComponent<CVRAttachment>();
+                if(m_attachment != null)
+                {
+                    m_attachment.onAttach.AddListener(this.OnAttach);
+                    m_attachment.onDeattach.AddListener(this.OnDeattach);
+                }
 
                 m_luaHandler = new LuaHandler(this.name);
                 Core.Instance?.RegisterScript(this);
@@ -181,6 +189,17 @@ namespace CVRLua
                 m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnInteractableGazeExit);
         }
 
+        void OnAttach()
+        {
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnAttachmentAttach);
+        }
+
+        void OnDeattach()
+        {
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnAttachmentDeattach);
+        }
+
+        // Players events
         internal void OnPlayerJoin(Players.Player p_player)
         {
             m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnPlayerJoin, p_player);

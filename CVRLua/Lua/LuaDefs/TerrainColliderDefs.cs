@@ -18,8 +18,7 @@ namespace CVRLua.Lua.LuaDefs
         {
             ms_staticMethods.Add((nameof(IsTerrainCollider), IsTerrainCollider));
 
-            /*
-            */
+            //ms_instanceProperties.Add(("terrainData", (?,?)));
 
             ColliderDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }

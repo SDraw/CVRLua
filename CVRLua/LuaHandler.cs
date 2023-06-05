@@ -30,7 +30,9 @@ namespace CVRLua
             OnInteractableGazeEnter,
             OnInteractableGazeExit,
             OnPlayerJoin,
-            OnPlayerLeft
+            OnPlayerLeft,
+            OnAttachmentAttach,
+            OnAttachmentDeattach
         }
 
         readonly Lua.LuaVM m_vm = null;
@@ -65,6 +67,7 @@ namespace CVRLua
             Lua.LuaDefs.RaycastHitDefs.Init();
             Lua.LuaDefs.RenderSettingsDefs.Init();
             Lua.LuaDefs.RigidbodyDefs.Init();
+            Lua.LuaDefs.TextMeshProDefs.Init();
             Lua.LuaDefs.TimeDefs.Init();
             Lua.LuaDefs.TransformDefs.Init();
             Lua.LuaDefs.Vector2Defs.Init();
@@ -81,6 +84,7 @@ namespace CVRLua
             Lua.LuaDefs.TerrainColliderDefs.Init();
 
             // CVR defs
+            Lua.LuaDefs.CVRAttachmentDefs.Init();
             Lua.LuaDefs.CVRPointerDefs.Init();
             Lua.LuaDefs.CVRVideoPlayerDefs.Init();
             Lua.LuaDefs.CVRInteractableDefs.Init();
@@ -125,6 +129,7 @@ namespace CVRLua
             Lua.LuaDefs.RaycastHitDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.RenderSettingsDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.RigidbodyDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.TextMeshProDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.TimeDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.TransformDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.Vector2Defs.RegisterInVM(m_vm);
@@ -141,6 +146,7 @@ namespace CVRLua
             Lua.LuaDefs.TerrainColliderDefs.RegisterInVM(m_vm);
 
             // CVR defs
+            Lua.LuaDefs.CVRAttachmentDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CVRPointerDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CVRVideoPlayerDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CVRInteractableDefs.RegisterInVM(m_vm);

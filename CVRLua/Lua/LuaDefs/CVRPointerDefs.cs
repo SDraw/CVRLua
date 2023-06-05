@@ -21,7 +21,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceProperties.Add(("isInternalPointer", (GetIsInternalPointer, null)));
             ms_instanceProperties.Add(("isLocalPointer", (GetIsLocalPointer, null)));
             ms_instanceProperties.Add(("limitToFilteredTriggers", (GetLimitToFilteredTriggers, null)));
-            ms_instanceProperties.Add(("type", (GetPointerType, null)));
+            ms_instanceProperties.Add(("type", (GetPointerType, SetPointerType)));
 
             MonoBehaviourDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
@@ -128,6 +128,24 @@ namespace CVRLua.Lua.LuaDefs
 
             l_argReader.LogError();
             return 1;
+        }
+        static int SetPointerType(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            CVRPointer l_pointer = null;
+            string l_type = "";
+            l_argReader.ReadObject(ref l_pointer);
+            l_argReader.ReadString(ref l_type);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_pointer != null)
+                    l_pointer.type = l_type;
+                else
+                    l_argReader.SetError(c_destroyed);
+            }
+
+            l_argReader.LogError();
+            return 0;
         }
     }
 }

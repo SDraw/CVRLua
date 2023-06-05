@@ -53,6 +53,11 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\games\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>D:\games\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -86,6 +91,14 @@
       <HintPath>D:\Games\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.TerrainPhysicsModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\games\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.VehiclesModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Games\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.VehiclesModule.dll</HintPath>
@@ -102,6 +115,7 @@
     <Compile Include="Lua\LuaDefs\BehaviourDefs.cs" />
     <Compile Include="Lua\LuaDefs\BoundsDefs.cs" />
     <Compile Include="Lua\LuaDefs\ColorDefs.cs" />
+    <Compile Include="Lua\LuaDefs\CVRAttachmentDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRInteractableDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRPickupObjectDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRVideoPlayerDefs.cs" />
@@ -117,6 +131,7 @@
     <Compile Include="Lua\LuaDefs\RenderSettingsDefs.cs" />
     <Compile Include="Lua\LuaDefs\RigidbodyDefs.cs" />
     <Compile Include="Lua\LuaDefs\TerrainColliderDefs.cs" />
+    <Compile Include="Lua\LuaDefs\TextMeshProDefs.cs" />
     <Compile Include="Lua\LuaDefs\UtilityDefs.cs" />
     <Compile Include="Lua\LuaDefs\WheelColliderDefs.cs" />
     <Compile Include="Lua\LuaDefs\SphereColliderDefs.cs" />
