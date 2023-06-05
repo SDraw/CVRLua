@@ -25,13 +25,11 @@ namespace CVRLua.Lua
 
         static readonly Dictionary<IntPtr, LuaVM> ms_VMs = new Dictionary<IntPtr, LuaVM>();
 
-        readonly string m_name;
         readonly IntPtr m_state = IntPtr.Zero;
         readonly Dictionary<long, ReferencedObject> m_objectsMap = null;
 
-        internal LuaVM(string p_name)
+        internal LuaVM()
         {
-            m_name = p_name;
             m_state = LuaInterop.luaL_newstate();
             ms_VMs.Add(m_state, this);
 
@@ -355,13 +353,13 @@ namespace CVRLua.Lua
         }
 
         // Debug
-        public void GetStateInfo(out string p_name, out int p_line)
+        public void GetStateInfo(out string p_chunk, out int p_line)
         {
             LuaInterop.lua_Debug l_debug = new LuaInterop.lua_Debug();
             LuaInterop.lua_getstack(m_state, 1, ref l_debug);
-            LuaInterop.lua_getinfo(m_state, "l", ref l_debug);
+            LuaInterop.lua_getinfo(m_state, "Sl", ref l_debug);
             p_line = l_debug.currentline;
-            p_name = m_name;
+            p_chunk = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(l_debug.source);
         }
 
         // Classes

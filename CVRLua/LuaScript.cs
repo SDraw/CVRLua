@@ -36,7 +36,7 @@ namespace CVRLua
                     m_attachment.onDeattach.AddListener(this.OnDeattach);
                 }
 
-                m_luaHandler = new LuaHandler(this.name);
+                m_luaHandler = new LuaHandler();
                 Core.Instance?.RegisterScript(this);
 
                 m_luaHandler.SetGlobalVariable("this", this.gameObject);
@@ -58,7 +58,7 @@ namespace CVRLua
                 foreach(var l_script in Scripts)
                 {
                     byte[] l_data = l_script.bytes;
-                    m_luaHandler.Execute(string.Format("{0}-{1}", this.name, l_script.name), ref l_data);
+                    m_luaHandler.Execute(string.Format("{0}|{1}", this.name, l_script.name), ref l_data);
                 }
 
                 m_luaHandler.ParseEvents();

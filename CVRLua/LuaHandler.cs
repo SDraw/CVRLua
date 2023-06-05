@@ -100,11 +100,11 @@ namespace CVRLua
             Lua.LuaDefs.LuaScriptDefs.Init();
         }
 
-        internal LuaHandler(string p_name)
+        internal LuaHandler()
         {
             m_eventFunctions = new Dictionary<ScriptEvent, int>();
 
-            m_vm = new Lua.LuaVM(p_name);
+            m_vm = new Lua.LuaVM();
 
             // Unity defs
             Lua.LuaDefs.ObjectDefs.RegisterInVM(m_vm);

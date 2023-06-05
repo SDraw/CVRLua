@@ -30,8 +30,8 @@ namespace CVRLua.Lua
         {
             if((m_vm != null) && m_hasErrors)
             {
-                m_vm.GetStateInfo(out string l_name, out int l_line);
-                LuaLogger.Log("Warning: {0}:{1}: {2} at argument {3}", l_name, l_line, m_errorInfo, m_currentArgument);
+                m_vm.GetStateInfo(out string p_chunk, out int l_line);
+                LuaLogger.Log("Warning: [\"{0}\"]:{1}: {2} at argument {3}", p_chunk, l_line, m_errorInfo, m_currentArgument);
             }
         }
 

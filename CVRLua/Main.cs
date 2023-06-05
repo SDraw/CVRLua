@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
-using ABI_RC.Core.Savior;
 
 namespace CVRLua
 {
@@ -16,7 +15,6 @@ namespace CVRLua
         static public Core Instance { get; private set; } = null;
 
         readonly List<LuaScript> m_scripts = null;
-
 
         internal Core()
         {
