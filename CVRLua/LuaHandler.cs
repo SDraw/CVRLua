@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CVRLua
 {
-    class LuaHandler
+    class LuaHandler : IDisposable
     {
         public enum ScriptEvent
         {
@@ -35,7 +35,7 @@ namespace CVRLua
             OnAttachmentDeattach
         }
 
-        readonly Lua.LuaVM m_vm = null;
+        Lua.LuaVM m_vm = null;
         readonly Dictionary<ScriptEvent, int> m_eventFunctions = null; // Event <-> Reference
 
         internal static void Init()
@@ -165,6 +165,16 @@ namespace CVRLua
             Lua.LuaDefs.PlayerDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.LuaScriptDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.UtilityDefs.RegisterInVM(m_vm);
+        }
+
+        public void Dispose()
+        {
+            m_eventFunctions.Clear();
+            if(m_vm != null)
+            {
+                m_vm.Dispose();
+                m_vm = null;
+            }
         }
 
         public void Execute(string p_code)

@@ -5,12 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace CVRLua
 {
     public class Core : MelonLoader.MelonMod
     {
-        public const int c_modRelease = 20;
+        public const int c_modRelease = 21;
 
         static public Core Instance { get; private set; } = null;
 
@@ -62,6 +63,8 @@ namespace CVRLua
                 null,
                 new HarmonyLib.HarmonyMethod(typeof(Core).GetMethod(nameof(OnPuppetMasterStart_Postfix), BindingFlags.NonPublic | BindingFlags.Static))
             );
+
+            SceneManager.sceneLoaded += this.OnSceneWasLoaded;
         }
 
         public override void OnDeinitializeMelon()
@@ -70,14 +73,25 @@ namespace CVRLua
                 Instance = null;
         }
 
+        // Scrips register and removal
         internal void RegisterScript(LuaScript p_script)
         {
             m_scripts.Add(p_script);
         }
 
-        internal void UnregisterScript(LuaScript p_script)
+        void OnSceneWasLoaded(Scene p_scene, LoadSceneMode p_mode)
         {
-            m_scripts.Remove(p_script);
+            while(true)
+            {
+                int l_index = m_scripts.FindIndex(p => (p == null));
+                if(l_index != -1)
+                {
+                    m_scripts[l_index].Dispose();
+                    m_scripts.RemoveAt(l_index);
+                }
+                else
+                    break;
+            }
         }
 
         // Patches

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CVRLua
 {
-    public class LuaScript : MonoBehaviour
+    public class LuaScript : MonoBehaviour, System.IDisposable
     {
         public List<TextAsset> Scripts = new List<TextAsset>();
         public List<string> VariableNames = new List<string>();
@@ -17,11 +17,6 @@ namespace CVRLua
 
         CVRInteractable m_interactable = null;
         CVRAttachment m_attachment = null;
-
-        ~LuaScript()
-        {
-            Core.Instance?.UnregisterScript(this); // Yes, it works
-        }
 
         void Awake()
         {
@@ -62,6 +57,15 @@ namespace CVRLua
                 }
 
                 m_luaHandler.ParseEvents();
+            }
+        }
+
+        public void Dispose()
+        {
+            if(m_luaHandler != null)
+            {
+                m_luaHandler.Dispose();
+                m_luaHandler = null;
             }
         }
 

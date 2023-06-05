@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace CVRLua.Lua
 {
-    class LuaVM
+    class LuaVM : IDisposable
     {
         class ReferencedObject
         {
@@ -25,7 +25,7 @@ namespace CVRLua.Lua
 
         static readonly Dictionary<IntPtr, LuaVM> ms_VMs = new Dictionary<IntPtr, LuaVM>();
 
-        readonly IntPtr m_state = IntPtr.Zero;
+        IntPtr m_state = IntPtr.Zero;
         readonly Dictionary<long, ReferencedObject> m_objectsMap = null;
 
         internal LuaVM()
@@ -52,10 +52,16 @@ namespace CVRLua.Lua
             LuaInterop.lua_setmetatable(m_state, -2); // Combines two previous tables
             LuaInterop.lua_setfield(m_state, LuaInterop.LUA_REGISTRYINDEX, c_objectsPool);
         }
-        ~LuaVM()
+
+        public void Dispose()
         {
-            ms_VMs.Remove(m_state);
-            LuaInterop.lua_close(m_state);
+            if(m_state != IntPtr.Zero)
+            {
+                m_objectsMap.Clear();
+                ms_VMs.Remove(m_state);
+                LuaInterop.lua_close(m_state);
+                m_state = IntPtr.Zero;
+            }
         }
 
         // Generic Lua stuff
