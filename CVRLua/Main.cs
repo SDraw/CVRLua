@@ -11,6 +11,8 @@ namespace CVRLua
 {
     public class Core : MelonLoader.MelonMod
     {
+        public const int c_modRelease = 19;
+
         static public Core Instance { get; private set; } = null;
 
         readonly List<LuaScript> m_scripts = null;

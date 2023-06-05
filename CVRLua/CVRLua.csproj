@@ -119,6 +119,7 @@
     <Compile Include="Lua\LuaDefs\CVRInteractableDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRPickupObjectDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRVideoPlayerDefs.cs" />
+    <Compile Include="Lua\LuaDefs\MeshRendererDefs.cs" />
     <Compile Include="Lua\LuaDefs\NavMeshAgentDefs.cs" />
     <Compile Include="Lua\LuaDefs\NavMeshHitDefs.cs" />
     <Compile Include="Lua\LuaDefs\NavMeshPathDefs.cs" />
@@ -128,8 +129,10 @@
     <Compile Include="Lua\LuaDefs\RandomDefs.cs" />
     <Compile Include="Lua\LuaDefs\RaycastHitDefs.cs" />
     <Compile Include="Lua\LuaDefs\RayDefs.cs" />
+    <Compile Include="Lua\LuaDefs\RendererDefs.cs" />
     <Compile Include="Lua\LuaDefs\RenderSettingsDefs.cs" />
     <Compile Include="Lua\LuaDefs\RigidbodyDefs.cs" />
+    <Compile Include="Lua\LuaDefs\SkinnedMeshRendererDefs.cs" />
     <Compile Include="Lua\LuaDefs\TerrainColliderDefs.cs" />
     <Compile Include="Lua\LuaDefs\TextMeshProDefs.cs" />
     <Compile Include="Lua\LuaDefs\UtilityDefs.cs" />

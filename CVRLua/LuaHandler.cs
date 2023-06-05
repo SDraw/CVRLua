@@ -83,6 +83,10 @@ namespace CVRLua
             Lua.LuaDefs.WheelColliderDefs.Init();
             Lua.LuaDefs.TerrainColliderDefs.Init();
 
+            Lua.LuaDefs.RendererDefs.Init();
+            Lua.LuaDefs.MeshRendererDefs.Init();
+            Lua.LuaDefs.SkinnedMeshRendererDefs.Init();
+
             // CVR defs
             Lua.LuaDefs.CVRAttachmentDefs.Init();
             Lua.LuaDefs.CVRPointerDefs.Init();
@@ -144,6 +148,10 @@ namespace CVRLua
             Lua.LuaDefs.SphereColliderDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.WheelColliderDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.TerrainColliderDefs.RegisterInVM(m_vm);
+
+            Lua.LuaDefs.RendererDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.MeshRendererDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.SkinnedMeshRendererDefs.RegisterInVM(m_vm);
 
             // CVR defs
             Lua.LuaDefs.CVRAttachmentDefs.RegisterInVM(m_vm);

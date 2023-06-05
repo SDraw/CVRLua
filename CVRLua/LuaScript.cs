@@ -36,7 +36,7 @@ namespace CVRLua
 
                 m_luaHandler.SetGlobalVariable("this", this.gameObject);
                 m_luaHandler.SetGlobalVariable("localPlayer", Players.PlayersManager.GetLocalPlayer());
-                m_luaHandler.SetGlobalVariable("modRelease", 18);
+                m_luaHandler.SetGlobalVariable("modRelease", Core.c_modRelease);
 
                 if((VariableNames.Count > 0) && (VariableValues.Count > 0))
                 {
