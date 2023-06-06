@@ -57,6 +57,9 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceProperties.Add(("zoom", (GetZoom, null)));
             ms_instanceProperties.Add(("zoomFactor", (GetZoomFactor, null)));
             ms_instanceProperties.Add(("movementVector", (GetMovementVector, null)));
+            ms_instanceProperties.Add(("lookVector", (GetLookVector, null)));
+            ms_instanceProperties.Add(("individualFingerTracking", (GetIndividualFingerTracking, null)));
+            ms_instanceProperties.Add(("fingerCurls", (GetFingerCurls, null)));
 
             ms_instanceMethods.Add((nameof(Teleport), Teleport));
             ms_instanceMethods.Add((nameof(SetImmobilized), SetImmobilized));
@@ -650,6 +653,48 @@ namespace CVRLua.Lua.LuaDefs
             l_argReader.ReadObject(ref l_player);
             if(!l_argReader.HasErrors() && l_player.GetMovementVector(out var l_move))
                 l_argReader.PushObject(new Wrappers.Vector2(l_move));
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+
+        static int GetLookVector(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Players.Player l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors() && l_player.GetLookVector(out var l_look))
+                l_argReader.PushObject(new Wrappers.Vector2(l_look));
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+
+        static int GetIndividualFingerTracking(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Players.Player l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushBoolean(l_player.GetIndividualFingerTracking());
+            else
+                l_argReader.PushBoolean(false);
+
+            l_argReader.LogError();
+            return 1;
+        }
+
+        static int GetFingerCurls(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Players.Player l_player = null;
+            l_argReader.ReadObject(ref l_player);
+            if(!l_argReader.HasErrors() && l_player.GetFingerCurls(out var l_curls))
+                l_argReader.PushTable(l_curls);
             else
                 l_argReader.PushBoolean(false);
 

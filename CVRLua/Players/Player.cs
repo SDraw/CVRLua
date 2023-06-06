@@ -69,7 +69,7 @@ namespace CVRLua.Players
             return false;
         }
 
-        public bool GetPosition(out UnityEngine.Vector3 p_pos)
+        public bool GetPosition(out Vector3 p_pos)
         {
             if(m_local)
             {
@@ -81,11 +81,11 @@ namespace CVRLua.Players
                 p_pos = m_gameObject.transform.position;
                 return true;
             }
-            p_pos = UnityEngine.Vector3.zero;
+            p_pos = Vector3.zero;
             return false;
         }
 
-        public bool GetRotation(out UnityEngine.Quaternion p_rot)
+        public bool GetRotation(out Quaternion p_rot)
         {
             if(m_local)
             {
@@ -97,7 +97,7 @@ namespace CVRLua.Players
                 p_rot = m_gameObject.transform.rotation;
                 return true;
             }
-            p_rot = UnityEngine.Quaternion.identity;
+            p_rot = Quaternion.identity;
             return false;
         }
 
@@ -165,7 +165,7 @@ namespace CVRLua.Players
             return false;
         }
 
-        public bool GetCameraPosition(out UnityEngine.Vector3 p_pos)
+        public bool GetCameraPosition(out Vector3 p_pos)
         {
             if(m_local)
             {
@@ -181,11 +181,11 @@ namespace CVRLua.Players
                     return true;
                 }
             }
-            p_pos = UnityEngine.Vector3.zero;
+            p_pos = Vector3.zero;
             return false;
         }
 
-        public bool GetCameraRotation(out UnityEngine.Quaternion p_rot)
+        public bool GetCameraRotation(out Quaternion p_rot)
         {
             if(m_local)
             {
@@ -201,7 +201,7 @@ namespace CVRLua.Players
                     return true;
                 }
             }
-            p_rot = UnityEngine.Quaternion.identity;
+            p_rot = Quaternion.identity;
             return false;
         }
 
@@ -328,23 +328,24 @@ namespace CVRLua.Players
             p_factor = 0f;
             return false;
         }
-        public bool GetMovementVector(out UnityEngine.Vector2 p_vec)
+
+        public bool GetMovementVector(out Vector2 p_vec)
         {
             if(m_local)
             {
-                p_vec = new UnityEngine.Vector2(MovementSystem.Instance.movementVector.x, MovementSystem.Instance.movementVector.z);
+                p_vec = new Vector2(MovementSystem.Instance.movementVector.x, MovementSystem.Instance.movementVector.z);
                 return true;
             }
             if(m_remote && (m_puppetMaster != null))
             {
-                p_vec = new UnityEngine.Vector2(m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorMovementX, m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorMovementY);
+                p_vec = new Vector2(m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorMovementX, m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorMovementY);
                 return true;
             }
-            p_vec = UnityEngine.Vector2.zero;
+            p_vec = Vector2.zero;
             return false;
         }
 
-        public bool GetLeftHandPosition(out UnityEngine.Vector3 p_pos)
+        public bool GetLeftHandPosition(out Vector3 p_pos)
         {
             if(m_local)
             {
@@ -364,11 +365,11 @@ namespace CVRLua.Players
                     }
                 }
             }
-            p_pos = UnityEngine.Vector3.zero;
+            p_pos = Vector3.zero;
             return false;
         }
 
-        public bool GetLeftHandRotation(out UnityEngine.Quaternion p_rot)
+        public bool GetLeftHandRotation(out Quaternion p_rot)
         {
             if(m_local)
             {
@@ -388,11 +389,11 @@ namespace CVRLua.Players
                     }
                 }
             }
-            p_rot = UnityEngine.Quaternion.identity;
+            p_rot = Quaternion.identity;
             return false;
         }
 
-        public bool GetRightHandPosition(out UnityEngine.Vector3 p_pos)
+        public bool GetRightHandPosition(out Vector3 p_pos)
         {
             if(m_local)
             {
@@ -412,11 +413,11 @@ namespace CVRLua.Players
                     }
                 }
             }
-            p_pos = UnityEngine.Vector3.zero;
+            p_pos = Vector3.zero;
             return false;
         }
 
-        public bool GetRightHandRotation(out UnityEngine.Quaternion p_rot)
+        public bool GetRightHandRotation(out Quaternion p_rot)
         {
             if(m_local)
             {
@@ -436,7 +437,7 @@ namespace CVRLua.Players
                     }
                 }
             }
-            p_rot = UnityEngine.Quaternion.identity;
+            p_rot = Quaternion.identity;
             return false;
         }
 
@@ -472,13 +473,13 @@ namespace CVRLua.Players
             return false;
         }
 
-        public void Teleport(UnityEngine.Vector3 p_position)
+        public void Teleport(Vector3 p_position)
         {
             if(m_local)
                 MovementSystem.Instance.TeleportTo(p_position);
         }
 
-        public void Teleport(UnityEngine.Vector3 p_position, UnityEngine.Quaternion p_rotation)
+        public void Teleport(Vector3 p_position, Quaternion p_rotation)
         {
             if(m_local)
                 MovementSystem.Instance.TeleportTo(p_position, p_rotation.eulerAngles);
@@ -496,11 +497,11 @@ namespace CVRLua.Players
                 RootLogic.Instance.Respawn();
         }
 
-        public bool GetBonePosition(HumanBodyBones p_bone, out UnityEngine.Vector3 p_vec)
+        public bool GetBonePosition(HumanBodyBones p_bone, out Vector3 p_vec)
         {
             if(m_local)
             {
-                UnityEngine.Vector3 l_result = UnityEngine.Vector3.zero;
+                Vector3 l_result = Vector3.zero;
                 if((PlayerSetup.Instance._animator != null) && PlayerSetup.Instance._animator.isHuman)
                 {
                     Transform l_bone = PlayerSetup.Instance._animator.GetBoneTransform(p_bone);
@@ -524,15 +525,15 @@ namespace CVRLua.Players
                     }
                 }
             }
-            p_vec = UnityEngine.Vector3.zero;
+            p_vec = Vector3.zero;
             return false;
         }
 
-        public bool GetBoneRotation(HumanBodyBones p_bone, out UnityEngine.Quaternion p_rot)
+        public bool GetBoneRotation(HumanBodyBones p_bone, out Quaternion p_rot)
         {
             if(m_local)
             {
-                UnityEngine.Vector3 l_result = UnityEngine.Vector3.zero;
+                Vector3 l_result = Vector3.zero;
                 if((PlayerSetup.Instance._animator != null) && PlayerSetup.Instance._animator.isHuman)
                 {
                     Transform l_bone = PlayerSetup.Instance._animator.GetBoneTransform(p_bone);
@@ -556,7 +557,67 @@ namespace CVRLua.Players
                     }
                 }
             }
-            p_rot = UnityEngine.Quaternion.identity;
+            p_rot = Quaternion.identity;
+            return false;
+        }
+
+        public bool GetLookVector(out Vector2 p_vec)
+        {
+            if(m_local)
+            {
+                p_vec = CVRInputManager.Instance.lookVector;
+                return true;
+            }
+            p_vec = Vector2.zero;
+            return false;
+        }
+
+        public bool GetIndividualFingerTracking()
+        {
+            if(m_local)
+                return CVRInputManager.Instance.individualFingerTracking;
+            if(m_remote && (m_puppetMaster != null))
+                return m_puppetMaster.PlayerAvatarMovementDataInput.IndexUseIndividualFingers;
+            return false;
+        }
+
+        public bool GetFingerCurls(out float[] p_curls)
+        {
+            if(m_local)
+            {
+                p_curls = new float[10]
+                {
+                    CVRInputManager.Instance.fingerCurlLeftThumb,
+                    CVRInputManager.Instance.fingerCurlLeftIndex,
+                    CVRInputManager.Instance.fingerCurlLeftMiddle,
+                    CVRInputManager.Instance.fingerCurlLeftThumb,
+                    CVRInputManager.Instance.fingerCurlLeftPinky,
+                    CVRInputManager.Instance.fingerCurlRightThumb,
+                    CVRInputManager.Instance.fingerCurlRightIndex,
+                    CVRInputManager.Instance.fingerCurlRightMiddle,
+                    CVRInputManager.Instance.fingerCurlRightThumb,
+                    CVRInputManager.Instance.fingerCurlRightPinky
+                };
+                return true;
+            }
+            if(m_remote && (m_puppetMaster != null))
+            {
+                p_curls = new float[10]
+                {
+                    m_puppetMaster.PlayerAvatarMovementDataInput.LeftThumbCurl,
+                    m_puppetMaster.PlayerAvatarMovementDataInput.LeftIndexCurl,
+                    m_puppetMaster.PlayerAvatarMovementDataInput.LeftMiddleCurl,
+                    m_puppetMaster.PlayerAvatarMovementDataInput.LeftRingCurl,
+                    m_puppetMaster.PlayerAvatarMovementDataInput.LeftPinkyCurl,
+                    m_puppetMaster.PlayerAvatarMovementDataInput.RightThumbCurl,
+                    m_puppetMaster.PlayerAvatarMovementDataInput.RightIndexCurl,
+                    m_puppetMaster.PlayerAvatarMovementDataInput.RightMiddleCurl,
+                    m_puppetMaster.PlayerAvatarMovementDataInput.RightRingCurl,
+                    m_puppetMaster.PlayerAvatarMovementDataInput.RightPinkyCurl
+                };
+                return true;
+            }
+            p_curls = null;
             return false;
         }
 
