@@ -28,7 +28,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceProperties.Add(("lightmapScaleOffset", (GetLightmapScaleOffset, SetLightmapScaleOffset)));
             ms_instanceProperties.Add(("lightProbeProxyVolumeOverride", (GetLightProbeProxyVolumeOverride, SetLightProbeProxyVolumeOverride)));
             ms_instanceProperties.Add(("lightProbeUsage", (GetLightProbeUsage, SetLightProbeUsage)));
-            //ms_instanceProperties.Add(("localToWorldMatrix", (?, null)));
+            ms_instanceProperties.Add(("localToWorldMatrix", (GetLocalToWorldMatrix, null)));
             //ms_instanceProperties.Add(("material", (?, ?)));
             //ms_instanceProperties.Add(("materials", (?, ?)));
             ms_instanceProperties.Add(("motionVectorGenerationMode", (GetMotionVectorGenerationMode, SetMotionVectorGenerationMode)));
@@ -46,7 +46,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceProperties.Add(("sortingLayerID", (GetSortingLayerID, SetSortingLayerID)));
             ms_instanceProperties.Add(("sortingLayerName", (GetSortingLayerName, SetSortingLayerName)));
             ms_instanceProperties.Add(("sortingOrder", (GetSortingOrder, SetSortingOrder)));
-            //ms_instanceProperties.Add(("worldToLocalMatrix", (?, null)));
+            ms_instanceProperties.Add(("worldToLocalMatrix", (GetWorldToLocalMatrix, null)));
 
             //ms_instanceMethods.Add((nameof(GetClosestReflectionProbes), GetClosestReflectionProbes));
             //ms_instanceMethods.Add((nameof(GetMaterials), GetMaterials));
@@ -439,6 +439,27 @@ namespace CVRLua.Lua.LuaDefs
 
             l_argReader.LogError();
             return 0;
+        }
+
+        static int GetLocalToWorldMatrix(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Renderer l_render = null;
+            l_argReader.ReadObject(ref l_render);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_render != null)
+                    l_argReader.PushObject(new Wrappers.Matrix4x4(l_render.localToWorldMatrix));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+            l_argReader.LogError();
+            return 1;
         }
 
         static int GetMotionVectorGenerationMode(IntPtr p_state)
@@ -953,6 +974,27 @@ namespace CVRLua.Lua.LuaDefs
             }
             l_argReader.LogError();
             return 0;
+        }
+
+        static int GetWorldToLocalMatrix(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Renderer l_render = null;
+            l_argReader.ReadObject(ref l_render);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_render != null)
+                    l_argReader.PushObject(new Wrappers.Matrix4x4(l_render.worldToLocalMatrix));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+            else
+                l_argReader.PushBoolean(false);
+            l_argReader.LogError();
+            return 1;
         }
 
         // Instance methods

@@ -55,6 +55,7 @@ namespace CVRLua
             Lua.LuaDefs.ContactPointDefs.Init();
             Lua.LuaDefs.GameObjectDefs.Init();
             Lua.LuaDefs.MathfDefs.Init();
+            Lua.LuaDefs.Matrix4x4Defs.Init();
             Lua.LuaDefs.NavMeshAgentDefs.Init();
             Lua.LuaDefs.NavMeshHitDefs.Init();
             Lua.LuaDefs.NavMeshPathDefs.Init();
@@ -121,6 +122,7 @@ namespace CVRLua
             Lua.LuaDefs.ContactPointDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.GameObjectDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.MathfDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.Matrix4x4Defs.RegisterInVM(m_vm);
             Lua.LuaDefs.NavMeshAgentDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.NavMeshHitDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.NavMeshPathDefs.RegisterInVM(m_vm);

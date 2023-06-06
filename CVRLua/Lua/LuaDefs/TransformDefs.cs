@@ -27,7 +27,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceProperties.Add(("localPosition", (GetLocalPosition, SetLocalPosition)));
             ms_instanceProperties.Add(("localRotation", (GetLocalRotation, SetLocalRotation)));
             ms_instanceProperties.Add(("localScale", (GetLocalScale, SetLocalScale)));
-            //ms_instanceProperties.Add(("localToWorldMatrix", (?, ?)));
+            ms_instanceProperties.Add(("localToWorldMatrix", (GetLocalToWorldMatrix, null)));
             ms_instanceProperties.Add(("lossyScale", (GetLossyScale, null)));
             ms_instanceProperties.Add(("parent", (GetParent, SetParentProp)));
             ms_instanceProperties.Add(("position", (GetPosition, SetPosition)));
@@ -35,7 +35,7 @@ namespace CVRLua.Lua.LuaDefs
             ms_instanceProperties.Add(("root", (GetRoot, null)));
             ms_instanceProperties.Add(("rotation", (GetRotation, SetRotation)));
             ms_instanceProperties.Add(("up", (GetUp, null)));
-            //ms_instanceProperties.Add(("worldToLocalMatrix", (?, ?)));
+            ms_instanceProperties.Add(("worldToLocalMatrix", (GetWorldToLocalMatrix, null)));
 
             ms_instanceMethods.Add((nameof(DetachChildren), DetachChildren));
             ms_instanceMethods.Add((nameof(Find), Find));
@@ -365,6 +365,26 @@ namespace CVRLua.Lua.LuaDefs
             return 0;
         }
 
+        static int GetLocalToWorldMatrix(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushObject(new Wrappers.Matrix4x4(l_transform.localToWorldMatrix));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
+        }
+
         static int GetLossyScale(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
@@ -558,6 +578,26 @@ namespace CVRLua.Lua.LuaDefs
             {
                 if(l_transform != null)
                     l_argReader.PushObject(new Wrappers.Vector3(l_transform.up));
+                else
+                {
+                    l_argReader.SetError(c_destroyed);
+                    l_argReader.PushBoolean(false);
+                }
+            }
+
+            l_argReader.LogError();
+            return 1;
+        }
+
+        static int GetWorldToLocalMatrix(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Transform l_transform = null;
+            l_argReader.ReadObject(ref l_transform);
+            if(!l_argReader.HasErrors())
+            {
+                if(l_transform != null)
+                    l_argReader.PushObject(new Wrappers.Matrix4x4(l_transform.worldToLocalMatrix));
                 else
                 {
                     l_argReader.SetError(c_destroyed);

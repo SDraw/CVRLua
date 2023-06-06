@@ -508,15 +508,15 @@ namespace CVRLua.Lua.LuaDefs
 
         static int GetY(IntPtr p_state)
         {
-            var l_reader = new LuaArgReader(p_state);
+            var l_argReader = new LuaArgReader(p_state);
             Wrappers.Vector2 l_vec = null;
-            l_reader.ReadObject(ref l_vec);
-            if(!l_reader.HasErrors())
-                l_reader.PushNumber(l_vec.m_vec.y);
+            l_argReader.ReadObject(ref l_vec);
+            if(!l_argReader.HasErrors())
+                l_argReader.PushNumber(l_vec.m_vec.y);
             else
-                l_reader.PushBoolean(false);
+                l_argReader.PushBoolean(false);
 
-            l_reader.LogError();
+            l_argReader.LogError();
             return 1;
         }
         static int SetY(IntPtr p_state)

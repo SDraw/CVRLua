@@ -119,6 +119,7 @@
     <Compile Include="Lua\LuaDefs\CVRInteractableDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRPickupObjectDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRVideoPlayerDefs.cs" />
+    <Compile Include="Lua\LuaDefs\Matrix4x4Defs.cs" />
     <Compile Include="Lua\LuaDefs\MeshRendererDefs.cs" />
     <Compile Include="Lua\LuaDefs\NavMeshAgentDefs.cs" />
     <Compile Include="Lua\LuaDefs\NavMeshHitDefs.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="Wrappers\Color.cs" />
     <Compile Include="Wrappers\ContactPoint.cs" />
     <Compile Include="Players\Player.cs" />
+    <Compile Include="Wrappers\Matrix4x4.cs" />
     <Compile Include="Wrappers\OffMeshLinkData.cs" />
     <Compile Include="Wrappers\NavMeshHit.cs" />
     <Compile Include="Wrappers\Quaternion.cs" />
