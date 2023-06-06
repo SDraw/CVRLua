@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace CVRLua
 {
@@ -63,8 +62,6 @@ namespace CVRLua
                 null,
                 new HarmonyLib.HarmonyMethod(typeof(Core).GetMethod(nameof(OnPuppetMasterStart_Postfix), BindingFlags.NonPublic | BindingFlags.Static))
             );
-
-            SceneManager.sceneLoaded += this.OnSceneWasLoaded;
         }
 
         public override void OnDeinitializeMelon()
@@ -79,18 +76,13 @@ namespace CVRLua
             m_scripts.Add(p_script);
         }
 
-        void OnSceneWasLoaded(Scene p_scene, LoadSceneMode p_mode)
+        internal void UnregisterScript(LuaScript p_script)
         {
-            while(true)
+            int l_index = m_scripts.FindIndex(p => ReferenceEquals(p, p_script));
+            if(l_index != -1)
             {
-                int l_index = m_scripts.FindIndex(p => (p == null));
-                if(l_index != -1)
-                {
-                    m_scripts[l_index].Dispose();
-                    m_scripts.RemoveAt(l_index);
-                }
-                else
-                    break;
+                m_scripts[l_index].Dispose();
+                m_scripts.RemoveAt(l_index);
             }
         }
 
@@ -191,7 +183,7 @@ namespace CVRLua
             }
         }
 
-        // Playeres managment
+        // Players managment
         static void OnPuppetMasterStart_Postfix(ref PuppetMaster __instance) => Instance?.OnPuppetMasterStart(__instance.gameObject);
         void OnPuppetMasterStart(GameObject p_obj)
         {

@@ -78,6 +78,7 @@ namespace CVRLua
         void OnDestroy()
         {
             m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnDestroy);
+            Core.Instance?.UnregisterScript(this);
         }
 
         void Update()
