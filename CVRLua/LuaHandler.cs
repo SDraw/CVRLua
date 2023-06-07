@@ -36,7 +36,7 @@ namespace CVRLua
         }
 
         Lua.LuaVM m_vm = null;
-        readonly Dictionary<ScriptEvent, int> m_eventFunctions = null; // Event <-> Reference
+        readonly Dictionary<ScriptEvent, int> m_eventFunctions = null; // Event <-> Function reference
 
         internal static void Init()
         {
@@ -50,10 +50,13 @@ namespace CVRLua
             Lua.LuaDefs.AudioClipDefs.Init();
             Lua.LuaDefs.AudioSourceDefs.Init();
             Lua.LuaDefs.BoundsDefs.Init();
+            Lua.LuaDefs.CameraDefs.Init();
             Lua.LuaDefs.CollisionDefs.Init();
             Lua.LuaDefs.ColorDefs.Init();
             Lua.LuaDefs.ContactPointDefs.Init();
             Lua.LuaDefs.GameObjectDefs.Init();
+            Lua.LuaDefs.LayerMaskDefs.Init();
+            Lua.LuaDefs.LightDefs.Init();
             Lua.LuaDefs.MathfDefs.Init();
             Lua.LuaDefs.Matrix4x4Defs.Init();
             Lua.LuaDefs.NavMeshAgentDefs.Init();
@@ -90,6 +93,7 @@ namespace CVRLua
 
             // CVR defs
             Lua.LuaDefs.CVRAttachmentDefs.Init();
+            Lua.LuaDefs.CVRMirrorDefs.Init();
             Lua.LuaDefs.CVRPointerDefs.Init();
             Lua.LuaDefs.CVRVideoPlayerDefs.Init();
             Lua.LuaDefs.CVRInteractableDefs.Init();
@@ -117,10 +121,13 @@ namespace CVRLua
             Lua.LuaDefs.AudioClipDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.AudioSourceDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.BoundsDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.CameraDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CollisionDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.ColorDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.ContactPointDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.GameObjectDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.LayerMaskDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.LightDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.MathfDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.Matrix4x4Defs.RegisterInVM(m_vm);
             Lua.LuaDefs.NavMeshAgentDefs.RegisterInVM(m_vm);
@@ -157,6 +164,7 @@ namespace CVRLua
 
             // CVR defs
             Lua.LuaDefs.CVRAttachmentDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.CVRMirrorDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CVRPointerDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CVRVideoPlayerDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CVRInteractableDefs.RegisterInVM(m_vm);

@@ -114,11 +114,15 @@
     <Compile Include="Lua\LuaDefs\AudioSourceDefs.cs" />
     <Compile Include="Lua\LuaDefs\BehaviourDefs.cs" />
     <Compile Include="Lua\LuaDefs\BoundsDefs.cs" />
+    <Compile Include="Lua\LuaDefs\CameraDefs.cs" />
     <Compile Include="Lua\LuaDefs\ColorDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRAttachmentDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRInteractableDefs.cs" />
+    <Compile Include="Lua\LuaDefs\CVRMirrorDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRPickupObjectDefs.cs" />
     <Compile Include="Lua\LuaDefs\CVRVideoPlayerDefs.cs" />
+    <Compile Include="Lua\LuaDefs\LayerMaskDefs.cs" />
+    <Compile Include="Lua\LuaDefs\LightDefs.cs" />
     <Compile Include="Lua\LuaDefs\Matrix4x4Defs.cs" />
     <Compile Include="Lua\LuaDefs\MeshRendererDefs.cs" />
     <Compile Include="Lua\LuaDefs\NavMeshAgentDefs.cs" />

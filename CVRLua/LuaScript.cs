@@ -27,8 +27,8 @@ namespace CVRLua
                 m_attachment = this.GetComponent<CVRAttachment>();
                 if(m_attachment != null)
                 {
-                    m_attachment.onAttach.AddListener(this.OnAttach);
-                    m_attachment.onDeattach.AddListener(this.OnDeattach);
+                    m_attachment.onAttach.AddListener(this.OnAttachmentAttach);
+                    m_attachment.onDeattach.AddListener(this.OnAttachmentDeattach);
                 }
 
                 m_luaHandler = new LuaHandler();
@@ -202,12 +202,12 @@ namespace CVRLua
                 m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnInteractableGazeExit);
         }
 
-        void OnAttach()
+        void OnAttachmentAttach()
         {
             m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnAttachmentAttach);
         }
 
-        void OnDeattach()
+        void OnAttachmentDeattach()
         {
             m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnAttachmentDeattach);
         }
