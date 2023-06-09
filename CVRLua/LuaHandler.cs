@@ -32,7 +32,10 @@ namespace CVRLua
             OnPlayerJoin,
             OnPlayerLeft,
             OnAttachmentAttach,
-            OnAttachmentDeattach
+            OnAttachmentDeattach,
+            OnButtonClick,
+            OnToggleChange,
+            OnSliderChange
         }
 
         Lua.LuaVM m_vm = null;
@@ -90,6 +93,11 @@ namespace CVRLua
             Lua.LuaDefs.RendererDefs.Init();
             Lua.LuaDefs.MeshRendererDefs.Init();
             Lua.LuaDefs.SkinnedMeshRendererDefs.Init();
+
+            Lua.LuaDefs.UiSelectableDefs.Init();
+            Lua.LuaDefs.UiButtonDefs.Init();
+            Lua.LuaDefs.UiToggleDefs.Init();
+            Lua.LuaDefs.UiSliderDefs.Init();
 
             // CVR defs
             Lua.LuaDefs.CVRAttachmentDefs.Init();
@@ -162,6 +170,11 @@ namespace CVRLua
             Lua.LuaDefs.MeshRendererDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.SkinnedMeshRendererDefs.RegisterInVM(m_vm);
 
+            Lua.LuaDefs.UiSelectableDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.UiButtonDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.UiToggleDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.UiSliderDefs.RegisterInVM(m_vm);
+
             // CVR defs
             Lua.LuaDefs.CVRAttachmentDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CVRMirrorDefs.RegisterInVM(m_vm);
@@ -180,11 +193,8 @@ namespace CVRLua
         public void Dispose()
         {
             m_eventFunctions.Clear();
-            if(m_vm != null)
-            {
-                m_vm.Dispose();
-                m_vm = null;
-            }
+            m_vm?.Dispose();
+            m_vm = null;
         }
 
         public void Execute(string p_code)

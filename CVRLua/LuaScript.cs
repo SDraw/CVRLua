@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CVRLua
 {
@@ -17,6 +18,9 @@ namespace CVRLua
 
         CVRInteractable m_interactable = null;
         CVRAttachment m_attachment = null;
+        Button m_uiButton = null;
+        Toggle m_uiToggle = null;
+        Slider m_uiSlider = null;
 
         void Awake()
         {
@@ -30,6 +34,18 @@ namespace CVRLua
                     m_attachment.onAttach.AddListener(this.OnAttachmentAttach);
                     m_attachment.onDeattach.AddListener(this.OnAttachmentDeattach);
                 }
+
+                m_uiButton = this.GetComponent<Button>();
+                if(m_uiButton != null)
+                    m_uiButton.onClick.AddListener(this.OnButtonClick);
+
+                m_uiToggle = this.GetComponent<Toggle>();
+                if(m_uiToggle != null)
+                    m_uiToggle.onValueChanged.AddListener(this.OnToggleChange);
+
+                m_uiSlider = this.GetComponent<Slider>();
+                if(m_uiSlider != null)
+                    m_uiSlider.onValueChanged.AddListener(this.OnSliderChange);
 
                 m_luaHandler = new LuaHandler();
                 Core.Instance?.RegisterScript(this);
@@ -62,11 +78,8 @@ namespace CVRLua
 
         public void Dispose()
         {
-            if(m_luaHandler != null)
-            {
-                m_luaHandler.Dispose();
-                m_luaHandler = null;
-            }
+            m_luaHandler?.Dispose();
+            m_luaHandler = null;
         }
 
         void Start()
@@ -220,6 +233,22 @@ namespace CVRLua
         internal void OnPlayerLeft(Players.Player p_player)
         {
             m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnPlayerLeft, p_player);
+        }
+
+        // Unity UI
+        void OnButtonClick()
+        {
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnButtonClick);
+        }
+
+        void OnToggleChange(bool p_state)
+        {
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnToggleChange, p_state);
+        }
+
+        void OnSliderChange(float p_value)
+        {
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnSliderChange, p_value);
         }
     }
 }

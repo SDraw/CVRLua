@@ -140,6 +140,10 @@
     <Compile Include="Lua\LuaDefs\SkinnedMeshRendererDefs.cs" />
     <Compile Include="Lua\LuaDefs\TerrainColliderDefs.cs" />
     <Compile Include="Lua\LuaDefs\TextMeshProDefs.cs" />
+    <Compile Include="Lua\LuaDefs\UiButtonDefs.cs" />
+    <Compile Include="Lua\LuaDefs\UiSelectableDefs.cs" />
+    <Compile Include="Lua\LuaDefs\UiSliderDefs.cs" />
+    <Compile Include="Lua\LuaDefs\UiToggleDefs.cs" />
     <Compile Include="Lua\LuaDefs\UtilityDefs.cs" />
     <Compile Include="Lua\LuaDefs\WheelColliderDefs.cs" />
     <Compile Include="Lua\LuaDefs\SphereColliderDefs.cs" />
