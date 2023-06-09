@@ -94,6 +94,9 @@ namespace CVRLua
             Lua.LuaDefs.MeshRendererDefs.Init();
             Lua.LuaDefs.SkinnedMeshRendererDefs.Init();
 
+            Lua.LuaDefs.TextureDefs.Init();
+            Lua.LuaDefs.Texture2DDefs.Init();
+
             Lua.LuaDefs.UiSelectableDefs.Init();
             Lua.LuaDefs.UiButtonDefs.Init();
             Lua.LuaDefs.UiToggleDefs.Init();
@@ -169,6 +172,9 @@ namespace CVRLua
             Lua.LuaDefs.RendererDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.MeshRendererDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.SkinnedMeshRendererDefs.RegisterInVM(m_vm);
+
+            Lua.LuaDefs.TextureDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.Texture2DDefs.RegisterInVM(m_vm);
 
             Lua.LuaDefs.UiSelectableDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.UiButtonDefs.RegisterInVM(m_vm);
