@@ -68,7 +68,7 @@ namespace CVRLua.Lua.LuaDefs
             {
                 if(l_obj != null)
                 {
-                    if(l_obj.IsSafeToDestroy())
+                    if(l_obj.IsSafeToManipulate())
                     {
                         UnityEngine.Object.Destroy(l_obj);
                         l_argReader.PushBoolean(true);
@@ -98,8 +98,16 @@ namespace CVRLua.Lua.LuaDefs
             {
                 if(l_obj != null)
                 {
-                    UnityEngine.Object l_copy = UnityEngine.Object.Instantiate(l_obj);
-                    l_argReader.PushObject(l_copy);
+                    if(l_obj.IsSafeToManipulate())
+                    {
+                        UnityEngine.Object l_copy = UnityEngine.Object.Instantiate(l_obj);
+                        l_argReader.PushObject(l_copy);
+                    }
+                    else
+                    {
+                        l_argReader.SetError("Attempt to instantiate unsafe Object");
+                        l_argReader.PushBoolean(false);
+                    }
                 }
                 else
                 {

@@ -49,7 +49,7 @@ namespace CVRLua
             p_source.ForEach(p => p_target.Add(p));
         }
 
-        public static bool IsSafeToDestroy(this UnityEngine.Object p_object)
+        public static bool IsSafeToManipulate(this UnityEngine.Object p_object)
         {
             GameObject l_rootObject = null;
             if(p_object is Component)
