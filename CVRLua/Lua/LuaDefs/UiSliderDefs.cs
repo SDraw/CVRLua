@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsSlider), IsSlider));
-
             ms_instanceProperties.Add(("normalizedValue", (GetNormalizedValue, SetNormalizedValue)));
             ms_instanceProperties.Add(("value", (GetValue, SetValue)));
             ms_instanceProperties.Add(("wholeNumbers", (GetWholeNumbers, SetWholeNumbers)));
@@ -36,6 +34,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Slider), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsSlider), IsSlider);
         }
 
         // Static methods

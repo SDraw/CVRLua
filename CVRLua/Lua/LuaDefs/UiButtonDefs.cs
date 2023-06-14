@@ -16,14 +16,13 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsButton), IsButton));
-
             UiSelectableDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Button), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsButton), IsButton);
         }
 
         // Static methods

@@ -22,7 +22,6 @@ namespace CVRLua.Lua.LuaDefs
             ms_staticProperties.Add(("white", (GetWhite, null)));
             ms_staticProperties.Add(("yellow", (GetYellow, null)));
 
-            ms_staticMethods.Add((nameof(IsColor), IsColor));
             ms_staticMethods.Add((nameof(HSVToRGB), HSVToRGB));
             ms_staticMethods.Add((nameof(Lerp), Lerp));
             ms_staticMethods.Add((nameof(LerpUnclamped), LerpUnclamped));
@@ -49,6 +48,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Wrappers.Color), Create, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, null);
+            p_vm.RegisterFunction(nameof(IsColor), IsColor);
         }
 
         // Constructor

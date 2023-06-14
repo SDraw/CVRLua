@@ -17,7 +17,6 @@ namespace CVRLua.Lua.LuaDefs
         internal static void Init()
         {
             ms_staticMethods.Add((nameof(StringToHash), StringToHash));
-            ms_staticMethods.Add((nameof(IsAnimator), IsAnimator));
 
             ms_instanceProperties.Add(("angularVelocity", (GetAngularVelocity, null)));
             ms_instanceProperties.Add(("applyRootMotion", (GetApplyRootMotion, SetApplyRootMotion)));
@@ -125,6 +124,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Animator), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsAnimator), IsAnimator);
         }
 
         // Static methods

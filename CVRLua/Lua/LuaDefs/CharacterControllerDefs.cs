@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsCharacterController), IsCharacterController));
-
             ms_instanceProperties.Add(("center", (GetCenter, SetCenter)));
             ms_instanceProperties.Add(("collisionFlags", (GetCollisionFlags, null)));
             ms_instanceProperties.Add(("detectCollisions", (GetDetectCollisions, SetDetectCollisions)));
@@ -40,6 +38,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(CharacterController), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsCharacterController), IsCharacterController);
         }
 
         // Static methods

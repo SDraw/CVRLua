@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsSkinnedMeshRenderer), IsSkinnedMeshRenderer));
-
             ms_instanceProperties.Add(("bones", (GetBones, null))); // Need table parsing for LuaArgReader
             ms_instanceProperties.Add(("forceMatrixRecalculationPerRender", (GetForceMatrixRecalculationPerRender, SetForceMatrixRecalculationPerRender)));
             ms_instanceProperties.Add(("localBounds", (GetLocalBounds, SetLocalBounds)));
@@ -34,6 +32,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(SkinnedMeshRenderer), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsSkinnedMeshRenderer), IsSkinnedMeshRenderer);
         }
 
         // Static methods

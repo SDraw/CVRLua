@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsMeshCollider), IsMeshCollider));
-
             ms_instanceProperties.Add(("convex", (GetConvex, SetConvex)));
             ms_instanceProperties.Add(("cookingOptions", (GetCookingOptions, SetCookingOptions)));
             //ms_instanceProperties.Add("sharedMesh", (GetSharedMesh, SetSharedMesh));
@@ -28,6 +26,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(MeshCollider), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsMeshCollider), IsMeshCollider);
         }
 
         // Static methods

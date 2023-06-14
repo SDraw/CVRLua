@@ -27,7 +27,6 @@ namespace CVRLua.Lua.LuaDefs
             ms_staticMethods.Add((nameof(RotateTowards), RotateTowards));
             ms_staticMethods.Add((nameof(Slerp), Slerp));
             ms_staticMethods.Add((nameof(SlerpUnclamped), SlerpUnclamped));
-            ms_staticMethods.Add((nameof(IsQuaternion), IsQuaternion));
 
             ms_metaMethods.Add(("__mul", Multiply));
             ms_metaMethods.Add(("__eq", Equal));
@@ -50,6 +49,7 @@ namespace CVRLua.Lua.LuaDefs
         public static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Wrappers.Quaternion), Create, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsQuaternion), IsQuaternion);
         }
 
         static int Create(IntPtr p_state)

@@ -6,7 +6,7 @@ namespace CVRLua.Lua.LuaDefs
     {
         internal static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterGlobalFunction(nameof(Log), Log);
+            p_vm.RegisterFunction(nameof(Log), Log);
         }
 
         static int Log(IntPtr p_state)

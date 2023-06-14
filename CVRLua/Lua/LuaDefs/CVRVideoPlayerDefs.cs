@@ -17,8 +17,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsCVRVideoPlayer), IsCVRVideoPlayer));
-
             ms_instanceProperties.Add(("audioMode", (GetAudioMode, SetAudioMode)));
             ms_instanceProperties.Add(("autoplay", (GetAutoplay, null)));
             ms_instanceProperties.Add(("customAudioSource", (GetCustomAudioSource, null)));
@@ -39,6 +37,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(CVRVideoPlayer), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsCVRVideoPlayer), IsCVRVideoPlayer);
         }
 
         // Static methods

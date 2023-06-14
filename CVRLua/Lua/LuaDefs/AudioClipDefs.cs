@@ -17,7 +17,6 @@ namespace CVRLua.Lua.LuaDefs
         internal static void Init()
         {
             //ms_staticMethods(nameof(Create), Create); // Probably will not be implemented
-            ms_staticMethods.Add((nameof(IsAudioClip), IsAudioClip));
 
             ms_instanceProperties.Add(("ambisonic", (GetAmbisonic, null)));
             ms_instanceProperties.Add(("channels", (GetChannels, null)));
@@ -35,9 +34,9 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(AudioClip), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsAudioClip), IsAudioClip);
         }
 
-        // Static methods
         static int IsAudioClip(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);

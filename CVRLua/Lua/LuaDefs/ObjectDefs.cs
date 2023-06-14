@@ -17,7 +17,6 @@ namespace CVRLua.Lua.LuaDefs
         {
             ms_staticMethods.Add((nameof(Destroy), Destroy));
             ms_staticMethods.Add((nameof(Instantiate), Instantiate));
-            ms_staticMethods.Add((nameof(IsObject), IsObject));
 
             ms_metaMethods.Add(("__eq", Equal));
             ms_metaMethods.Add(("__tostring", ToString));
@@ -56,6 +55,7 @@ namespace CVRLua.Lua.LuaDefs
         public static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(UnityEngine.Object), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsObject), IsObject);
         }
 
         // Static methods

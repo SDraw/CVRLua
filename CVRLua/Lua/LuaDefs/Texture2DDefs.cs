@@ -23,8 +23,6 @@ namespace CVRLua.Lua.LuaDefs
             ms_staticProperties.Add(("redTexture", (GetRedTexture, null)));
             ms_staticProperties.Add(("whiteTexture", (GetWhiteTexture, null)));
 
-            ms_staticMethods.Add((nameof(IsTexture2D), IsTexture2D));
-
             ms_instanceProperties.Add(("calculatedMipmapLevel", (GetCalculatedMipmapLevel, null)));
             ms_instanceProperties.Add(("desiredMipmapLevel", (GetDesiredMipmapLevel, null)));
             ms_instanceProperties.Add(("format", (GetFormat, null)));
@@ -61,7 +59,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Texture2D), Create, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
-
+            p_vm.RegisterFunction(nameof(IsTexture2D), IsTexture2D);
         }
 
         // Constructor

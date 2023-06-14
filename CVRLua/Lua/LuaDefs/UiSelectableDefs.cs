@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsSelectable), IsSelectable));
-
             ms_instanceProperties.Add(("animator", (GetAnimator, null)));
             ms_instanceProperties.Add(("interactable", (GetInteractable, SetInteractable)));
             ms_instanceProperties.Add(("transition", (GetTransition, SetTransition)));
@@ -35,6 +33,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Selectable), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsSelectable), IsSelectable);
         }
 
         internal static void InheritTo(

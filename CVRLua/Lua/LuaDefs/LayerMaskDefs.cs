@@ -37,7 +37,10 @@ namespace CVRLua.Lua.LuaDefs
                     if((l_arg != null) && (l_arg is string))
                         l_layers.Add((string)l_arg);
                 }
-                l_argReader.PushInteger(LayerMask.GetMask(l_layers.ToArray()));
+                if(l_layers.Count > 0)
+                    l_argReader.PushInteger(LayerMask.GetMask(l_layers.ToArray()));
+                else
+                    l_argReader.PushBoolean(false);
             }
             else
                 l_argReader.PushBoolean(false);

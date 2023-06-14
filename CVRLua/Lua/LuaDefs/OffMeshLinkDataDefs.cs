@@ -6,13 +6,10 @@ namespace CVRLua.Lua.LuaDefs
     static class OffMeshLinkDataDefs
     {
         static readonly List<(string, LuaInterop.lua_CFunction)> ms_metaMethods = new List<(string, LuaInterop.lua_CFunction)>();
-        static readonly List<(string, LuaInterop.lua_CFunction)> ms_staticMethods = new List<(string, LuaInterop.lua_CFunction)>();
         static readonly List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))> ms_instanceProperties = new List<(string, (LuaInterop.lua_CFunction, LuaInterop.lua_CFunction))>();
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsOffMeshLinkData), IsOffMeshLinkData));
-
             ms_metaMethods.Add(("__eq", Equal));
             ms_metaMethods.Add(("__tostring", ToString));
 
@@ -26,7 +23,8 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void RegisterInVM(LuaVM p_vm)
         {
-            p_vm.RegisterClass(typeof(Wrappers.OffMeshLinkData), Create, null, ms_staticMethods, ms_metaMethods, ms_instanceProperties, null);
+            p_vm.RegisterClass(typeof(Wrappers.OffMeshLinkData), Create, null, null, ms_metaMethods, ms_instanceProperties, null);
+            p_vm.RegisterFunction(nameof(IsOffMeshLinkData), IsOffMeshLinkData);
         }
 
         // Constructor

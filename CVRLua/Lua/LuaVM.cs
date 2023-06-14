@@ -217,7 +217,7 @@ namespace CVRLua.Lua
                 LuaInterop.lua_pop(m_state, 1);
         }
 
-        public void RegisterGlobalFunction(string p_name, LuaInterop.lua_CFunction p_func) => LuaInterop.lua_register(m_state, p_name, p_func);
+        public void RegisterFunction(string p_name, LuaInterop.lua_CFunction p_func) => LuaInterop.lua_register(m_state, p_name, p_func);
 
         // VM separation
         public static LuaVM GetVM(IntPtr p_state)

@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsTexture), IsTexture));
-
             ms_instanceProperties.Add(("anisoLevel", (GetAnisoLevel, SetAnisoLevel)));
             ms_instanceProperties.Add(("dimension", (GetDimension, SetDimension)));
             ms_instanceProperties.Add(("filterMode", (GetFilterMode, SetFilterMode)));
@@ -42,7 +40,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Texture), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
-
+            p_vm.RegisterFunction(nameof(IsTexture), IsTexture);
         }
 
         internal static void InheritTo(

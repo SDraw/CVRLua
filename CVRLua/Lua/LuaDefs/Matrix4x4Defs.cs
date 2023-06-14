@@ -52,6 +52,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Wrappers.Matrix4x4), Create, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsMatrix4x4), IsMatrix4x4);
         }
 
         // Constructor
@@ -73,6 +74,15 @@ namespace CVRLua.Lua.LuaDefs
                 (l_columnC != null) ? l_columnC.m_vec : UnityEngine.Vector4.zero,
                 (l_columnD != null) ? l_columnD.m_vec : UnityEngine.Vector4.zero))
             );
+            return l_argReader.GetReturnValue();
+        }
+
+        static int IsMatrix4x4(IntPtr p_state)
+        {
+            var l_argReader = new LuaArgReader(p_state);
+            Wrappers.Matrix4x4 l_mat = null;
+            l_argReader.ReadNextObject(ref l_mat);
+            l_argReader.PushBoolean(l_mat != null);
             return l_argReader.GetReturnValue();
         }
 

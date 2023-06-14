@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsCVRPointer), IsCVRPointer));
-
             ms_instanceProperties.Add(("isInternalPointer", (GetIsInternalPointer, null)));
             ms_instanceProperties.Add(("isLocalPointer", (GetIsLocalPointer, null)));
             ms_instanceProperties.Add(("limitToFilteredTriggers", (GetLimitToFilteredTriggers, null)));
@@ -29,6 +27,7 @@ namespace CVRLua.Lua.LuaDefs
         static internal void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(CVRPointer), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsCVRPointer), IsCVRPointer);
         }
 
         // Static methods

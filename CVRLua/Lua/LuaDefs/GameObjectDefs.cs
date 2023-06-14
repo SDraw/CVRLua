@@ -17,7 +17,6 @@ namespace CVRLua.Lua.LuaDefs
         internal static void Init()
         {
             ms_staticMethods.Add((nameof(CreatePrimitive), CreatePrimitive));
-            ms_staticMethods.Add((nameof(IsGameObject), IsGameObject));
 
             ms_instanceProperties.Add(("activeInHierarchy", (GetIsActiveInHierarchy, null)));
             ms_instanceProperties.Add(("activeSelf", (GetIsActiveSelf, null)));
@@ -36,6 +35,7 @@ namespace CVRLua.Lua.LuaDefs
         public static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(GameObject), Create, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsGameObject), IsGameObject);
         }
 
         static int Create(IntPtr p_state)

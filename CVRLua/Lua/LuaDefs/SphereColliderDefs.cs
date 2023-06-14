@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsSphereCollider), IsSphereCollider));
-
             ms_instanceProperties.Add(("center", (GetCenter, SetCenter)));
             ms_instanceProperties.Add(("radius", (GetRadius, SetRadius)));
             
@@ -27,6 +25,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(SphereCollider), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsSphereCollider), IsSphereCollider);
         }
 
         // Static methods

@@ -18,7 +18,6 @@ namespace CVRLua.Lua.LuaDefs
         internal static void Init()
         {
             ms_staticMethods.Add((nameof(PlayClipAtPoint), PlayClipAtPoint));
-            ms_staticMethods.Add((nameof(IsAudioSource), IsAudioSource));
 
             ms_instanceProperties.Add(("bypassEffects", (GetBypassEffects, SetBypassEffects)));
             ms_instanceProperties.Add(("bypassListenerEffects", (GetBypassListenerEffects, SetBypassListenerEffects)));
@@ -69,9 +68,10 @@ namespace CVRLua.Lua.LuaDefs
             BehaviourDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
         }
 
-        internal static void RegisterInVM(LuaVM p_m)
+        internal static void RegisterInVM(LuaVM p_vm)
         {
-            p_m.RegisterClass(typeof(AudioSource), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterClass(typeof(AudioSource), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsAudioSource), IsAudioSource);
         }
 
         // Static methods

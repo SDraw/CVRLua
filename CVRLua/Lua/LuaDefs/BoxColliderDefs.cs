@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsBoxCollider), IsBoxCollider));
-
             ms_instanceProperties.Add(("center", (GetCenter, SetCenter)));
             ms_instanceProperties.Add(("size", (GetSize, SetSize)));
 
@@ -27,6 +25,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(BoxCollider), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsBoxCollider), IsBoxCollider);
         }
 
         // Static methods

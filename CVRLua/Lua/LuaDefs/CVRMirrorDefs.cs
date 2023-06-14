@@ -15,8 +15,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsCVRMirror), IsCVRMirror));
-
             ms_instanceProperties.Add(("disablePixelLights", (GetDisablePixelLights, SetDisablePixelLights)));
             ms_instanceProperties.Add(("textureSize", (GetTextureSize, null)));
             ms_instanceProperties.Add(("clipPlaneOffset", (GetClipPlaneOffset, SetClipPlaneOffset)));
@@ -30,6 +28,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(CVRMirror), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsCVRMirror), IsCVRMirror);
         }
 
         // Static methods

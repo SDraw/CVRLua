@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsRenderer), IsRenderer));
-
             ms_instanceProperties.Add(("allowOcclusionWhenDynamic", (GetAllowOcclusionWhenDynamic, SetAllowOcclusionWhenDynamic)));
             ms_instanceProperties.Add(("bounds", (GetBounds, null)));
             ms_instanceProperties.Add(("enabled", (GetEnabled, SetEnabled)));
@@ -61,6 +59,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Renderer), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsRenderer), IsRenderer);
         }
 
         internal static void InheritTo(

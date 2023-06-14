@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticProperties.Add(("allCamerasCount", (GetAllCamerasCount, null)));
-
             ms_staticMethods.Add((nameof(IsCamera), IsCamera));
             //ms_staticMethods.Add((nameof(CalculateProjectionMatrixFromPhysicalProperties), CalculateProjectionMatrixFromPhysicalProperties));
             ms_staticMethods.Add((nameof(FieldOfViewToFocalLength), FieldOfViewToFocalLength));
@@ -129,6 +127,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Camera), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsCamera), IsCamera);
         }
 
 

@@ -25,7 +25,6 @@ namespace CVRLua.Lua.LuaDefs
             ms_staticMethods.Add((nameof(MoveTowards), MoveTowards));
             ms_staticMethods.Add((nameof(Project), Project));
             ms_staticMethods.Add((nameof(Scale), Scale));
-            ms_staticMethods.Add((nameof(IsVector4), IsVector4));
 
             ms_metaMethods.Add(("__add", Add));
             ms_metaMethods.Add(("__sub", Subtract));
@@ -52,6 +51,7 @@ namespace CVRLua.Lua.LuaDefs
         public static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Wrappers.Vector4), Create, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsVector4), IsVector4);
         }
 
         static int Create(IntPtr p_state)

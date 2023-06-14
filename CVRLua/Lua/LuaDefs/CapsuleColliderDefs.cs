@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsCapsuleCollider), IsCapsuleCollider));
-
             ms_instanceProperties.Add(("center", (GetCenter, SetCenter)));
             ms_instanceProperties.Add(("direction", (GetDirection, SetDirection)));
             ms_instanceProperties.Add(("height", (GetHeight, SetHeight)));
@@ -29,6 +27,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(CapsuleCollider), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsCapsuleCollider), IsCapsuleCollider);
         }
 
         // Static methods

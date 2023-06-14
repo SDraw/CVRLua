@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsTransform), IsTransform));
-
             ms_instanceProperties.Add(("childCount", (GetChildCount, null)));
             ms_instanceProperties.Add(("eulerAngles", (GetEulerAngles, SetEulerAngles)));
             ms_instanceProperties.Add(("forward", (GetForward, null)));
@@ -64,6 +62,7 @@ namespace CVRLua.Lua.LuaDefs
         public static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Transform), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsTransform), IsTransform);
         }
 
         // Static methods

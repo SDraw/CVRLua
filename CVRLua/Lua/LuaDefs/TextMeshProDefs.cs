@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsTextMeshPro), IsTextMeshPro));
-
             ms_instanceProperties.Add(("autoSizeTextContainer", (GetAutoSizeTextContainer, SetAutoSizeTextContainer)));
             ms_instanceProperties.Add(("maskType", (GetMaskType, SetMaskType)));
             //ms_instanceProperties.Add(("mesh", (?, ?)));
@@ -50,6 +48,7 @@ namespace CVRLua.Lua.LuaDefs
         public static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(TextMeshPro), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsTextMeshPro), IsTextMeshPro);
         }
 
         // Static methods

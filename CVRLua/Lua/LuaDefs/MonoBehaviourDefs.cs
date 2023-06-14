@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add(("IsMonoBehaviour", IsMonoBehaviour));
-
             ms_instanceProperties.Add(("useGUILayout", (GetUseGUILayout, SetUseGUILayout)));
 
             BehaviourDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
@@ -26,6 +24,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(MonoBehaviour), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsMonoBehaviour), IsMonoBehaviour);
         }
 
         internal static void InheritTo(

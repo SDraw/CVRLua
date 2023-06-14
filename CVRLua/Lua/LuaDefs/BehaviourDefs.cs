@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsBehaviour), IsBehaviour));
-
             ms_instanceProperties.Add(("enabled", (GetEnabled, SetEnabled)));
             ms_instanceProperties.Add(("isActiveAndEnabled", (GetIsActiveAndEnabled, null)));
 
@@ -51,6 +49,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Behaviour), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsBehaviour), IsBehaviour);
         }
 
         // Static methods

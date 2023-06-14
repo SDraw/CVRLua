@@ -18,7 +18,6 @@ namespace CVRLua.Lua.LuaDefs
             ms_staticProperties.Add(("allPlayers", (GetAllPlayers, null)));
 
             ms_staticMethods.Add((nameof(Find), Find));
-            ms_staticMethods.Add((nameof(IsPlayer), IsPlayer));
 
             ms_metaMethods.Add(("__tostring", ToString));
             ms_metaMethods.Add(("__eq", Equal));
@@ -71,6 +70,7 @@ namespace CVRLua.Lua.LuaDefs
         public static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Players.Player), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsPlayer), IsPlayer);
         }
 
         // Static properties

@@ -19,8 +19,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsMeshRenderer), IsMeshRenderer));
-
             //ms_instanceProperties.Add(("additionalVertexStreams", (?,?)));
             ms_instanceProperties.Add(("subMeshStartIndex", (GetSubMeshStartIndex, null)));
 
@@ -30,6 +28,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(MeshRenderer), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsMeshRenderer), IsMeshRenderer);
         }
 
         // Static methods

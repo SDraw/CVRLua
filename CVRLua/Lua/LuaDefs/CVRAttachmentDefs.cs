@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsCVRAttachment), IsCVRAttachment));
-
             ms_instanceProperties.Add(("attachmentType", (GetAttachmentType, SetAttachmentType)));
             ms_instanceProperties.Add(("boneType", (GetBoneType, SetBoneType)));
             ms_instanceProperties.Add(("trackerType", (GetTrackerType, SetTrackerType)));
@@ -37,6 +35,7 @@ namespace CVRLua.Lua.LuaDefs
         static internal void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(CVRAttachment), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsCVRAttachment), IsCVRAttachment);
         }
 
         // Static methods

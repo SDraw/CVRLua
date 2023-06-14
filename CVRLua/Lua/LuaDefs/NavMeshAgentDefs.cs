@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsNavMeshAgent), IsNavMeshAgent));
-
             ms_instanceProperties.Add(("acceleration", (GetAcceleration, SetAcceleration)));
             ms_instanceProperties.Add(("agentTypeID", (GetAgentTypeID, SetAgentTypeID)));
             ms_instanceProperties.Add(("angularSpeed", (GetAngularSpeed, SetAngularSpeed)));
@@ -73,6 +71,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(NavMeshAgent), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsNavMeshAgent), IsNavMeshAgent);
         }
 
         // Static methods

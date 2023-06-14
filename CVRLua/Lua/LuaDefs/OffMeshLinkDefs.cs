@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsOffMeshLink), IsOffMeshLink));
-
             ms_instanceProperties.Add(("activated", (GetActivated, SetActivated)));
             ms_instanceProperties.Add(("area", (GetArea, SetArea)));
             ms_instanceProperties.Add(("autoUpdatePositions", (GetAutoUpdatePositions, SetAutoUpdatePositions)));
@@ -33,6 +31,7 @@ namespace CVRLua.Lua.LuaDefs
         internal static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(OffMeshLink), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsOffMeshLink), IsOffMeshLink);
         }
 
         // Static methods

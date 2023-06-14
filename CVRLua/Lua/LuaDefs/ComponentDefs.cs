@@ -16,8 +16,6 @@ namespace CVRLua.Lua.LuaDefs
 
         internal static void Init()
         {
-            ms_staticMethods.Add((nameof(IsComponent), IsComponent));
-
             ms_instanceProperties.Add(("gameObject", (GetGameObject, null)));
             ms_instanceProperties.Add(("tag", (GetTag, SetTag)));
             ms_instanceProperties.Add(("transform", (GetTransform, null)));
@@ -55,6 +53,7 @@ namespace CVRLua.Lua.LuaDefs
         public static void RegisterInVM(LuaVM p_vm)
         {
             p_vm.RegisterClass(typeof(Component), null, ms_staticProperties, ms_staticMethods, ms_metaMethods, ms_instanceProperties, ms_instanceMethods);
+            p_vm.RegisterFunction(nameof(IsComponent), IsComponent);
         }
 
         // Static methods
