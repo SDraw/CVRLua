@@ -6,18 +6,6 @@ namespace CVRLua.Lua
 {
     class LuaVM : IDisposable
     {
-        class ReferencedObject
-        {
-            public object m_object = null;
-            public int m_references = 0;
-
-            public ReferencedObject(object p_obj)
-            {
-                m_object = p_obj;
-                m_references = 1;
-            }
-        }
-
         const string c_propGet = "__propGet";
         const string c_propSet = "__propSet";
         const string c_methods = "__methods";
@@ -26,7 +14,7 @@ namespace CVRLua.Lua
         static readonly Dictionary<IntPtr, LuaVM> ms_VMs = new Dictionary<IntPtr, LuaVM>();
 
         IntPtr m_state = IntPtr.Zero;
-        readonly Dictionary<long, ReferencedObject> m_objectsMap = null;
+        readonly Dictionary<long, object> m_objectsMap = null;
 
         internal LuaVM()
         {
@@ -40,7 +28,7 @@ namespace CVRLua.Lua
             LuaInterop.luaL_requiref(m_state, "math", LuaInterop.luaopen_math, 1);
             LuaInterop.luaL_requiref(m_state, "utf8", LuaInterop.luaopen_utf8, 1);
 
-            m_objectsMap = new Dictionary<long, ReferencedObject>();
+            m_objectsMap = new Dictionary<long, object>();
 
             // Table weak values
             LuaInterop.lua_newtable(m_state);
@@ -116,10 +104,8 @@ namespace CVRLua.Lua
         {
             Type l_type = p_obj.GetType();
             long l_hash = Utils.CombineInts(RuntimeHelpers.GetHashCode(p_obj), l_type.GetHashCode()); // Help ...
-            if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
-                l_refObj.m_references++;
-            else
-                m_objectsMap.Add(l_hash, new ReferencedObject(p_obj));
+            if(!m_objectsMap.ContainsKey(l_hash))
+                m_objectsMap.Add(l_hash, p_obj);
 
             LuaInterop.lua_getfield(m_state, LuaInterop.LUA_REGISTRYINDEX, c_objectsPool);
             if(LuaInterop.lua_geti(m_state, -1, l_hash) == LuaInterop.LUA_TNIL)
@@ -139,9 +125,9 @@ namespace CVRLua.Lua
             if(IsUserdata(p_index))
             {
                 long l_hash = ToUserdata(p_index).GetInt();
-                if((l_hash != 0) && m_objectsMap.TryGetValue(l_hash, out var l_refObj) && (l_refObj.m_object is T))
+                if((l_hash != 0) && m_objectsMap.TryGetValue(l_hash, out var l_refObj) && (l_refObj is T))
                 {
-                    p_obj = (T)l_refObj.m_object;
+                    p_obj = (T)l_refObj;
                     l_result = true;
                 }
             }
@@ -240,11 +226,7 @@ namespace CVRLua.Lua
             {
                 long l_hash = l_vm.ToUserdata(1).GetInt();
                 if((l_hash != 0) && l_vm.m_objectsMap.TryGetValue(l_hash, out var l_orc))
-                {
-                    l_orc.m_references--;
-                    if(l_orc.m_references == 0)
-                        l_vm.m_objectsMap.Remove(l_hash);
-                }
+                    l_vm.m_objectsMap.Remove(l_hash);
             }
             return 0;
         }
@@ -272,7 +254,7 @@ namespace CVRLua.Lua
                     {
                         long l_hash = LuaInterop.lua_touserdata(m_state, p_index).GetInt();
                         if(m_objectsMap.TryGetValue(l_hash, out var l_refObj))
-                            l_result = l_refObj.m_object;
+                            l_result = l_refObj;
                     }
                     break;
                 }
@@ -359,13 +341,26 @@ namespace CVRLua.Lua
         }
 
         // Debug
-        public void GetStateInfo(out string p_chunk, out int p_line)
+        public void GetStackInfo(out string p_chunk, out int p_line)
         {
-            LuaInterop.lua_Debug l_debug = new LuaInterop.lua_Debug();
-            LuaInterop.lua_getstack(m_state, 1, ref l_debug);
-            LuaInterop.lua_getinfo(m_state, "Sl", ref l_debug);
-            p_line = l_debug.currentline;
-            p_chunk = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(l_debug.source);
+            for(int i = 0; ; i++)
+            {
+                LuaInterop.lua_Debug l_debug = new LuaInterop.lua_Debug();
+                if(LuaInterop.lua_getstack(m_state, i, ref l_debug) != 1)
+                {
+                    p_chunk = "unknown";
+                    p_line = 0;
+                    break;
+                }
+
+                LuaInterop.lua_getinfo(m_state, "Sl", ref l_debug);
+                if(l_debug.currentline < 0)
+                    continue;
+
+                p_chunk = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(l_debug.source);
+                p_line = l_debug.currentline;
+                break;
+            }
         }
 
         // Classes
