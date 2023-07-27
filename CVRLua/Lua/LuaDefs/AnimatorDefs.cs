@@ -628,7 +628,7 @@ namespace CVRLua.Lua.LuaDefs
             if(!l_argReader.HasErrors())
             {
                 if(l_animator != null)
-                    l_argReader.PushBoolean(l_animator.keepAnimatorControllerStateOnDisable);
+                    l_argReader.PushBoolean(l_animator.keepAnimatorStateOnDisable);
                 else
                 {
                     l_argReader.PushBoolean(false);
@@ -651,7 +651,7 @@ namespace CVRLua.Lua.LuaDefs
             if(!l_argReader.HasErrors())
             {
                 if(l_animator != null)
-                    l_animator.keepAnimatorControllerStateOnDisable = l_state;
+                    l_animator.keepAnimatorStateOnDisable = l_state;
                 else
                     l_argReader.SetError(c_destroyed);
             }

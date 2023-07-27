@@ -1,9 +1,11 @@
 ﻿using ABI.CCK.Components;
 using ABI_RC.Core;
+using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Systems.IK;
 using ABI_RC.Systems.IK.SubSystems;
+using ABI_RC.Systems.InputManagement;
 using ABI_RC.Systems.MovementSystem;
 using UnityEngine;
 
@@ -37,7 +39,7 @@ namespace CVRLua.Players
         {
             if(m_local)
             {
-                p_name = MetaPort.Instance.username;
+                p_name = CVR_MenuManager.Instance.coreData.core.username;
                 return true;
             }
             if(m_remote && (m_descriptor != null))

@@ -46,7 +46,7 @@ namespace CVRLua.Lua.LuaDefs
             //ms_instanceMethods.Add((nameof(LoadRawTextureData), LoadRawTextureData));
             //ms_instanceMethods.Add((nameof(PackTextures), PackTextures));
             //ms_instanceMethods.Add((nameof(ReadPixels), ReadPixels));
-            ms_instanceMethods.Add((nameof(Resize), Resize));
+            ms_instanceMethods.Add((nameof(Reinitialize), Reinitialize));
             ms_instanceMethods.Add((nameof(SetPixel), SetPixel));
             //ms_instanceMethods.Add((nameof(SetPixelData), SetPixelData));
             //ms_instanceMethods.Add((nameof(SetPixels), SetPixels));
@@ -565,7 +565,7 @@ namespace CVRLua.Lua.LuaDefs
             return l_argReader.GetReturnValue();
         }
 
-        static int Resize(IntPtr p_state)
+        static int Reinitialize(IntPtr p_state)
         {
             var l_argReader = new LuaArgReader(p_state);
             bool l_extended = false;
@@ -588,9 +588,9 @@ namespace CVRLua.Lua.LuaDefs
                 if(l_texture != null)
                 {
                     if(l_extended)
-                        l_texture.Resize(l_width, l_height, l_format, l_mipChain);
+                        l_texture.Reinitialize(l_width, l_height, l_format, l_mipChain);
                     else
-                        l_texture.Resize(l_width, l_height);
+                        l_texture.Reinitialize(l_width, l_height);
                     l_argReader.PushBoolean(true);
                 }
                 else
