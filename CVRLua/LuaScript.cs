@@ -27,6 +27,11 @@ namespace CVRLua
             if(m_luaHandler == null)
             {
                 m_interactable = this.GetComponent<CVRInteractable>();
+                if(m_interactable != null)
+                {
+                    m_interactable.onEnterSeat.AddListener(this.OnEnterSeat);
+                    m_interactable.onExitSeat.AddListener(this.OnExitSeat);
+                }
 
                 m_attachment = this.GetComponent<CVRAttachment>();
                 if(m_attachment != null)
@@ -73,6 +78,9 @@ namespace CVRLua
                 }
 
                 m_luaHandler.ParseEvents();
+
+                Players.PlayersManager.PlayerJoin += this.OnPlayerJoin;
+                Players.PlayersManager.PlayerLeft += this.OnPlayerLeft;
             }
         }
 
@@ -92,6 +100,9 @@ namespace CVRLua
         {
             m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnDestroy);
             Core.Instance?.UnregisterScript(this);
+
+            Players.PlayersManager.PlayerJoin -= this.OnPlayerJoin;
+            Players.PlayersManager.PlayerLeft -= this.OnPlayerLeft;
         }
 
         void Update()
@@ -117,11 +128,6 @@ namespace CVRLua
         void OnDisable()
         {
             m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnDisable);
-        }
-
-        void OnGUI()
-        {
-            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnGUI);
         }
 
         void OnCollisionEnter(Collision p_col)
@@ -215,6 +221,16 @@ namespace CVRLua
                 m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnInteractableGazeExit);
         }
 
+        void OnEnterSeat()
+        {
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnEnterSeat);
+        }
+
+        void OnExitSeat()
+        {
+            m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnExitSeat);
+        }
+
         void OnAttachmentAttach()
         {
             m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnAttachmentAttach);
@@ -226,11 +242,11 @@ namespace CVRLua
         }
 
         // Players events
-        internal void OnPlayerJoin(Players.Player p_player)
+        void OnPlayerJoin(Players.Player p_player)
         {
             m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnPlayerJoin, p_player);
         }
-        internal void OnPlayerLeft(Players.Player p_player)
+        void OnPlayerLeft(Players.Player p_player)
         {
             m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnPlayerLeft, p_player);
         }

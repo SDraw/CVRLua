@@ -1,22 +1,65 @@
 ﻿using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using ABI_RC.Systems.GameEventSystem;
+using System;
 
 namespace CVRLua.Players
 {
     static class PlayersManager
     {
-        static readonly Dictionary<GameObject, Player> ms_players = new Dictionary<GameObject, Player>();
+        static readonly Dictionary<PlayerDescriptor, Player> ms_remotePlayers = new Dictionary<PlayerDescriptor, Player>();
         static readonly Player ms_localPlayer = new Player();
+
+        static internal Action<Player> PlayerJoin;
+        static internal Action<Player> PlayerLeft;
+
+        internal static void Init()
+        {
+            CVRGameEventSystem.Player.OnJoin.AddListener(OnPlayerJoin);
+            CVRGameEventSystem.Player.OnLeave.AddListener(OnPlayerLeave);
+        }
+
+        static void OnPlayerJoin(PlayerDescriptor p_descriptor)
+        {
+            try
+            {
+                if(!ms_remotePlayers.ContainsKey(p_descriptor))
+                {
+                    Player l_remotePlayer = new Player(p_descriptor);
+                    ms_remotePlayers.Add(p_descriptor, l_remotePlayer);
+                    PlayerJoin?.Invoke(l_remotePlayer);
+                }
+            }
+            catch(Exception e)
+            {
+                MelonLoader.MelonLogger.Warning(e);
+            }
+        }
+
+        static void OnPlayerLeave(PlayerDescriptor p_descriptor)
+        {
+            try
+            {
+                if(ms_remotePlayers.TryGetValue(p_descriptor, out Player l_remotePlayer))
+                {
+                    PlayerLeft?.Invoke(l_remotePlayer);
+                    ms_remotePlayers.Remove(p_descriptor);
+                }
+            }
+            catch(Exception e)
+            {
+                MelonLoader.MelonLogger.Warning(e);
+            }
+        }
 
         public static Player GetLocalPlayer() => ms_localPlayer;
 
         public static List<Player> GetRemotePlayers()
         {
             var l_list = new List<Player>();
-            foreach(var l_pair in ms_players)
+            foreach(var l_pair in ms_remotePlayers)
                 l_list.Add(l_pair.Value);
             return l_list;
         }
@@ -25,7 +68,7 @@ namespace CVRLua.Players
         {
             var l_list = new List<Player>();
             l_list.Add(ms_localPlayer);
-            foreach(var l_pair in ms_players)
+            foreach(var l_pair in ms_remotePlayers)
                 l_list.Add(l_pair.Value);
             return l_list;
         }
@@ -35,11 +78,10 @@ namespace CVRLua.Players
             if(MetaPort.Instance.ownerId == p_id)
                 return ms_localPlayer;
 
-            if(CVRPlayerManager.Instance.GetPlayerPuppetMaster(p_id, out var l_puppet))
+            foreach(var l_remotePlayer in ms_remotePlayers)
             {
-                var l_searchPair = ms_players.FirstOrDefault(p => (p.Key == l_puppet.gameObject));
-                if(l_searchPair.Key != null)
-                    return l_searchPair.Value;
+                if(l_remotePlayer.Key.ownerId == p_id)
+                    return l_remotePlayer.Value;
             }
             return null;
         }
@@ -47,28 +89,16 @@ namespace CVRLua.Players
         public static Player GetFromGameObject(GameObject p_obj)
         {
             Player l_result = null;
-            if(!ms_players.TryGetValue(p_obj, out l_result) && (p_obj == PlayerSetup.Instance.gameObject))
+            Transform l_root = p_obj.transform.root;
+            if(l_root == PlayerSetup.Instance.transform)
                 l_result = ms_localPlayer;
-            return l_result;
-        }
-
-        // Core call only
-        internal static Player AddPlayer(GameObject p_obj)
-        {
-            Player l_result = null;
-            if(!ms_players.TryGetValue(p_obj, out l_result))
+            else
             {
-                l_result = new Player(p_obj);
-                ms_players.Add(p_obj, l_result);
+                PlayerDescriptor l_descriptor = l_root.GetComponent<PlayerDescriptor>();
+                if(l_descriptor != null)
+                    ms_remotePlayers.TryGetValue(l_descriptor, out l_result);
             }
             return l_result;
-        }
-
-        // Core call only
-        internal static void RemovePlayerByGameObject(GameObject p_obj)
-        {
-            if(ms_players.ContainsKey(p_obj))
-                ms_players.Remove(p_obj);
         }
     }
 }

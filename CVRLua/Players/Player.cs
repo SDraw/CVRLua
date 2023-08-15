@@ -13,637 +13,694 @@ namespace CVRLua.Players
 {
     class Player
     {
-        bool m_local = false;
-        bool m_remote = false;
+        enum PlayerType
+        {
+            Local = 0,
+            Remote
+        };
+
+        PlayerType m_type;
         readonly GameObject m_gameObject = null; // Remote only
         readonly PlayerDescriptor m_descriptor = null; // Remote only
         readonly PuppetMaster m_puppetMaster = null; // Remote only
 
         public Player()
         {
-            m_local = true;
+            m_type = PlayerType.Local;
         }
-        public Player(GameObject p_obj)
+        public Player(PlayerDescriptor p_descriptor)
         {
-            m_gameObject = p_obj;
-            m_descriptor = p_obj.GetComponent<PlayerDescriptor>();
-            m_puppetMaster = p_obj.GetComponent<PuppetMaster>();
-            m_remote = true;
-        }
-
-        public bool IsLocal() => m_local;
-        public bool IsRemote() => m_remote;
-        public bool IsConnected() => (m_local || (m_remote && (m_puppetMaster != null)));
-
-        public bool GetName(out string p_name)
-        {
-            if(m_local)
-            {
-                p_name = CVR_MenuManager.Instance.coreData.core.username;
-                return true;
-            }
-            if(m_remote && (m_descriptor != null))
-            {
-                p_name = m_descriptor.userName;
-                return true;
-            }
-            p_name = "";
-            return false;
+            m_type = PlayerType.Remote;
+            m_descriptor = p_descriptor;
+            m_gameObject = p_descriptor.gameObject;
+            m_puppetMaster = m_gameObject.GetComponent<PuppetMaster>();
         }
 
-        public bool GetId(out string p_id)
+        public bool IsLocal() => (m_type == PlayerType.Local);
+        public bool IsRemote() => (m_type == PlayerType.Remote);
+        public bool IsConnected() => ((m_type == PlayerType.Local) || (m_descriptor != null));
+
+        public string GetName()
         {
-            if(m_local)
+            string l_result = "";
+            switch(m_type)
             {
-                p_id = MetaPort.Instance.ownerId;
-                return true;
+                case PlayerType.Local:
+                    l_result = CVR_MenuManager.Instance.coreData.core.username;
+                    break;
+                case PlayerType.Remote:
+                    l_result = m_descriptor.name;
+                    break;
             }
-            if(m_remote && (m_puppetMaster != null))
+            return l_result;
+        }
+
+        public string GetId()
+        {
+            string l_result = "";
+            switch(m_type)
             {
-                var l_player = CVRPlayerManager.Instance.NetworkPlayers.Find(p => p.PuppetMaster == m_puppetMaster);
-                if(l_player != null)
+                case PlayerType.Local:
+                    l_result = MetaPort.Instance.ownerId;
+                    break;
+                case PlayerType.Remote:
+                    l_result = m_descriptor.ownerId;
+                    break;
+            }
+            return l_result;
+        }
+
+        public Vector3 GetPosition()
+        {
+            Vector3 l_result = Vector3.zero;
+            switch(m_type)
+            {
+                case PlayerType.Local:
+                    l_result = PlayerSetup.Instance.transform.position;
+                    break;
+
+                case PlayerType.Remote:
                 {
-                    p_id = l_player.Uuid;
-                    return true;
+                    if(m_gameObject != null)
+                        l_result = m_gameObject.transform.position;
                 }
+                break;
             }
-            p_id = "";
-            return false;
+            return l_result;
         }
 
-        public bool GetPosition(out Vector3 p_pos)
+        public Quaternion GetRotation()
         {
-            if(m_local)
+            Quaternion l_result = Quaternion.identity;
+            switch(m_type)
             {
-                p_pos = PlayerSetup.Instance.transform.position;
-                return true;
-            }
-            if(m_remote && (m_gameObject != null))
-            {
-                p_pos = m_gameObject.transform.position;
-                return true;
-            }
-            p_pos = Vector3.zero;
-            return false;
-        }
+                case PlayerType.Local:
+                    l_result = PlayerSetup.Instance.transform.rotation;
+                    break;
 
-        public bool GetRotation(out Quaternion p_rot)
-        {
-            if(m_local)
-            {
-                p_rot = PlayerSetup.Instance.transform.rotation;
-                return true;
-            }
-            if(m_remote && (m_gameObject != null))
-            {
-                p_rot = m_gameObject.transform.rotation;
-                return true;
-            }
-            p_rot = Quaternion.identity;
-            return false;
-        }
-
-        public bool GetAvatarHeight(out float p_height)
-        {
-            if(m_local)
-            {
-                p_height = PlayerSetup.Instance.GetAvatarHeight();
-                return true;
-            }
-            if(m_remote && (m_puppetMaster != null))
-            {
-                p_height = m_puppetMaster.GetAvatarHeight();
-                return true;
-            }
-            p_height = 0f;
-            return false;
-        }
-
-        public bool GetAvatarScale(out float p_scale)
-        {
-            if(m_local)
-            {
-                p_scale = PlayerSetup.Instance.GetAvatarScale().y;
-                return true;
-            }
-            if(m_remote && (m_puppetMaster != null))
-            {
-                p_scale = m_puppetMaster.GetAvatarScale().y;
-                return true;
-            }
-            p_scale = 0f;
-            return false;
-        }
-
-        public bool GetPlayerHeight(out float p_height)
-        {
-            if(m_local)
-            {
-                p_height = PlayerSetup.Instance.playerHeight;
-                return true;
-            }
-            if(m_remote && (m_puppetMaster != null))
-            {
-                p_height = m_puppetMaster.GetAvatarHeight();
-                return true;
-            }
-            p_height = 0f;
-            return false;
-        }
-
-        public bool GetPlayerScale(out float p_scale)
-        {
-            if(m_local)
-            {
-                p_scale = PlayerSetup.Instance.GetPlayerScale();
-                return true;
-            }
-            if(m_remote && (m_puppetMaster != null))
-            {
-                p_scale = m_puppetMaster.GetAvatarScale().y;
-                return true;
-            }
-            p_scale = 0f;
-            return false;
-        }
-
-        public bool GetCameraPosition(out Vector3 p_pos)
-        {
-            if(m_local)
-            {
-                p_pos = PlayerSetup.Instance.GetActiveCamera().transform.position;
-                return true;
-            }
-            if(m_remote && (m_puppetMaster != null))
-            {
-                var l_point = m_puppetMaster.GetHeadPoint();
-                if(l_point != null)
+                case PlayerType.Remote:
                 {
-                    p_pos = l_point.transform.position;
-                    return true;
+                    if(m_gameObject != null)
+                        l_result = m_gameObject.transform.rotation;
                 }
+                break;
             }
-            p_pos = Vector3.zero;
-            return false;
+            return l_result;
         }
 
-        public bool GetCameraRotation(out Quaternion p_rot)
+        public float GetAvatarHeight()
         {
-            if(m_local)
+            float l_result = 0f;
+            switch(m_type)
             {
-                p_rot = PlayerSetup.Instance.GetActiveCamera().transform.rotation;
-                return true;
+                case PlayerType.Local:
+                    l_result = PlayerSetup.Instance.GetAvatarHeight();
+                    break;
+                case PlayerType.Remote:
+                    l_result = m_puppetMaster.GetAvatarHeight();
+                    break;
             }
-            if(m_remote && (m_puppetMaster != null))
+            return l_result;
+        }
+
+        public float GetAvatarScale()
+        {
+            float l_result = 0f;
+            switch(m_type)
             {
-                var l_point = m_puppetMaster.GetHeadPoint();
-                if(l_point != null)
+                case PlayerType.Local:
+                    l_result = PlayerSetup.Instance.GetAvatarScale().y;
+                    break;
+                case PlayerType.Remote:
+                    l_result = m_puppetMaster.GetAvatarScale().y;
+                    break;
+            }
+            return l_result;
+        }
+
+        public float GetPlayerHeight()
+        {
+            float l_result = 0f;
+            switch(m_type)
+            {
+                case PlayerType.Local:
+                    l_result = PlayerSetup.Instance.playerHeight;
+                    break;
+                case PlayerType.Remote:
+                    l_result = m_puppetMaster.GetAvatarHeight();
+                    break;
+            }
+            return l_result;
+        }
+
+        public float GetPlayerScale()
+        {
+            float l_result = 0f;
+            switch(m_type)
+            {
+                case PlayerType.Local:
+                    l_result = PlayerSetup.Instance.GetPlayerScale();
+                    break;
+                case PlayerType.Remote:
+                    l_result = m_puppetMaster.GetAvatarScale().y;
+                    break;
+            }
+            return l_result;
+        }
+
+        public Vector3 GetViewPosition()
+        {
+            Vector3 l_result = Vector3.zero;
+            switch(m_type)
+            {
+                case PlayerType.Local:
+                    l_result = PlayerSetup.Instance.GetActiveCamera().transform.position;
+                    break;
+                case PlayerType.Remote:
                 {
-                    p_rot = l_point.transform.rotation;
-                    return true;
+                    var l_point = m_puppetMaster.GetHeadPoint();
+                    if(l_point != null)
+                        l_result = l_point.transform.position;
                 }
+                break;
             }
-            p_rot = Quaternion.identity;
-            return false;
+            return l_result;
+        }
+
+        public Quaternion GetViewRotation()
+        {
+            Quaternion l_result = Quaternion.identity;
+            switch(m_type)
+            {
+                case PlayerType.Local:
+                    l_result = PlayerSetup.Instance.GetActiveCamera().transform.rotation;
+                    break;
+                case PlayerType.Remote:
+                {
+                    var l_point = m_puppetMaster.GetHeadPoint();
+                    if(l_point != null)
+                        l_result = l_point.transform.rotation;
+                }
+                break;
+            }
+            return l_result;
         }
 
         public bool IsInVR()
         {
-            if(m_local)
-                return CheckVR.Instance.hasVrDeviceLoaded;
-            if(m_remote && (m_puppetMaster != null))
-                return (m_puppetMaster.PlayerAvatarMovementDataInput.DeviceType == PlayerAvatarMovementData.UsingDeviceType.PCVR);
-            return false;
+            bool l_result = false;
+            switch(m_type)
+            {
+                case PlayerType.Local:
+                    l_result = CheckVR.Instance.hasVrDeviceLoaded;
+                    break;
+                case PlayerType.Remote:
+                    l_result = (m_puppetMaster.PlayerAvatarMovementDataInput.DeviceType != PlayerAvatarMovementData.UsingDeviceType.PCStanalone);
+                    break;
+            }
+            return l_result;
         }
 
-        public bool IsInFullbody()
-        {
-            if(m_local)
-                return BodySystem.isCalibratedAsFullBody;
-            return false;
-        }
+        public bool IsInFullbody() => ((m_type == PlayerType.Local) && BodySystem.isCalibratedAsFullBody);
 
         public bool HasAvatar()
         {
-            if(m_local)
-                return (PlayerSetup.Instance._avatar != null);
-            if(m_remote && (m_puppetMaster != null))
+            bool l_result = false;
+            switch(m_type)
             {
-                CVRAvatar l_avatar = m_puppetMaster.GetAvatar();
-                return (l_avatar != null);
+                case PlayerType.Local:
+                    l_result = (PlayerSetup.Instance._avatar != null);
+                    break;
+                case PlayerType.Remote:
+                    l_result = (m_puppetMaster.GetAvatar() != null);
+                    break;
             }
-            return false;
+            return l_result;
         }
 
-        public bool IsAvatarLoading()
-        {
-            if(m_local)
-                return PlayerSetup.Instance.avatarIsLoading;
-            return false;
-        }
+        public bool IsAvatarLoading() => ((m_type == PlayerType.Local) && PlayerSetup.Instance.avatarIsLoading);
 
         public bool IsAvatarHumanoid()
         {
-            if(m_local)
-                return ((PlayerSetup.Instance._animator != null) && PlayerSetup.Instance._animator.isHuman);
-            if(m_remote && (m_puppetMaster != null))
+            bool l_result = false;
+            switch(m_type)
             {
-                Animator l_animator = m_puppetMaster.GetAnimator();
-                return ((l_animator != null) && l_animator.isHuman);
+                case PlayerType.Local:
+                    l_result = ((PlayerSetup.Instance._animator != null) && PlayerSetup.Instance._animator.isHuman);
+                    break;
+                case PlayerType.Remote:
+                {
+                    Animator l_animator = m_puppetMaster.GetAnimator();
+                    l_result = ((l_animator != null) && l_animator.isHuman);
+                }
+                break;
             }
-            return false;
+            return l_result;
         }
 
         public bool IsFlying()
         {
-            if(m_local)
-                return MovementSystem.Instance.flying;
-            if(m_remote && (m_puppetMaster != null))
-                return m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorFlying;
-            return false;
+            bool l_result = false;
+            switch(m_type)
+            {
+                case PlayerType.Local:
+                    l_result = MovementSystem.Instance.flying;
+                    break;
+                case PlayerType.Remote:
+                    l_result = m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorFlying;
+                    break;
+            }
+            return l_result;
         }
 
         public bool IsCrouching()
         {
-            if(m_local)
-                return MovementSystem.Instance.crouching;
-            if(m_remote && (m_puppetMaster != null))
-                return m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorCrouching;
-            return false;
+            bool l_result = false;
+            switch(m_type)
+            {
+                case PlayerType.Local:
+                    l_result = MovementSystem.Instance.crouching;
+                    break;
+                case PlayerType.Remote:
+                    l_result = m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorCrouching;
+                    break;
+            }
+            return l_result;
         }
 
         public bool IsProning()
         {
-            if(m_local)
-                return MovementSystem.Instance.prone;
-            if(m_remote && (m_puppetMaster != null))
-                return m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorProne;
-            return false;
+            bool l_result = false;
+            switch(m_type)
+            {
+                case PlayerType.Local:
+                    l_result = MovementSystem.Instance.prone;
+                    break;
+                case PlayerType.Remote:
+                    l_result = m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorProne;
+                    break;
+            }
+            return l_result;
         }
 
         public bool IsSitting()
         {
-            if(m_local)
-                return MovementSystem.Instance.sitting;
-            if(m_remote && (m_puppetMaster != null))
-                return m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorSitting;
-            return false;
+            bool l_result = false;
+            switch(m_type)
+            {
+                case PlayerType.Local:
+                    l_result = MovementSystem.Instance.sitting;
+                    break;
+                case PlayerType.Remote:
+                    l_result = m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorSitting;
+                    break;
+            }
+            return l_result;
         }
 
         public bool IsSprinting()
         {
-            if(m_local)
-                return CVRInputManager.Instance.sprint;
-            return false;
+            bool l_result = false;
+            switch(m_type)
+            {
+                case PlayerType.Local:
+                    l_result = CVRInputManager.Instance.sprint;
+                    break;
+                case PlayerType.Remote:
+                {
+                    Vector2 l_move = new Vector2(m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorMovementX, m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorMovementY);
+                    l_result = (l_move.magnitude >= 0.5f);
+                }
+                break;
+            }
+            return l_result;
         }
 
-        public bool IsJumping()
-        {
-            if(m_local)
-                return CVRInputManager.Instance.jump;
-            return false;
-        }
+        public bool IsJumping() => ((m_type == PlayerType.Local) && CVRInputManager.Instance.jump);
 
         public bool IsGrounded()
         {
-            if(m_local)
-                return MovementSystem.Instance.IsGrounded();
-            if(m_remote && (m_puppetMaster != null))
-                return m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorGrounded;
+            bool l_result = false;
+            switch(m_type)
+            {
+                case PlayerType.Local:
+                    l_result = MovementSystem.Instance.IsGrounded();
+                    break;
+                case PlayerType.Remote:
+                    l_result = m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorGrounded;
+                    break;
+            }
             return false;
         }
 
-        public bool IsZooming()
-        {
-            if(m_local)
-                return CVRInputManager.Instance.zoom;
-            return false;
-        }
+        public bool IsZooming() => ((m_type == PlayerType.Local) && CVRInputManager.Instance.zoom);
 
-        public bool GetZoomFactor(out float p_factor)
-        {
-            if(m_local)
-            {
-                p_factor = CVR_DesktopCameraController.currentZoomProgress;
-                return true;
-            }
-            p_factor = 0f;
-            return false;
-        }
+        public float GetZoomFactor() => ((m_type == PlayerType.Local) ? CVR_DesktopCameraController.currentZoomProgress : 0f);
 
-        public bool GetMovementVector(out Vector2 p_vec)
+        public Vector2 GetMovementVector()
         {
-            if(m_local)
+            Vector2 l_result = Vector2.zero;
+            switch(m_type)
             {
-                p_vec = new Vector2(MovementSystem.Instance.movementVector.x, MovementSystem.Instance.movementVector.z);
-                return true;
-            }
-            if(m_remote && (m_puppetMaster != null))
-            {
-                p_vec = new Vector2(m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorMovementX, m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorMovementY);
-                return true;
-            }
-            p_vec = Vector2.zero;
-            return false;
-        }
-
-        public bool GetLeftHandPosition(out Vector3 p_pos)
-        {
-            if(m_local)
-            {
-                p_pos = IKSystem.Instance.leftHandOffset.position;
-                return true;
-            }
-            if(m_remote && (m_puppetMaster != null))
-            {
-                Animator l_animator = m_puppetMaster.GetAnimator();
-                if((l_animator != null) && l_animator.isHuman)
+                case PlayerType.Local:
                 {
-                    Transform l_hand = l_animator.GetBoneTransform(HumanBodyBones.LeftHand);
-                    if(l_hand != null)
+                    l_result.x = MovementSystem.Instance.movementVector.x;
+                    l_result.y = MovementSystem.Instance.movementVector.y;
+                }
+                break;
+                case PlayerType.Remote:
+                {
+                    l_result.x = m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorMovementX;
+                    l_result.y = m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorMovementY;
+                }
+                break;
+            }
+            return l_result;
+        }
+
+        public Vector3 GetLeftHandPosition()
+        {
+            Vector3 l_result = Vector3.zero;
+            switch(m_type)
+            {
+                case PlayerType.Local:
+                    l_result = IKSystem.Instance.leftHandOffset.position;
+                    break;
+                case PlayerType.Remote:
+                {
+                    Animator l_animator = m_puppetMaster.GetAnimator();
+                    if((l_animator != null) && l_animator.isHuman)
                     {
-                        p_pos = l_hand.position;
-                        return true;
+                        Transform l_hand = l_animator.GetBoneTransform(HumanBodyBones.LeftHand);
+                        if(l_hand != null)
+                            l_result = l_hand.position;
                     }
                 }
+                break;
             }
-            p_pos = Vector3.zero;
-            return false;
+            return l_result;
         }
 
-        public bool GetLeftHandRotation(out Quaternion p_rot)
+        public Quaternion GetLeftHandRotation()
         {
-            if(m_local)
+            Quaternion l_result = Quaternion.identity;
+            switch(m_type)
             {
-                p_rot = IKSystem.Instance.leftHandOffset.rotation;
-                return true;
-            }
-            if(m_remote && (m_puppetMaster != null))
-            {
-                Animator l_animator = m_puppetMaster.GetAnimator();
-                if((l_animator != null) && l_animator.isHuman)
+                case PlayerType.Local:
+                    l_result = IKSystem.Instance.leftHandOffset.rotation;
+                    break;
+                case PlayerType.Remote:
                 {
-                    Transform l_hand = l_animator.GetBoneTransform(HumanBodyBones.LeftHand);
-                    if(l_hand != null)
+                    Animator l_animator = m_puppetMaster.GetAnimator();
+                    if((l_animator != null) && l_animator.isHuman)
                     {
-                        p_rot = l_hand.rotation;
-                        return true;
+                        Transform l_hand = l_animator.GetBoneTransform(HumanBodyBones.LeftHand);
+                        if(l_hand != null)
+                            l_result = l_hand.rotation;
                     }
                 }
+                break;
             }
-            p_rot = Quaternion.identity;
-            return false;
+            return l_result;
         }
 
-        public bool GetRightHandPosition(out Vector3 p_pos)
+        public Vector3 GetRightHandPosition()
         {
-            if(m_local)
+            Vector3 l_result = Vector3.zero;
+            switch(m_type)
             {
-                p_pos = IKSystem.Instance.rightHandOffset.position;
-                return true;
-            }
-            if(m_remote && (m_puppetMaster != null))
-            {
-                Animator l_animator = m_puppetMaster.GetAnimator();
-                if((l_animator != null) && l_animator.isHuman)
+                case PlayerType.Local:
+                    l_result = IKSystem.Instance.rightHandOffset.position;
+                    break;
+                case PlayerType.Remote:
                 {
-                    Transform l_hand = l_animator.GetBoneTransform(HumanBodyBones.RightHand);
-                    if(l_hand != null)
+                    Animator l_animator = m_puppetMaster.GetAnimator();
+                    if((l_animator != null) && l_animator.isHuman)
                     {
-                        p_pos = l_hand.position;
-                        return true;
+                        Transform l_hand = l_animator.GetBoneTransform(HumanBodyBones.RightHand);
+                        if(l_hand != null)
+                            l_result = l_hand.position;
                     }
                 }
+                break;
             }
-            p_pos = Vector3.zero;
-            return false;
+            return l_result;
         }
 
-        public bool GetRightHandRotation(out Quaternion p_rot)
+        public Quaternion GetRightHandRotation()
         {
-            if(m_local)
+            Quaternion l_result = Quaternion.identity;
+            switch(m_type)
             {
-                p_rot = IKSystem.Instance.rightHandOffset.rotation;
-                return true;
-            }
-            if(m_remote && (m_puppetMaster != null))
-            {
-                Animator l_animator = m_puppetMaster.GetAnimator();
-                if((l_animator != null) && l_animator.isHuman)
+                case PlayerType.Local:
+                    l_result = IKSystem.Instance.rightHandOffset.rotation;
+                    break;
+                case PlayerType.Remote:
                 {
-                    Transform l_hand = l_animator.GetBoneTransform(HumanBodyBones.RightHand);
-                    if(l_hand != null)
+                    Animator l_animator = m_puppetMaster.GetAnimator();
+                    if((l_animator != null) && l_animator.isHuman)
                     {
-                        p_rot = l_hand.rotation;
-                        return true;
+                        Transform l_hand = l_animator.GetBoneTransform(HumanBodyBones.RightHand);
+                        if(l_hand != null)
+                            l_result = l_hand.rotation;
                     }
                 }
+                break;
             }
-            p_rot = Quaternion.identity;
-            return false;
+            return l_result;
         }
 
-        public bool GetLeftHandGetsture(out float p_gesture)
+        public float GetLeftHandGetsture()
         {
-            if(m_local)
+            float l_result = 0f;
+            switch(m_type)
             {
-                p_gesture = CVRInputManager.Instance.gestureLeft;
-                return true;
+                case PlayerType.Local:
+                    l_result = CVRInputManager.Instance.gestureLeft;
+                    break;
+                case PlayerType.Remote:
+                    l_result = m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorGestureLeft;
+                    break;
             }
-            if(m_remote && (m_puppetMaster != null))
-            {
-                p_gesture = m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorGestureLeft;
-                return true;
-            }
-            p_gesture = 0f;
-            return false;
+            return l_result;
         }
 
-        public bool GetRightHandGetsture(out float p_gesture)
+        public float GetRightHandGetsture()
         {
-            if(m_local)
+            float l_result = 0f;
+            switch(m_type)
             {
-                p_gesture = CVRInputManager.Instance.gestureRight;
-                return true;
+                case PlayerType.Local:
+                    l_result = CVRInputManager.Instance.gestureRight;
+                    break;
+                case PlayerType.Remote:
+                    l_result = m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorGestureRight;
+                    break;
             }
-            if(m_remote && (m_puppetMaster != null))
-            {
-                p_gesture = m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorGestureRight;
-                return true;
-            }
-            p_gesture = 0f;
-            return false;
+            return l_result;
         }
 
         public void Teleport(Vector3 p_position)
         {
-            if(m_local)
+            if(m_type == PlayerType.Local)
                 MovementSystem.Instance.TeleportTo(p_position);
         }
 
         public void Teleport(Vector3 p_position, Quaternion p_rotation)
         {
-            if(m_local)
+            if(m_type == PlayerType.Local)
                 MovementSystem.Instance.TeleportTo(p_position, p_rotation.eulerAngles);
         }
 
         public void SetImmobilized(bool p_state)
         {
-            if(m_local)
+            if(m_type == PlayerType.Local)
                 MovementSystem.Instance.SetImmobilized(p_state);
         }
 
         public void Respawn()
         {
-            if(m_local)
+            if(m_type == PlayerType.Local)
                 RootLogic.Instance.Respawn();
         }
 
-        public bool GetBonePosition(HumanBodyBones p_bone, out Vector3 p_vec)
+        public Vector3 GetBonePosition(HumanBodyBones p_bone)
         {
-            if(m_local)
+            Vector3 l_result = Vector3.zero;
+            switch(m_type)
             {
-                Vector3 l_result = Vector3.zero;
-                if((PlayerSetup.Instance._animator != null) && PlayerSetup.Instance._animator.isHuman)
+                case PlayerType.Local:
                 {
-                    Transform l_bone = PlayerSetup.Instance._animator.GetBoneTransform(p_bone);
-                    if(l_bone != null)
+                    if((PlayerSetup.Instance._animator != null) && PlayerSetup.Instance._animator.isHuman)
                     {
-                        p_vec = l_bone.position;
-                        return true;
+                        Transform l_bone = PlayerSetup.Instance._animator.GetBoneTransform(p_bone);
+                        if(l_bone != null)
+                            l_result = l_bone.position;
                     }
                 }
-            }
-            if(m_remote && (m_puppetMaster != null))
-            {
-                Animator l_animator = m_puppetMaster.GetAnimator();
-                if((l_animator != null) && l_animator.isHuman)
+                break;
+                case PlayerType.Remote:
                 {
-                    Transform l_bone = l_animator.GetBoneTransform(p_bone);
-                    if(l_bone != null)
+                    Animator l_animator = m_puppetMaster.GetAnimator();
+                    if((l_animator != null) && l_animator.isHuman)
                     {
-                        p_vec = l_bone.position;
-                        return true;
+                        Transform l_bone = l_animator.GetBoneTransform(p_bone);
+                        if(l_bone != null)
+                            l_result = l_bone.position;
                     }
                 }
+                break;
             }
-            p_vec = Vector3.zero;
-            return false;
+            return l_result;
         }
 
-        public bool GetBoneRotation(HumanBodyBones p_bone, out Quaternion p_rot)
+        public Quaternion GetBoneRotation(HumanBodyBones p_bone)
         {
-            if(m_local)
+            Quaternion l_result = Quaternion.identity;
+            switch(m_type)
             {
-                Vector3 l_result = Vector3.zero;
-                if((PlayerSetup.Instance._animator != null) && PlayerSetup.Instance._animator.isHuman)
+                case PlayerType.Local:
                 {
-                    Transform l_bone = PlayerSetup.Instance._animator.GetBoneTransform(p_bone);
-                    if(l_bone != null)
+                    if((PlayerSetup.Instance._animator != null) && PlayerSetup.Instance._animator.isHuman)
                     {
-                        p_rot = l_bone.rotation;
-                        return true;
+                        Transform l_bone = PlayerSetup.Instance._animator.GetBoneTransform(p_bone);
+                        if(l_bone != null)
+                            l_result = l_bone.rotation;
                     }
                 }
-            }
-            if(m_remote && (m_puppetMaster != null))
-            {
-                Animator l_animator = m_puppetMaster.GetAnimator();
-                if((l_animator != null) && l_animator.isHuman)
+                break;
+                case PlayerType.Remote:
                 {
-                    Transform l_bone = l_animator.GetBoneTransform(p_bone);
-                    if(l_bone != null)
+                    Animator l_animator = m_puppetMaster.GetAnimator();
+                    if((l_animator != null) && l_animator.isHuman)
                     {
-                        p_rot = l_bone.rotation;
-                        return true;
+                        Transform l_bone = l_animator.GetBoneTransform(p_bone);
+                        if(l_bone != null)
+                            l_result = l_bone.rotation;
                     }
                 }
+                break;
             }
-            p_rot = Quaternion.identity;
-            return false;
+            return l_result;
         }
 
-        public bool GetLookVector(out Vector2 p_vec)
-        {
-            if(m_local)
-            {
-                p_vec = CVRInputManager.Instance.lookVector;
-                return true;
-            }
-            p_vec = Vector2.zero;
-            return false;
-        }
+        public Vector2 GetLookVector() => ((m_type == PlayerType.Local) ? CVRInputManager.Instance.lookVector : Vector2.zero);
 
         public bool GetIndividualFingerTracking()
         {
-            if(m_local)
-                return CVRInputManager.Instance.individualFingerTracking;
-            if(m_remote && (m_puppetMaster != null))
-                return m_puppetMaster.PlayerAvatarMovementDataInput.IndexUseIndividualFingers;
-            return false;
+            bool l_result = false;
+            switch(m_type)
+            {
+                case PlayerType.Local:
+                    l_result = CVRInputManager.Instance.individualFingerTracking;
+                    break;
+                case PlayerType.Remote:
+                    l_result = m_puppetMaster.PlayerAvatarMovementDataInput.IndexUseIndividualFingers;
+                    break;
+            }
+            return l_result;
         }
 
-        public bool GetFingerCurls(out float[] p_curls)
+        public float[] GetFingerCurls()
         {
-            if(m_local)
+            float[] l_result = null;
+            switch(m_type)
             {
-                p_curls = new float[10]
+                case PlayerType.Local:
                 {
-                    CVRInputManager.Instance.fingerCurlLeftThumb,
-                    CVRInputManager.Instance.fingerCurlLeftIndex,
-                    CVRInputManager.Instance.fingerCurlLeftMiddle,
-                    CVRInputManager.Instance.fingerCurlLeftThumb,
-                    CVRInputManager.Instance.fingerCurlLeftPinky,
-                    CVRInputManager.Instance.fingerCurlRightThumb,
-                    CVRInputManager.Instance.fingerCurlRightIndex,
-                    CVRInputManager.Instance.fingerCurlRightMiddle,
-                    CVRInputManager.Instance.fingerCurlRightThumb,
-                    CVRInputManager.Instance.fingerCurlRightPinky
-                };
-                return true;
+                    l_result = new float[10]
+                    {
+                        CVRInputManager.Instance.fingerCurlLeftThumb,
+                        CVRInputManager.Instance.fingerCurlLeftIndex,
+                        CVRInputManager.Instance.fingerCurlLeftMiddle,
+                        CVRInputManager.Instance.fingerCurlLeftThumb,
+                        CVRInputManager.Instance.fingerCurlLeftPinky,
+                        CVRInputManager.Instance.fingerCurlRightThumb,
+                        CVRInputManager.Instance.fingerCurlRightIndex,
+                        CVRInputManager.Instance.fingerCurlRightMiddle,
+                        CVRInputManager.Instance.fingerCurlRightThumb,
+                        CVRInputManager.Instance.fingerCurlRightPinky
+                    };
+                }
+                break;
+                case PlayerType.Remote:
+                {
+                    l_result = new float[10]
+                    {
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftThumbCurl,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftIndexCurl,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftMiddleCurl,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftRingCurl,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftPinkyCurl,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightThumbCurl,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightIndexCurl,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightMiddleCurl,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightRingCurl,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightPinkyCurl
+                    };
+                }
+                break;
             }
-            if(m_remote && (m_puppetMaster != null))
+            return l_result;
+        }
+
+        public float[] GetFingerSpreads()
+        {
+            float[] l_result = null;
+            switch(m_type)
             {
-                p_curls = new float[10]
+                case PlayerType.Local:
                 {
-                    m_puppetMaster.PlayerAvatarMovementDataInput.LeftThumbCurl,
-                    m_puppetMaster.PlayerAvatarMovementDataInput.LeftIndexCurl,
-                    m_puppetMaster.PlayerAvatarMovementDataInput.LeftMiddleCurl,
-                    m_puppetMaster.PlayerAvatarMovementDataInput.LeftRingCurl,
-                    m_puppetMaster.PlayerAvatarMovementDataInput.LeftPinkyCurl,
-                    m_puppetMaster.PlayerAvatarMovementDataInput.RightThumbCurl,
-                    m_puppetMaster.PlayerAvatarMovementDataInput.RightIndexCurl,
-                    m_puppetMaster.PlayerAvatarMovementDataInput.RightMiddleCurl,
-                    m_puppetMaster.PlayerAvatarMovementDataInput.RightRingCurl,
-                    m_puppetMaster.PlayerAvatarMovementDataInput.RightPinkyCurl
-                };
-                return true;
+                    l_result = new float[10]
+                    {
+                        CVRInputManager.Instance.fingerSpreadLeftThumb,
+                        CVRInputManager.Instance.fingerSpreadLeftIndex,
+                        CVRInputManager.Instance.fingerSpreadLeftMiddle,
+                        CVRInputManager.Instance.fingerSpreadLeftThumb,
+                        CVRInputManager.Instance.fingerSpreadLeftPinky,
+                        CVRInputManager.Instance.fingerSpreadRightThumb,
+                        CVRInputManager.Instance.fingerSpreadRightIndex,
+                        CVRInputManager.Instance.fingerSpreadRightMiddle,
+                        CVRInputManager.Instance.fingerSpreadRightThumb,
+                        CVRInputManager.Instance.fingerSpreadRightPinky
+                    };
+                }
+                break;
+                case PlayerType.Remote:
+                {
+                    l_result = new float[10]
+                    {
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftThumbSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftIndexSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftMiddleSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftRingSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftPinkySpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightThumbSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightIndexSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightMiddleSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightRingSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightPinkySpread
+                    };
+                }
+                break;
             }
-            p_curls = null;
-            return false;
+            return l_result;
         }
 
         public static bool Compare(Player p_playerA, Player p_playerB)
         {
-            if(p_playerA.m_local && p_playerB.m_local)
+            if(p_playerA.IsLocal() && p_playerB.IsLocal())
                 return true;
-            if(p_playerA.m_local && p_playerB.m_remote)
+            if(p_playerA.IsLocal() && p_playerB.IsRemote())
                 return false;
-            if(p_playerA.m_remote && p_playerB.m_local)
+            if(p_playerA.IsRemote() && p_playerB.IsLocal())
                 return false;
-            if(p_playerA.m_remote && p_playerB.m_remote)
+            if(p_playerA.IsRemote() && p_playerB.IsRemote())
                 return (p_playerA.m_gameObject == p_playerB.m_gameObject);
 
             return false;
         }
 
-        public override string ToString()
-        {
-            string l_result = "Player(";
-            if(GetName(out string l_name))
-                l_result += l_name;
-            l_result += ')';
-            return l_result;
-        }
+        public override string ToString() => string.Format("Player({0})", GetName());
     }
 }

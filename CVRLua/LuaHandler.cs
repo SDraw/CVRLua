@@ -14,7 +14,6 @@ namespace CVRLua
             OnEnable,
             OnDisable,
             OnDestroy,
-            OnGUI,
             OnCollisionEnter,
             OnCollisionExit,
             OnCollisionStay,
@@ -22,17 +21,24 @@ namespace CVRLua
             OnTriggerExit,
             OnTriggerStay,
             OnAnimatorIK,
+
             OnMessage,
+
+            OnPlayerJoin,
+            OnPlayerLeft,
+
             OnInteractableGrab,
             OnInteractableDrop,
             OnInteractableUp,
             OnInteractableDown,
             OnInteractableGazeEnter,
             OnInteractableGazeExit,
-            OnPlayerJoin,
-            OnPlayerLeft,
+            OnEnterSeat,
+            OnExitSeat,
+            
             OnAttachmentAttach,
             OnAttachmentDeattach,
+
             OnButtonClick,
             OnToggleChange,
             OnSliderChange
