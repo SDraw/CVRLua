@@ -49,7 +49,7 @@ namespace CVRLua.Players
                     l_result = CVR_MenuManager.Instance.coreData.core.username;
                     break;
                 case PlayerType.Remote:
-                    l_result = m_descriptor.name;
+                    l_result = m_descriptor.userName;
                     break;
             }
             return l_result;
