@@ -8,7 +8,7 @@ namespace CVRLua
 {
     public class Core : MelonLoader.MelonMod
     {
-        public const int c_modRelease = 31;
+        public const int c_modRelease = 32;
 
         static public Core Instance { get; private set; } = null;
 
@@ -53,6 +53,8 @@ namespace CVRLua
                 null,
                 new HarmonyLib.HarmonyMethod(typeof(Core).GetMethod(nameof(OnInteractableGazeExit_Postfix), BindingFlags.NonPublic | BindingFlags.Static))
             );
+
+            (typeof(ABI_RC.Core.Util.AssetFiltering.WorldFilter).GetField("_Base", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null) as HashSet<System.Type>)?.Add(typeof(LuaScript));
 
             Players.PlayersManager.Init();
         }

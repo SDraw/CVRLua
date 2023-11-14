@@ -18,7 +18,6 @@ namespace CVRLua.Lua.LuaDefs
         {
             ms_instanceProperties.Add(("isInternalPointer", (GetIsInternalPointer, null)));
             ms_instanceProperties.Add(("isLocalPointer", (GetIsLocalPointer, null)));
-            ms_instanceProperties.Add(("limitToFilteredTriggers", (GetLimitToFilteredTriggers, null)));
             ms_instanceProperties.Add(("type", (GetPointerType, SetPointerType)));
 
             MonoBehaviourDefs.InheritTo(ms_metaMethods, ms_staticProperties, ms_staticMethods, ms_instanceProperties, ms_instanceMethods);
@@ -72,28 +71,6 @@ namespace CVRLua.Lua.LuaDefs
             {
                 if(l_pointer != null)
                     l_argReader.PushBoolean(l_pointer.isLocalPointer);
-                else
-                {
-                    l_argReader.SetError(c_destroyed);
-                    l_argReader.PushBoolean(false);
-                }
-            }
-            else
-                l_argReader.PushBoolean(false);
-
-            l_argReader.LogError();
-            return 1;
-        }
-
-        static int GetLimitToFilteredTriggers(IntPtr p_state)
-        {
-            var l_argReader = new LuaArgReader(p_state);
-            CVRPointer l_pointer = null;
-            l_argReader.ReadObject(ref l_pointer);
-            if(!l_argReader.HasErrors())
-            {
-                if(l_pointer != null)
-                    l_argReader.PushBoolean(l_pointer.limitToFilteredTriggers);
                 else
                 {
                     l_argReader.SetError(c_destroyed);

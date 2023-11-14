@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ABI_RC.Systems.GameEventSystem;
 using System;
+using ABI_RC.Systems.MovementSystem;
 
 namespace CVRLua.Players
 {
@@ -90,7 +91,7 @@ namespace CVRLua.Players
         {
             Player l_result = null;
             Transform l_root = p_obj.transform.root;
-            if(l_root == PlayerSetup.Instance.transform)
+            if(l_root == PlayerSetup.Instance.transform || l_root == MovementSystem.Instance.proxyCollider.transform || l_root == MovementSystem.Instance.forceCollider.transform)
                 l_result = ms_localPlayer;
             else
             {
