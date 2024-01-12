@@ -25,12 +25,13 @@ namespace CVRLua
             foreach(string l_library in ms_libraries)
             {
                 Stream l_libraryStream = l_assembly.GetManifestResourceStream(l_assemblyName + ".libs." + l_library);
+                string l_filePath = Path.Combine(ms_librariesPath, l_library);
 
-                if(!File.Exists(l_library))
+                if(!File.Exists(l_filePath))
                 {
                     try
                     {
-                        Stream l_fileStream = File.Create(Path.Combine(ms_librariesPath, l_library));
+                        Stream l_fileStream = File.Create(l_filePath);
                         l_libraryStream.CopyTo(l_fileStream);
                         l_fileStream.Flush();
                         l_fileStream.Close();
@@ -44,7 +45,7 @@ namespace CVRLua
                 {
                     try
                     {
-                        FileStream l_fileStream = File.Open(Path.Combine(ms_librariesPath, l_library), FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                        FileStream l_fileStream = File.Open(l_filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
                         SHA256 l_hasher = SHA256.Create();
                         string l_libraryHash = BitConverter.ToString(l_hasher.ComputeHash(l_libraryStream));
                         string l_fileHash = BitConverter.ToString(l_hasher.ComputeHash(l_fileStream));
@@ -57,7 +58,7 @@ namespace CVRLua
                             l_libraryStream.CopyTo(l_fileStream);
                             l_fileStream.Flush();
 
-                            Core.Logger?.Msg("Updated {0} library from embedded one", l_library);
+                            Core.Logger.Msg("Updated {0} library from embedded one", l_library);
                         }
 
                         l_fileStream.Close();
