@@ -35,7 +35,7 @@ namespace CVRLua.Players
             }
             catch(Exception e)
             {
-                MelonLoader.MelonLogger.Warning(e);
+                Core.Logger?.Error(e);
             }
         }
 
@@ -51,7 +51,7 @@ namespace CVRLua.Players
             }
             catch(Exception e)
             {
-                MelonLoader.MelonLogger.Warning(e);
+                Core.Logger?.Error(e);
             }
         }
 

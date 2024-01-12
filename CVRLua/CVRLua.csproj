@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="vendor\lua\bin\lua54.dll">
-      <Link>lua54.dll</Link>
+      <Link>libs\lua54.dll</Link>
     </EmbeddedResource>
   </ItemGroup>
 

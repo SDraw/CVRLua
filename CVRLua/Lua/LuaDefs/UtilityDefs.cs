@@ -15,7 +15,7 @@ namespace CVRLua.Lua.LuaDefs
             string l_text = "";
             l_argReader.ReadString(ref l_text);
             if(!l_argReader.HasErrors())
-                LuaLogger.Log(l_text);
+                Core.Logger?.Msg(l_text);
             else
                 l_argReader.PushBoolean(false);
 

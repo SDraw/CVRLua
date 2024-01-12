@@ -8,9 +8,10 @@ namespace CVRLua
 {
     public class Core : MelonLoader.MelonMod
     {
-        public const int c_modRelease = 32;
+        public const int c_modRelease = 33;
 
         static public Core Instance { get; private set; } = null;
+        internal static MelonLoader.MelonLogger.Instance Logger = null;
 
         readonly List<LuaScript> m_scripts = null;
 
@@ -22,7 +23,10 @@ namespace CVRLua
         public override void OnInitializeMelon()
         {
             if(Instance == null)
+            {
                 Instance = this;
+                Logger = this.LoggerInstance;
+            }
 
             LibrariesHandler.ExtractDependencies();
             LuaHandler.Init();
@@ -62,7 +66,10 @@ namespace CVRLua
         public override void OnDeinitializeMelon()
         {
             if(Instance == this)
+            {
                 Instance = null;
+                Logger = null;
+            }
         }
 
         // Scrips register and removal
@@ -95,7 +102,7 @@ namespace CVRLua
             }
             catch(Exception e)
             {
-                MelonLoader.MelonLogger.Error(e);
+                Logger?.Error(e);
             }
         }
 
@@ -112,7 +119,7 @@ namespace CVRLua
             }
             catch(Exception e)
             {
-                MelonLoader.MelonLogger.Error(e);
+                Logger?.Error(e);
             }
         }
 
@@ -129,7 +136,7 @@ namespace CVRLua
             }
             catch(Exception e)
             {
-                MelonLoader.MelonLogger.Error(e);
+                Logger?.Error(e);
             }
         }
 
@@ -146,7 +153,7 @@ namespace CVRLua
             }
             catch(Exception e)
             {
-                MelonLoader.MelonLogger.Error(e);
+                Logger?.Error(e);
             }
         }
 
@@ -160,7 +167,7 @@ namespace CVRLua
             }
             catch(Exception e)
             {
-                MelonLoader.MelonLogger.Error(e);
+                Logger?.Error(e);
             }
         }
 
@@ -174,7 +181,7 @@ namespace CVRLua
             }
             catch(Exception e)
             {
-                MelonLoader.MelonLogger.Error(e);
+                Logger?.Error(e);
             }
         }
     }

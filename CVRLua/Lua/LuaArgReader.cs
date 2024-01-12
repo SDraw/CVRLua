@@ -31,7 +31,7 @@ namespace CVRLua.Lua
             if((m_vm != null) && m_hasErrors)
             {
                 m_vm.GetStackInfo(out string p_chunk, out int l_line);
-                LuaLogger.Log("Warning: [\"{0}\"]:{1}: {2} at argument {3}", p_chunk, l_line, m_errorInfo, m_currentArgument);
+                Core.Logger?.Warning("Warning: [\"{0}\"]:{1}: {2} at argument {3}", p_chunk, l_line, m_errorInfo, m_currentArgument);
             }
         }
 

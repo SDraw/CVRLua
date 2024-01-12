@@ -85,7 +85,7 @@ namespace CVRLua.Lua
         {
             if((LuaInterop.luaL_loadstring(m_state, p_script) != LuaInterop.LUA_OK) || (LuaInterop.lua_pcall(m_state, 0, 0, 0) != LuaInterop.LUA_OK))
             {
-                LuaLogger.Log(LuaInterop.lua_tostring(m_state, -1));
+                Core.Logger?.Warning(LuaInterop.lua_tostring(m_state, -1));
                 LuaInterop.lua_pop(m_state, 1);
             }
         }
@@ -94,7 +94,7 @@ namespace CVRLua.Lua
         {
             if((LuaInterop.luaL_loadbuffer(m_state, ref p_data, p_data.Length, p_blockName) != LuaInterop.LUA_OK) || (LuaInterop.lua_pcall(m_state, 0, 0, 0) != LuaInterop.LUA_OK))
             {
-                LuaLogger.Log(LuaInterop.lua_tostring(m_state, -1));
+                Core.Logger?.Warning(LuaInterop.lua_tostring(m_state, -1));
                 LuaInterop.lua_pop(m_state, 1);
             }
         }
@@ -171,7 +171,7 @@ namespace CVRLua.Lua
                     PushValue(l_value);
                 if(LuaInterop.lua_pcall(m_state, p_args.Length, 0, 0) != 0)
                 {
-                    LuaLogger.Log(LuaInterop.lua_tostring(m_state, -1));
+                    Core.Logger?.Warning(LuaInterop.lua_tostring(m_state, -1));
                     LuaInterop.lua_pop(m_state, 1);
                 }
             }
@@ -188,7 +188,7 @@ namespace CVRLua.Lua
                     PushValue(l_value);
                 if(LuaInterop.lua_pcall(m_state, p_args.Length, LuaInterop.LUA_MULTRET, 0) != LuaInterop.LUA_OK)
                 {
-                    LuaLogger.Log(LuaInterop.lua_tostring(m_state, -1));
+                    Core.Logger?.Warning(LuaInterop.lua_tostring(m_state, -1));
                     LuaInterop.lua_pop(m_state, 1);
                 }
                 else

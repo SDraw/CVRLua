@@ -5,7 +5,7 @@ namespace CVRLua.Lua
 {
     public static class LuaInterop
     {
-        const string ms_binaryName = "UserLibs/lua54.dll";
+        const string ms_binaryName = "UserLibs/native/lua54.dll";
 
         public const int LUAI_MAXSTACK = 1000000; // for x64
         public const int LUA_REGISTRYINDEX = (-LUAI_MAXSTACK - 1000);
