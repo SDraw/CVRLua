@@ -1,7 +1,7 @@
-﻿using ABI.CCK.Components;
+using ABI.CCK.Components;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Player.AvatarTracking.Remote;
-using ABI_RC.Systems.MovementSystem;
+using MovementSystem = ABI_RC.Systems.Movement.BetterBetterCharacterController;
 using System;
 using System.Collections.Generic;
 using System.Linq;
