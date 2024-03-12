@@ -1,4 +1,4 @@
-﻿using ABI.CCK.Components;
+using ABI.CCK.Components;
 using ABI_RC.Core.InteractionSystem;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace CVRLua
 {
     public class Core : MelonLoader.MelonMod
     {
-        public const int c_modRelease = 33;
+        public const int c_modRelease = 34;
 
         static public Core Instance { get; private set; } = null;
         internal static MelonLoader.MelonLogger.Instance Logger = null;
