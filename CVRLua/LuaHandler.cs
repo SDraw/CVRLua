@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace CVRLua
@@ -114,6 +114,7 @@ namespace CVRLua
             Lua.LuaDefs.CVRPointerDefs.Init();
             Lua.LuaDefs.CVRVideoPlayerDefs.Init();
             Lua.LuaDefs.CVRInteractableDefs.Init();
+            Lua.LuaDefs.CVRWorldDefs.Init();
             Lua.LuaDefs.CVRPickupObjectDefs.Init();
 
             // Own defs
@@ -192,6 +193,7 @@ namespace CVRLua
             Lua.LuaDefs.CVRMirrorDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CVRPointerDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CVRVideoPlayerDefs.RegisterInVM(m_vm);
+            Lua.LuaDefs.CVRWorldDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CVRInteractableDefs.RegisterInVM(m_vm);
             Lua.LuaDefs.CVRPickupObjectDefs.RegisterInVM(m_vm);
 
