@@ -1,4 +1,4 @@
-﻿using ABI.CCK.Components;
+using ABI.CCK.Components;
 using ABI_RC.Core;
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
@@ -6,7 +6,7 @@ using ABI_RC.Core.Savior;
 using ABI_RC.Systems.IK;
 using ABI_RC.Systems.IK.SubSystems;
 using ABI_RC.Systems.InputManagement;
-using ABI_RC.Systems.MovementSystem;
+using MovementSystem = ABI_RC.Systems.Movement.BetterBetterCharacterController;
 using UnityEngine;
 
 namespace CVRLua.Players
@@ -264,7 +264,7 @@ namespace CVRLua.Players
             switch(m_type)
             {
                 case PlayerType.Local:
-                    l_result = MovementSystem.Instance.flying;
+                    l_result = MovementSystem.Instance.IsFlying();
                     break;
                 case PlayerType.Remote:
                     l_result = m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorFlying;
@@ -309,7 +309,7 @@ namespace CVRLua.Players
             switch(m_type)
             {
                 case PlayerType.Local:
-                    l_result = MovementSystem.Instance.sitting;
+                    l_result = MovementSystem.Instance.IsSitting();
                     break;
                 case PlayerType.Remote:
                     l_result = m_puppetMaster.PlayerAvatarMovementDataInput.AnimatorSitting;
@@ -364,8 +364,8 @@ namespace CVRLua.Players
             {
                 case PlayerType.Local:
                 {
-                    l_result.x = MovementSystem.Instance.movementVector.x;
-                    l_result.y = MovementSystem.Instance.movementVector.y;
+                    l_result.x = MovementSystem.Instance.AppliedMovementVector.x;
+                    l_result.y = MovementSystem.Instance.AppliedMovementVector.y;
                 }
                 break;
                 case PlayerType.Remote:
@@ -384,7 +384,7 @@ namespace CVRLua.Players
             switch(m_type)
             {
                 case PlayerType.Local:
-                    l_result = IKSystem.Instance.leftHandOffset.position;
+                    l_result = IKSystem.Instance.leftHandTarget.position;
                     break;
                 case PlayerType.Remote:
                 {
@@ -407,7 +407,7 @@ namespace CVRLua.Players
             switch(m_type)
             {
                 case PlayerType.Local:
-                    l_result = IKSystem.Instance.leftHandOffset.rotation;
+                    l_result = IKSystem.Instance.leftHandRotations.rotation;
                     break;
                 case PlayerType.Remote:
                 {
@@ -430,7 +430,7 @@ namespace CVRLua.Players
             switch(m_type)
             {
                 case PlayerType.Local:
-                    l_result = IKSystem.Instance.rightHandOffset.position;
+                    l_result = IKSystem.Instance.rightHandTarget.position;
                     break;
                 case PlayerType.Remote:
                 {
@@ -453,7 +453,7 @@ namespace CVRLua.Players
             switch(m_type)
             {
                 case PlayerType.Local:
-                    l_result = IKSystem.Instance.rightHandOffset.rotation;
+                    l_result = IKSystem.Instance.rightHandRotations.rotation;
                     break;
                 case PlayerType.Remote:
                 {
@@ -503,13 +503,13 @@ namespace CVRLua.Players
         public void Teleport(Vector3 p_position)
         {
             if(m_type == PlayerType.Local)
-                MovementSystem.Instance.TeleportTo(p_position);
+                MovementSystem.Instance.TeleportPosition(p_position);
         }
 
         public void Teleport(Vector3 p_position, Quaternion p_rotation)
         {
             if(m_type == PlayerType.Local)
-                MovementSystem.Instance.TeleportTo(p_position, p_rotation.eulerAngles);
+                MovementSystem.Instance.TeleportPlayerTo(p_position, true, false, p_rotation);
         }
 
         public void SetImmobilized(bool p_state)
@@ -595,7 +595,7 @@ namespace CVRLua.Players
                     l_result = CVRInputManager.Instance.individualFingerTracking;
                     break;
                 case PlayerType.Remote:
-                    l_result = m_puppetMaster.PlayerAvatarMovementDataInput.IndexUseIndividualFingers;
+                    l_result = m_puppetMaster.PlayerAvatarMovementDataInput.UseIndividualFingers;
                     break;
             }
             return l_result;
@@ -610,16 +610,16 @@ namespace CVRLua.Players
                 {
                     l_result = new float[10]
                     {
-                        CVRInputManager.Instance.fingerCurlLeftThumb,
-                        CVRInputManager.Instance.fingerCurlLeftIndex,
-                        CVRInputManager.Instance.fingerCurlLeftMiddle,
-                        CVRInputManager.Instance.fingerCurlLeftThumb,
-                        CVRInputManager.Instance.fingerCurlLeftPinky,
-                        CVRInputManager.Instance.fingerCurlRightThumb,
-                        CVRInputManager.Instance.fingerCurlRightIndex,
-                        CVRInputManager.Instance.fingerCurlRightMiddle,
-                        CVRInputManager.Instance.fingerCurlRightThumb,
-                        CVRInputManager.Instance.fingerCurlRightPinky
+                        CVRInputManager.Instance.fingerFullCurlNormalizedLeftThumb,
+                        CVRInputManager.Instance.fingerFullCurlNormalizedLeftIndex,
+                        CVRInputManager.Instance.fingerFullCurlNormalizedLeftMiddle,
+                        CVRInputManager.Instance.fingerFullCurlNormalizedLeftThumb,
+                        CVRInputManager.Instance.fingerFullCurlNormalizedLeftPinky,
+                        CVRInputManager.Instance.fingerFullCurlNormalizedRightThumb,
+                        CVRInputManager.Instance.fingerFullCurlNormalizedRightIndex,
+                        CVRInputManager.Instance.fingerFullCurlNormalizedRightMiddle,
+                        CVRInputManager.Instance.fingerFullCurlNormalizedRightThumb,
+                        CVRInputManager.Instance.fingerFullCurlNormalizedRightPinky
                     };
                 }
                 break;
@@ -627,16 +627,16 @@ namespace CVRLua.Players
                 {
                     l_result = new float[10]
                     {
-                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftThumbCurl,
-                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftIndexCurl,
-                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftMiddleCurl,
-                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftRingCurl,
-                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftPinkyCurl,
-                        m_puppetMaster.PlayerAvatarMovementDataInput.RightThumbCurl,
-                        m_puppetMaster.PlayerAvatarMovementDataInput.RightIndexCurl,
-                        m_puppetMaster.PlayerAvatarMovementDataInput.RightMiddleCurl,
-                        m_puppetMaster.PlayerAvatarMovementDataInput.RightRingCurl,
-                        m_puppetMaster.PlayerAvatarMovementDataInput.RightPinkyCurl
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftThumbSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftIndexSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftMiddleSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftRingSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.LeftPinkySpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightThumbSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightIndexSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightMiddleSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightRingSpread,
+                        m_puppetMaster.PlayerAvatarMovementDataInput.RightPinkySpread
                     };
                 }
                 break;

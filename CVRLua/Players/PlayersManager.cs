@@ -1,10 +1,10 @@
-﻿using ABI_RC.Core.Player;
+using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using System.Collections.Generic;
 using UnityEngine;
 using ABI_RC.Systems.GameEventSystem;
 using System;
-using ABI_RC.Systems.MovementSystem;
+using MovementSystem = ABI_RC.Systems.Movement.BetterBetterCharacterController;
 
 namespace CVRLua.Players
 {
@@ -91,7 +91,7 @@ namespace CVRLua.Players
         {
             Player l_result = null;
             Transform l_root = p_obj.transform.root;
-            if(l_root == PlayerSetup.Instance.transform || l_root == MovementSystem.Instance.proxyCollider.transform || l_root == MovementSystem.Instance.forceCollider.transform)
+            if(l_root == PlayerSetup.Instance.transform || l_root == MovementSystem.Instance.Collider.transform)
                 l_result = ms_localPlayer;
             else
             {
