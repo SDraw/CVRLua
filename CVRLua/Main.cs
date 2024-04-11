@@ -8,7 +8,7 @@ namespace CVRLua
 {
     public class Core : MelonLoader.MelonMod
     {
-        public const int c_modRelease = 34;
+        public const int c_modRelease = 35;
 
         static public Core Instance { get; private set; } = null;
         internal static MelonLoader.MelonLogger.Instance Logger = null;
@@ -49,13 +49,13 @@ namespace CVRLua
                 null,
                 new HarmonyLib.HarmonyMethod(typeof(Core).GetMethod(nameof(OnInteractableDown_Postfix), BindingFlags.NonPublic | BindingFlags.Static))
             );
-            HarmonyInstance.Patch(typeof(CVRInteractable).GetMethod(nameof(CVRInteractable.OnGazeEnter)),
+            HarmonyInstance.Patch(typeof(CVRInteractable).GetMethod(nameof(CVRInteractable.HoverEnter)),
                 null,
-                new HarmonyLib.HarmonyMethod(typeof(Core).GetMethod(nameof(OnInteractableGazeEnter_Postfix), BindingFlags.NonPublic | BindingFlags.Static))
+                new HarmonyLib.HarmonyMethod(typeof(Core).GetMethod(nameof(OnInteractableHoverEnter_Postfix), BindingFlags.NonPublic | BindingFlags.Static))
             );
-            HarmonyInstance.Patch(typeof(CVRInteractable).GetMethod(nameof(CVRInteractable.OnGazeExit)),
+            HarmonyInstance.Patch(typeof(CVRInteractable).GetMethod(nameof(CVRInteractable.HoverExit)),
                 null,
-                new HarmonyLib.HarmonyMethod(typeof(Core).GetMethod(nameof(OnInteractableGazeExit_Postfix), BindingFlags.NonPublic | BindingFlags.Static))
+                new HarmonyLib.HarmonyMethod(typeof(Core).GetMethod(nameof(OnInteractableHoverExit_Postfix), BindingFlags.NonPublic | BindingFlags.Static))
             );
 
             (typeof(ABI_RC.Core.Util.AssetFiltering.WorldFilter).GetField("_Base", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null) as HashSet<System.Type>)?.Add(typeof(LuaScript));
@@ -157,13 +157,13 @@ namespace CVRLua
             }
         }
 
-        static void OnInteractableGazeEnter_Postfix(ref CVRInteractable __instance) => Instance?.OnInteractableGazeEnter(__instance);
-        void OnInteractableGazeEnter(CVRInteractable p_interact)
+        static void OnInteractableHoverEnter_Postfix(ref CVRInteractable __instance) => Instance?.OnInteractableHoverEnter(__instance);
+        void OnInteractableHoverEnter(CVRInteractable p_interact)
         {
             try
             {
                 foreach(var l_script in m_scripts)
-                    l_script.OnInteractableGazeEnter(p_interact);
+                    l_script.OnInteractableHoverEnter(p_interact);
             }
             catch(Exception e)
             {
@@ -171,13 +171,13 @@ namespace CVRLua
             }
         }
 
-        static void OnInteractableGazeExit_Postfix(ref CVRInteractable __instance) => Instance?.OnInteractableGazeExit(__instance);
-        void OnInteractableGazeExit(CVRInteractable p_interact)
+        static void OnInteractableHoverExit_Postfix(ref CVRInteractable __instance) => Instance?.OnInteractableHoverExit(__instance);
+        void OnInteractableHoverExit(CVRInteractable p_interact)
         {
             try
             {
                 foreach(var l_script in m_scripts)
-                    l_script.OnInteractableGazeExit(p_interact);
+                    l_script.OnInteractableHoverExit(p_interact);
             }
             catch(Exception e)
             {

@@ -321,7 +321,7 @@ namespace CVRLua.Lua.LuaDefs
             if(!l_argReader.HasErrors())
             {
                 if(l_pickup != null)
-                    l_argReader.PushBoolean(l_pickup.IsGrabbedByMe());
+                    l_argReader.PushBoolean(l_pickup.IsGrabbedByMe);
                 else
                 {
                     l_argReader.SetError(c_destroyed);
@@ -365,7 +365,7 @@ namespace CVRLua.Lua.LuaDefs
             if(!l_argReader.HasErrors())
             {
                 if(l_pickup != null)
-                    l_argReader.PushString(l_pickup.grabbedBy);
+                    l_argReader.PushString(l_pickup.GrabbedBy);
 
                 else
                 {

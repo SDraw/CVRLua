@@ -724,13 +724,15 @@ namespace CVRLua.Lua.LuaDefs
             Players.Player l_player = null;
             Wrappers.Vector3 l_pos = null;
             Wrappers.Quaternion l_rot = null;
+            bool l_preserveVelocity = false;
             l_argReader.ReadObject(ref l_player);
             l_argReader.ReadObject(ref l_pos);
             l_argReader.ReadNextObject(ref l_rot);
+            l_argReader.ReadNextBoolean(ref l_preserveVelocity);
             if(!l_argReader.HasErrors())
             {
                 if(l_rot != null)
-                    l_player.Teleport(l_pos.m_vec, l_rot.m_quat);
+                    l_player.Teleport(l_pos.m_vec, l_rot.m_quat, l_preserveVelocity);
                 else
                     l_player.Teleport(l_pos.m_vec);
                 l_argReader.PushBoolean(true);

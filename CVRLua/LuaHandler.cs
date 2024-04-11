@@ -31,8 +31,8 @@ namespace CVRLua
             OnInteractableDrop,
             OnInteractableUp,
             OnInteractableDown,
-            OnInteractableGazeEnter,
-            OnInteractableGazeExit,
+            OnInteractableHoverEnter,
+            OnInteractableHoverExit,
             OnEnterSeat,
             OnExitSeat,
             

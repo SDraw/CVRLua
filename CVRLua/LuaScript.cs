@@ -209,16 +209,16 @@ namespace CVRLua
                 m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnInteractableDown);
         }
 
-        internal void OnInteractableGazeEnter(CVRInteractable p_instance)
+        internal void OnInteractableHoverEnter(CVRInteractable p_instance)
         {
             if(m_interactable == p_instance)
-                m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnInteractableGazeEnter);
+                m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnInteractableHoverEnter);
         }
 
-        internal void OnInteractableGazeExit(CVRInteractable p_instance)
+        internal void OnInteractableHoverExit(CVRInteractable p_instance)
         {
             if(m_interactable == p_instance)
-                m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnInteractableGazeExit);
+                m_luaHandler?.CallEvent(LuaHandler.ScriptEvent.OnInteractableHoverExit);
         }
 
         void OnEnterSeat()

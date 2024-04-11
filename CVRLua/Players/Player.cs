@@ -506,10 +506,10 @@ namespace CVRLua.Players
                 MovementSystem.Instance.TeleportPosition(p_position);
         }
 
-        public void Teleport(Vector3 p_position, Quaternion p_rotation)
+        public void Teleport(Vector3 p_position, Quaternion p_rotation, bool p_velocity)
         {
             if(m_type == PlayerType.Local)
-                MovementSystem.Instance.TeleportPlayerTo(p_position, true, false, p_rotation);
+                MovementSystem.Instance.TeleportPlayerTo(p_position, p_rotation.eulerAngles,true, p_velocity);
         }
 
         public void SetImmobilized(bool p_state)
