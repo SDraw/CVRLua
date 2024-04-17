@@ -8,7 +8,7 @@ namespace CVRLua
 {
     public class Core : MelonLoader.MelonMod
     {
-        public const int c_modRelease = 35;
+        public const int c_modRelease = 36;
 
         static public Core Instance { get; private set; } = null;
         internal static MelonLoader.MelonLogger.Instance Logger = null;

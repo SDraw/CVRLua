@@ -117,7 +117,7 @@ namespace CVRLua.Players
                     l_result = PlayerSetup.Instance.GetAvatarHeight();
                     break;
                 case PlayerType.Remote:
-                    l_result = m_puppetMaster.GetAvatarHeight();
+                    l_result = m_puppetMaster.netIkController.GetRemoteHeight();
                     break;
             }
             return l_result;
@@ -147,7 +147,7 @@ namespace CVRLua.Players
                     l_result = PlayerSetup.Instance.playerHeight;
                     break;
                 case PlayerType.Remote:
-                    l_result = m_puppetMaster.GetAvatarHeight();
+                    l_result = m_puppetMaster.netIkController.GetRemoteHeight();
                     break;
             }
             return l_result;
@@ -215,7 +215,7 @@ namespace CVRLua.Players
                     l_result = CheckVR.Instance.hasVrDeviceLoaded;
                     break;
                 case PlayerType.Remote:
-                    l_result = (m_puppetMaster.PlayerAvatarMovementDataInput.DeviceType != PlayerAvatarMovementData.UsingDeviceType.PCStanalone);
+                    l_result = (m_puppetMaster.PlayerAvatarMovementDataInput.DeviceType != PlayerAvatarMovementData.UsingDeviceType.PC_Desktop);
                     break;
             }
             return l_result;
@@ -509,7 +509,7 @@ namespace CVRLua.Players
         public void Teleport(Vector3 p_position, Quaternion p_rotation, bool p_velocity)
         {
             if(m_type == PlayerType.Local)
-                MovementSystem.Instance.TeleportPlayerTo(p_position, p_rotation.eulerAngles,true, p_velocity);
+                MovementSystem.Instance.TeleportPlayerTo(p_position, p_rotation.eulerAngles, true, p_velocity);
         }
 
         public void SetImmobilized(bool p_state)
