@@ -5,7 +5,7 @@
     <Platforms>x64</Platforms>
     <Authors>SDraw</Authors>
     <Company>None</Company>
-    <Version>1.0.35</Version>
+    <Version>1.0.36</Version>
   </PropertyGroup>
 
   <ItemGroup>
